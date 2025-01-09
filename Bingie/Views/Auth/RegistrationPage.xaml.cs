@@ -1,8 +1,5 @@
-﻿// Views/Auth/RegistrationPage.xaml.cs
-using Bingie.Models;
-using Bingie.Services;
+﻿using Bingie.Services;
 using Microsoft.Maui.Controls;
-using System;
 
 namespace Bingie.Views.Auth
 {
@@ -18,38 +15,25 @@ namespace Bingie.Views.Auth
 
         private async void OnRegisterClicked(object sender, EventArgs e)
         {
-            try
+            var username = UsernameEntry.Text;
+            var password = PasswordEntry.Text;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                // Get the entered username and password
-                var username = UsernameEntry.Text;
-                var password = PasswordEntry.Text;
-
-                // Validate inputs before attempting to register
-                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                {
-                    await DisplayAlert("Error", "Username and password cannot be empty.", "OK");
-                    return; // Exit early if validation fails
-                }
-
-                // Attempt to register the user
-                var user = await _authService.RegisterUser(username, password);
-
-                if (user != null)
-                {
-                    // Handle successful registration (e.g., navigate back to LoginPage)
-                    await DisplayAlert("Success", "Registration successful!", "OK");
-                    await Navigation.PopAsync(); // Navigate back to the login page or previous page
-                }
-                else
-                {
-                    // Handle registration failure (e.g., user already exists)
-                    await DisplayAlert("Error", "User already exists or registration failed.", "OK");
-                }
+                await DisplayAlert("Error", "Username and password cannot be empty.", "OK");
+                return;
             }
-            catch (Exception ex)
+
+            bool registrationSuccess = await _authService.RegisterAsync(username, password);
+
+            if (registrationSuccess)
             {
-                // Catch any exceptions that occur during registration
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                await DisplayAlert("Success", "Registration successful!", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Error", "User already exists or registration failed.", "OK");
             }
         }
     }

@@ -1,7 +1,5 @@
-﻿// Views/Auth/LoginPage.xaml.cs
-using Bingie.Models;
-using Bingie.Services;
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 
 namespace Bingie.Views.Auth
 {
@@ -15,29 +13,57 @@ namespace Bingie.Views.Auth
             _authService = authService;
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Load saved username from Preferences
+            var rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
+            if (!string.IsNullOrEmpty(rememberedUsername))
+            {
+                UsernameEntry.Text = rememberedUsername;
+
+                // Load saved password from SecureStorage
+                var rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
+                if (!string.IsNullOrEmpty(rememberedPassword))
+                {
+                    PasswordEntry.Text = rememberedPassword;
+                    RememberMeCheckBox.IsChecked = true;
+                }
+            }
+        }
+
         private async void OnLoginClicked(object sender, EventArgs e)
         {
             var username = UsernameEntry.Text;
             var password = PasswordEntry.Text;
 
-            var user = await _authService.LoginUser(username, password);
+            bool isLoggedIn = await _authService.LoginAsync(username, password);
 
-            if (user != null)
+            if (isLoggedIn)
             {
-                // Handle successful login (e.g., navigate to the main page)
+                if (RememberMeCheckBox.IsChecked)
+                {
+                    Preferences.Set("RememberedUsername", username);
+                    await SecureStorage.SetAsync("RememberedPassword", password);
+                }
+                else
+                {
+                    Preferences.Remove("RememberedUsername");
+                    SecureStorage.Remove("RememberedPassword");
+                }
+
                 await DisplayAlert("Success", "Login successful!", "OK");
                 Application.Current.MainPage = new AppShell();
             }
             else
             {
-                // Handle failed login
                 await DisplayAlert("Error", "Invalid username or password.", "OK");
             }
         }
 
         private void OnRegisterClicked(object sender, EventArgs e)
         {
-            // Navigate to the RegistrationPage
             Navigation.PushAsync(new RegistrationPage(_authService));
         }
     }

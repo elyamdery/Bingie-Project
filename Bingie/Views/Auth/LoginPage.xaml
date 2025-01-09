@@ -6,6 +6,8 @@
     <StackLayout Padding="20">
         <Entry Placeholder="Username" x:Name="UsernameEntry" />
         <Entry Placeholder="Password" x:Name="PasswordEntry" IsPassword="True" />
+        <CheckBox x:Name="RememberMeCheckBox" />
+        <Label Text="Remember Me" />
         <Button Text="Login" Clicked="OnLoginClicked" />
         <Button Text="Register" Clicked="OnRegisterClicked" />
     </StackLayout>

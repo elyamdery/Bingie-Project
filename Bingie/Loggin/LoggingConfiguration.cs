@@ -1,6 +1,6 @@
 ﻿using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.File;  // Added for the File sink
+using System.IO;
 
 namespace Bingie.Logging
 {
@@ -8,11 +8,19 @@ namespace Bingie.Logging
     {
         public static void ConfigureLogging()
         {
+            var logDirectory = Path.Combine(FileSystem.AppDataDirectory, "logs");
+
+            // Ensure the logs directory exists
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.File(Path.Combine(FileSystem.AppDataDirectory, "logs", "bingie-.log"),
+                .WriteTo.File(Path.Combine(logDirectory, "BingieLogR-.log"),
                     rollingInterval: RollingInterval.Day,
                     retainedFileCountLimit: 7)
                 .CreateLogger();

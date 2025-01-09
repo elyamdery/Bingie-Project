@@ -1,42 +1,50 @@
-﻿// Services/AuthService.cs
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bingie.Models;
+using Bingie.Services; // Add this using directive
 
-namespace Bingie.Services
+public class AuthService : IAuthService
 {
-    public class AuthService : IAuthService // Implementing the interface
+    private readonly IDataStore<User> _databaseService;
+
+    public AuthService(IDataStore<User> databaseService)
     {
-        private readonly List<User> _users = new();
+        _databaseService = databaseService;
+    }
 
-        public async Task<User> RegisterUser(string username, string password)
+    public async Task<bool> LoginAsync(string username, string password)
+    {
+        var users = await _databaseService.GetItemsAsync();
+        var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
+        return user != null;
+    }
+
+    public async Task<bool> RegisterAsync(string username, string password)
+    {
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            if (_users.Exists(u => u.Username == username))
-            {
-                return null; // User already exists
-            }
-
-            var user = new User
-            {
-                Username = username,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
-            };
-
-            _users.Add(user);
-            await Task.CompletedTask; // Simulate async operation
-            return user;
+            return false;
         }
 
-        public async Task<User> LoginUser(string username, string password)
+        var users = await _databaseService.GetItemsAsync();
+        if (users.Any(u => u.Username == username))
         {
-            var user = _users.Find(u => u.Username == username);
-
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            {
-                return user; // Successful login
-            }
-
-            return null; // Login failed
+            return false;
         }
+
+        var newUser = new User
+        {
+            Username = username,
+            Password = password
+        };
+
+        await _databaseService.AddItemAsync(newUser);
+        return true;
+    }
+
+    public async Task LogoutAsync()
+    {
+        // Clear any session or authentication token
+        await Task.CompletedTask;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Maui.Controls;
+using Serilog;  // Importing Serilog for logging
 
 namespace Bingie.Views
 {
@@ -8,6 +9,10 @@ namespace Bingie.Views
         public MainPage()
         {
             InitializeComponent();
+
+            // Initialize logging in the MainPage as well
+            Log.Information("MainPage initialized.");  // <-- Log when the MainPage is initialized
+
             StartClock();
         }
 
@@ -15,6 +20,9 @@ namespace Bingie.Views
         {
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
+                // Log the time update
+                Log.Information("Current time: {Time}", DateTime.UtcNow.AddHours(3).ToString("HH:mm:ss"));
+
                 CurrentTimeLabel.Text = DateTime.UtcNow.AddHours(3).ToString("HH:mm:ss"); // Adjust to Israel Time (UTC+3)
                 return true;
             });
@@ -22,6 +30,9 @@ namespace Bingie.Views
 
         private void OnBingeButtonClicked(object sender, EventArgs e)
         {
+            // Log when the binge button is clicked
+            Log.Information("Binge button clicked at {Time}", DateTime.UtcNow.ToString("HH:mm:ss"));
+
             var dot = new BoxView
             {
                 Color = Colors.Red,
@@ -33,7 +44,7 @@ namespace Bingie.Views
             // Create a new horizontal row every 10 dots
             if (DotsContainer.Children.Count == 0 || (DotsContainer.Children[DotsContainer.Children.Count - 1] as StackLayout).Children.Count >= 10)
             {
-                DotsContainer.Children.Add(new StackLayout 
+                DotsContainer.Children.Add(new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
                     Margin = new Thickness(0, 5)

@@ -50,6 +50,14 @@ namespace Bingie.Views
 
         private void OnDaySelected(int day)
         {
+            int daysInMonth = DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month);
+            if (day < 1 || day > daysInMonth)
+            {
+                // Handle invalid day value
+                Console.WriteLine("Invalid day selected.");
+                return;
+            }
+
             var selectedDate = new DateTime(_currentDate.Year, _currentDate.Month, day);
             Navigation.PushAsync(new DayStatisticsPage(selectedDate));
         }

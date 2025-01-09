@@ -1,12 +1,17 @@
-﻿// Services/IAuthService.cs
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bingie.Models;
 
-namespace Bingie.Services
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<User> RegisterUser(string username, string password);
-        Task<User> LoginUser(string username, string password);
-    }
+    // Authenticates the user with the provided credentials (username & password).
+    // Returns true if authentication is successful, otherwise false.
+    Task<bool> LoginAsync(string username, string password);
+
+    // Logs out the current user.
+    // Clears any session or authentication token.
+    Task LogoutAsync();
+
+    // Registers a new user with the provided username and password.
+    // Returns true if registration is successful, otherwise false.
+    Task<bool> RegisterAsync(string username, string password);
 }

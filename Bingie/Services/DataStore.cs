@@ -1,53 +1,74 @@
 ﻿using SQLite;
 using Bingie.Models;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Bingie.Services
 {
-    public interface IDataStore
+    public class DataStore<T> : IDataStore<T>
     {
-        Task<User> GetUserAsync(string username);
-        Task<bool> AddUserAsync(User user);
-        Task<bool> AddBingeEntryAsync(BingeEntry entry);
-        Task<List<BingeEntry>> GetBingeEntriesForDateAsync(DateTime date);
-    }
+        // Simulate a local data store (e.g., SQLite or any other storage mechanism).
+        private List<T> _dataStore = new List<T>();
 
-    public class DataStore : IDataStore
-    {
-        private readonly SQLiteAsyncConnection _database;
-        private readonly ILogger<DataStore> _logger;
-
-        public DataStore(ILogger<DataStore> logger)
+        // Adds a new item to the data store (e.g., SQLite database).
+        // Returns true if the item was successfully added.
+        public async Task<bool> AddItemAsync(T item)
         {
-            _logger = logger;
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "bingie.db");
-            _database = new SQLiteAsyncConnection(dbPath);
-            _database.CreateTableAsync<User>().Wait();
-            _database.CreateTableAsync<BingeEntry>().Wait();
+            // In a real implementation, this would involve database insertion (e.g., SQLite)
+            _dataStore.Add(item); // Adds the item to the in-memory store for simplicity
+            return await Task.FromResult(true); // Simulating an async operation
         }
 
-        public async Task<User> GetUserAsync(string username)
+        // Retrieves a single item by its unique identifier.
+        // Returns the item if found, otherwise null.
+        public async Task<T> GetItemAsync(string id)
         {
-            return await _database.Table<User>().Where(u => u.Username == username).FirstOrDefaultAsync();
+            // In a real implementation, this would involve querying the database (e.g., SQLite)
+            // Simulating fetching an item by ID
+            var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simplified lookup
+            return await Task.FromResult(item);
         }
 
-        public async Task<bool> AddUserAsync(User user)
+        // Retrieves all items from the data store.
+        // Returns an enumerable collection of items.
+        public async Task<IEnumerable<T>> GetItemsAsync()
         {
-            await _database.InsertAsync(user);
-            return true;
+            // In a real implementation, this would fetch items from the database.
+            return await Task.FromResult(_dataStore.AsEnumerable());
         }
 
-        public async Task<bool> AddBingeEntryAsync(BingeEntry entry)
+        // Updates an existing item in the data store.
+        // Returns true if the item was successfully updated, otherwise false.
+        public async Task<bool> UpdateItemAsync(T item)
         {
-            await _database.InsertAsync(entry);
-            return true;
+            // In a real implementation, this would involve updating the item in the database.
+            // Simulating an update operation
+            var existingItem = _dataStore.FirstOrDefault(i => i.Equals(item));
+            if (existingItem != null)
+            {
+                // Assuming the item was updated successfully.
+                return await Task.FromResult(true);
+            }
+
+            return await Task.FromResult(false); // Item not found
         }
 
-        public async Task<List<BingeEntry>> GetBingeEntriesForDateAsync(DateTime date)
+        // Deletes an item by its unique identifier.
+        // Returns true if the item was successfully deleted, otherwise false.
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            return await _database.Table<BingeEntry>()
-                .Where(e => e.Date.Date == date.Date)
-                .ToListAsync();
+            // In a real implementation, this would involve deleting from the database.
+            var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simulated lookup
+            if (item != null)
+            {
+                _dataStore.Remove(item); // Remove the item from the in-memory store
+                return await Task.FromResult(true); // Item deleted
+            }
+
+            return await Task.FromResult(false); // Item not found
         }
     }
 }
