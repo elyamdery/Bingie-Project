@@ -1,42 +1,41 @@
-﻿namespace Bingie.Views
+﻿namespace Bingie.Views;
+
+public partial class DayStatisticsPage : ContentPage
 {
-    public partial class DayStatisticsPage : ContentPage
+    private readonly DateTime selectedDate;
+
+    public DayStatisticsPage(DateTime date)
     {
-        private readonly DateTime selectedDate;
+        InitializeComponent();
+        selectedDate = date;
+        DisplayStatistics();
+    }
 
-        public DayStatisticsPage(DateTime date)
+    private void DisplayStatistics()
+    {
+        try
         {
-            InitializeComponent();
-            selectedDate = date;
-            DisplayStatistics();
+            SelectedDateLabel.Text = selectedDate.ToString("MMMM dd, yyyy");
+            var bingeCount = GetBingeCountForDate(selectedDate);
+            BingeCountLabel.Text = $"You binged {bingeCount} times on this day.";
         }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Error in DisplayStatistics: {ex.Message}");
+            BingeCountLabel.Text = "Unable to retrieve binge count.";
+        }
+    }
 
-        private void DisplayStatistics()
-        {
-            try
-            {
-                SelectedDateLabel.Text = selectedDate.ToString("MMMM dd, yyyy");
-                int bingeCount = GetBingeCountForDate(selectedDate);
-                BingeCountLabel.Text = $"You binged {bingeCount} times on this day.";
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine($"Error in DisplayStatistics: {ex.Message}");
-                BingeCountLabel.Text = "Unable to retrieve binge count.";
-            }
-        }
+    private int GetBingeCountForDate(DateTime date)
+    {
+        // TODO: Implement actual logic to retrieve binge count from your data storage
+        // For now, we'll return a random number between 0 and 5
+        return new Random().Next(0, 6);
+    }
 
-        private int GetBingeCountForDate(DateTime date)
-        {
-            // TODO: Implement actual logic to retrieve binge count from your data storage
-            // For now, we'll return a random number between 0 and 5
-            return new Random().Next(0, 6);
-        }
-
-        private void OnBackButtonClicked(object sender, EventArgs e)
-        {
-            _ = Navigation.PopAsync();
-        }
+    private void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        _ = Navigation.PopAsync();
     }
 }

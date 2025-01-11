@@ -1,5 +1,7 @@
 ﻿using Bingie.Models;
-using Bingie.Services; // Add this using directive
+using Bingie.Services;
+
+// Add this using directive
 
 public class AuthService : IAuthService
 {
@@ -13,22 +15,16 @@ public class AuthService : IAuthService
     public async Task<bool> LoginAsync(string username, string password)
     {
         IEnumerable<User> users = await _databaseService.GetItemsAsync();
-        User? user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
+        var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
         return user != null;
     }
 
     public async Task<bool> RegisterAsync(string username, string password)
     {
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-        {
-            return false;
-        }
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
 
         IEnumerable<User> users = await _databaseService.GetItemsAsync();
-        if (users.Any(u => u.Username == username))
-        {
-            return false;
-        }
+        if (users.Any(u => u.Username == username)) return false;
 
         User newUser = new()
         {

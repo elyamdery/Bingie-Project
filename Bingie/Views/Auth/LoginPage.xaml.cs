@@ -1,67 +1,66 @@
-﻿namespace Bingie.Views.Auth
+﻿namespace Bingie.Views.Auth;
+
+public partial class LoginPage : ContentPage
 {
-    public partial class LoginPage : ContentPage
+    private readonly AuthService _authService;
+
+    public LoginPage(AuthService authService)
     {
-        private readonly AuthService _authService;
+        InitializeComponent();
+        _authService = authService;
+    }
 
-        public LoginPage(AuthService authService)
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Load saved username from Preferences
+        var rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
+        if (!string.IsNullOrEmpty(rememberedUsername))
         {
-            InitializeComponent();
-            _authService = authService;
-        }
+            UsernameEntry.Text = rememberedUsername;
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-            // Load saved username from Preferences
-            string rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
-            if (!string.IsNullOrEmpty(rememberedUsername))
+            // Load saved password from SecureStorage
+            var rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
+            if (!string.IsNullOrEmpty(rememberedPassword))
             {
-                UsernameEntry.Text = rememberedUsername;
-
-                // Load saved password from SecureStorage
-                string? rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
-                if (!string.IsNullOrEmpty(rememberedPassword))
-                {
-                    PasswordEntry.Text = rememberedPassword;
-                    RememberMeCheckBox.IsChecked = true;
-                }
+                PasswordEntry.Text = rememberedPassword;
+                RememberMeCheckBox.IsChecked = true;
             }
         }
+    }
 
-        private async void OnLoginClicked(object sender, EventArgs e)
+    private async void OnLoginClicked(object sender, EventArgs e)
+    {
+        var username = UsernameEntry.Text;
+        var password = PasswordEntry.Text;
+
+        var isLoggedIn = await _authService.LoginAsync(username, password);
+
+        if (isLoggedIn)
         {
-            string username = UsernameEntry.Text;
-            string password = PasswordEntry.Text;
-
-            bool isLoggedIn = await _authService.LoginAsync(username, password);
-
-            if (isLoggedIn)
+            if (RememberMeCheckBox.IsChecked)
             {
-                if (RememberMeCheckBox.IsChecked)
-                {
-                    Preferences.Set("RememberedUsername", username);
-                    await SecureStorage.SetAsync("RememberedPassword", password);
-                }
-                else
-                {
-                    Preferences.Remove("RememberedUsername");
-                    _ = SecureStorage.Remove("RememberedPassword");
-                }
-
-                await DisplayAlert("Success", "Login successful!", "OK");
-                Application.Current.MainPage = new AppShell();
+                Preferences.Set("RememberedUsername", username);
+                await SecureStorage.SetAsync("RememberedPassword", password);
             }
             else
             {
-                await DisplayAlert("Error", "Invalid username or password.", "OK");
+                Preferences.Remove("RememberedUsername");
+                _ = SecureStorage.Remove("RememberedPassword");
             }
-        }
 
-        private void OnRegisterClicked(object sender, EventArgs e)
-        {
-            _ = Navigation.PushAsync(new RegistrationPage(_authService));
+            await DisplayAlert("Success", "Login successful!", "OK");
+            Application.Current.MainPage = new AppShell();
         }
+        else
+        {
+            await DisplayAlert("Error", "Invalid username or password.", "OK");
+        }
+    }
+
+    private void OnRegisterClicked(object sender, EventArgs e)
+    {
+        _ = Navigation.PushAsync(new RegistrationPage(_authService));
     }
 }
