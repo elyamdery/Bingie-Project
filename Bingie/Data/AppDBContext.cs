@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Bingie.Models;
+﻿using Bingie.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bingie.Data
 {
@@ -10,7 +10,7 @@ namespace Bingie.Data
         public AppDbContext(string connectionString)
         {
             _connectionString = connectionString;
-            Database.EnsureCreated();
+            _ = Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
@@ -18,7 +18,7 @@ namespace Bingie.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(_connectionString);
+            _ = optionsBuilder.UseSqlite(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace Bingie.Data
             base.OnModelCreating(modelBuilder);
 
             // Ensure usernames are unique
-            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+            _ = modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         }
     }
 }

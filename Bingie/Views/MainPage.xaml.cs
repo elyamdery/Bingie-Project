@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-using Serilog;  // Importing Serilog for logging
+﻿using Serilog;  // Importing Serilog for logging
 
 namespace Bingie.Views
 {
     public partial class MainPage : ContentPage
     {
+        [Obsolete]
         public MainPage()
         {
             InitializeComponent();
@@ -16,6 +15,7 @@ namespace Bingie.Views
             StartClock();
         }
 
+        [Obsolete]
         private void StartClock()
         {
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -33,7 +33,7 @@ namespace Bingie.Views
             // Log when the binge button is clicked
             Log.Information("Binge button clicked at {Time}", DateTime.UtcNow.ToString("HH:mm:ss"));
 
-            var dot = new BoxView
+            BoxView dot = new()
             {
                 Color = Colors.Red,
                 WidthRequest = 15, // Make the dot bigger
@@ -51,7 +51,7 @@ namespace Bingie.Views
                 });
             }
 
-            var currentRow = DotsContainer.Children[DotsContainer.Children.Count - 1] as StackLayout;
+            StackLayout? currentRow = DotsContainer.Children[DotsContainer.Children.Count - 1] as StackLayout;
             currentRow.Children.Add(dot);
         }
     }

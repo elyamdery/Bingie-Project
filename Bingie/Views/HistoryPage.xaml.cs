@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-
-namespace Bingie.Views
+﻿namespace Bingie.Views
 {
     public partial class HistoryPage : ContentPage
     {
@@ -22,14 +19,14 @@ namespace Bingie.Views
             CalendarGrid.Children.Clear();
 
             // Get the first day of the current month
-            var firstDayOfMonth = new DateTime(_currentDate.Year, _currentDate.Month, 1);
+            DateTime firstDayOfMonth = new(_currentDate.Year, _currentDate.Month, 1);
             int daysInMonth = DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month);
             int startDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
 
             // Add the days of the month to the calendar grid
             for (int day = 1; day <= daysInMonth; day++)
             {
-                var dayButton = new Button
+                Button dayButton = new()
                 {
                     Text = day.ToString(),
                     BackgroundColor = Colors.Red,
@@ -58,8 +55,8 @@ namespace Bingie.Views
                 return;
             }
 
-            var selectedDate = new DateTime(_currentDate.Year, _currentDate.Month, day);
-            Navigation.PushAsync(new DayStatisticsPage(selectedDate));
+            DateTime selectedDate = new(_currentDate.Year, _currentDate.Month, day);
+            _ = Navigation.PushAsync(new DayStatisticsPage(selectedDate));
         }
 
         private void OnPreviousWeekClicked(object sender, EventArgs e)

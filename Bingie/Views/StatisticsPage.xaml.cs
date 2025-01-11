@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-
-namespace Bingie.Views
+﻿namespace Bingie.Views
 {
     public partial class StatisticsPage : ContentPage
     {
@@ -19,8 +16,8 @@ namespace Bingie.Views
         private async void StartPageAnimation()
         {
             // Fade in animation
-            this.Opacity = 0;
-            await this.FadeTo(1, 500); // Fades in over 0.5 seconds
+            Opacity = 0;
+            _ = await this.FadeTo(1, 500); // Fades in over 0.5 seconds
         }
     }
 }

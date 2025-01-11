@@ -1,7 +1,6 @@
-﻿using Microsoft.Maui.Controls;
-using Bingie.Views.Auth;
+﻿using Bingie.Loggin;
 using Bingie.Services; // Add this using directive
-using Bingie.Logging;
+using Bingie.Views.Auth;
 using Serilog;
 
 namespace Bingie
@@ -17,8 +16,8 @@ namespace Bingie
             Log.Information("Application Started");
 
             // Initialize the main page with AuthService
-            var databaseService = new DatabaseService(new SqliteConnectionFactory());
-            var authService = new AuthService(databaseService);
+            DatabaseService databaseService = new(new SqliteConnectionFactory());
+            AuthService authService = new(databaseService);
             MainPage = new NavigationPage(new LoginPage(authService));
         }
     }

@@ -21,6 +21,8 @@
           "MySql.Data": "9.1.0",
           "MySqlConnector": "2.3.7",
           "Pomelo.EntityFrameworkCore.MySql": "8.0.2",
+          "Roslynator": "0.2.10",
+          "Roslynator.Analyzers": "4.12.10",
           "Serilog": "4.0.1",
           "Serilog.Extensions.Logging": "8.0.0",
           "Serilog.Settings.Configuration": "8.0.2",
@@ -134,6 +136,12 @@
           }
         }
       },
+      "Microsoft.CodeAnalysis/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.5.0",
+          "Microsoft.CodeAnalysis.VisualBasic.Workspaces": "2.3.0"
+        }
+      },
       "Microsoft.CodeAnalysis.Analyzers/3.11.0": {},
       "Microsoft.CodeAnalysis.Common/4.5.0": {
         "dependencies": {
@@ -243,6 +251,18 @@
           }
         }
       },
+      "Microsoft.CodeAnalysis.CSharp.Features/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.5.0",
+          "Microsoft.CodeAnalysis.Features": "2.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Features.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.61908"
+          }
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp.Workspaces/4.5.0": {
         "dependencies": {
           "Humanizer.Core": "2.14.1",
@@ -295,6 +315,52 @@
           },
           "lib/netcoreapp3.1/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll": {
             "locale": "zh-Hant"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.Features/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Workspaces.Common": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Features.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.61908"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.VisualBasic/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.VisualBasic.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.61908"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.VisualBasic.Features/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Features": "2.3.0",
+          "Microsoft.CodeAnalysis.VisualBasic.Workspaces": "2.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.VisualBasic.Features.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.61908"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.VisualBasic.Workspaces/2.3.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.VisualBasic": "2.3.0",
+          "Microsoft.CodeAnalysis.Workspaces.Common": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.61908"
           }
         }
       },
@@ -1161,6 +1227,24 @@
           }
         }
       },
+      "Roslynator/0.2.10": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis": "2.3.0",
+          "Microsoft.CodeAnalysis.CSharp.Features": "2.3.0",
+          "Microsoft.CodeAnalysis.VisualBasic.Features": "2.3.0"
+        },
+        "runtime": {
+          "lib/net461/Roslyn.VisualStudio.Services.UnitTests.dll": {
+            "assemblyVersion": "0.2.10.0",
+            "fileVersion": "0.2.10.0"
+          },
+          "lib/net461/Roslynator.Interfaces.dll": {
+            "assemblyVersion": "0.2.10.0",
+            "fileVersion": "0.2.10.0"
+          }
+        }
+      },
+      "Roslynator.Analyzers/4.12.10": {},
       "runtime.any.System.IO/4.3.0": {},
       "runtime.any.System.Reflection/4.3.0": {},
       "runtime.any.System.Reflection.Primitives/4.3.0": {},
@@ -1700,6 +1784,13 @@
       "path": "microsoft.bcl.asyncinterfaces/6.0.0",
       "hashPath": "microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512"
     },
+    "Microsoft.CodeAnalysis/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g5l7rqul9Cdzr2NtXGiApSmAPen9fyqvVMnrJ2INP8p9CZxQH48sLcvB6HphVs5VBrhDPVKXBppC3dYn2JZ/VQ==",
+      "path": "microsoft.codeanalysis/2.3.0",
+      "hashPath": "microsoft.codeanalysis.2.3.0.nupkg.sha512"
+    },
     "Microsoft.CodeAnalysis.Analyzers/3.11.0": {
       "type": "package",
       "serviceable": true,
@@ -1721,12 +1812,47 @@
       "path": "microsoft.codeanalysis.csharp/4.5.0",
       "hashPath": "microsoft.codeanalysis.csharp.4.5.0.nupkg.sha512"
     },
+    "Microsoft.CodeAnalysis.CSharp.Features/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-147m2VNGCvhbl868BPgwVKD5VSiTma0/4+cn6mImmt9KbzqkDf4VoiQZKG60oBKtfPIB14OWHlm5WNh1A//S1w==",
+      "path": "microsoft.codeanalysis.csharp.features/2.3.0",
+      "hashPath": "microsoft.codeanalysis.csharp.features.2.3.0.nupkg.sha512"
+    },
     "Microsoft.CodeAnalysis.CSharp.Workspaces/4.5.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-h74wTpmGOp4yS4hj+EvNzEiPgg/KVs2wmSfTZ81upJZOtPkJsVkgfsgtxxqmAeapjT/vLKfmYV0bS8n5MNVP+g==",
       "path": "microsoft.codeanalysis.csharp.workspaces/4.5.0",
       "hashPath": "microsoft.codeanalysis.csharp.workspaces.4.5.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.Features/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UZVJee6vtjIDC+MKJPHWS4gSoPVodhlTEdU+KxBx13thpJgLE5J27d8pXTwUxWImlwB6Fw84y77q/asK9+i+Qg==",
+      "path": "microsoft.codeanalysis.features/2.3.0",
+      "hashPath": "microsoft.codeanalysis.features.2.3.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.VisualBasic/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ts6m2fRDDyI2R9UqHuswTxbnLVSZJKUsvr1yN8ktiJAVDqXWLSEDEdOt2FWFJOg88qeEDmyFY4exx6KxkBG/pQ==",
+      "path": "microsoft.codeanalysis.visualbasic/2.3.0",
+      "hashPath": "microsoft.codeanalysis.visualbasic.2.3.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.VisualBasic.Features/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Zb6TvLIhORkOSFETBC7owTZEJPQ5EGzDDm4UxV4sUHFC/3r6ZsvB8JFZ+xHFrQJVOyuOVoiMccZxfaf+hFLR/Q==",
+      "path": "microsoft.codeanalysis.visualbasic.features/2.3.0",
+      "hashPath": "microsoft.codeanalysis.visualbasic.features.2.3.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.VisualBasic.Workspaces/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XH8xqybipWgvq3wHSKCUuox8ZkS/4dxlXDqpbjiZ6Dlqffm2BaID6OK3rQdJ30OSubWM81dniFMucd38K6CYqg==",
+      "path": "microsoft.codeanalysis.visualbasic.workspaces/2.3.0",
+      "hashPath": "microsoft.codeanalysis.visualbasic.workspaces.2.3.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Workspaces.Common/4.5.0": {
       "type": "package",
@@ -2133,6 +2259,20 @@
       "sha512": "sha512-XjnlcxVBLnEMbyEc5cZzgZeDyLvAniACZQ04W1slWN0f4rmfNzl98gEMvHnFH0fMDF06z9MmgGi/Sr7hJ+BVnw==",
       "path": "pomelo.entityframeworkcore.mysql/8.0.2",
       "hashPath": "pomelo.entityframeworkcore.mysql.8.0.2.nupkg.sha512"
+    },
+    "Roslynator/0.2.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DZ9jaUi8k/6aMQMkcs6y71DeFKNuEpviuQXlupXiJiuzdU7kxAFP6oVnymzlRDd6YYsEJWjwv1Ykci0QujFwtQ==",
+      "path": "roslynator/0.2.10",
+      "hashPath": "roslynator.0.2.10.nupkg.sha512"
+    },
+    "Roslynator.Analyzers/4.12.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wecq3nfhTvnJPxX87hKbjMdX1xeCAMJf9rdBX3nQLTntQs9v0fFbUB2eQSSOArXMuFh7MxjLWaL4+b6XMi1NDA==",
+      "path": "roslynator.analyzers/4.12.10",
+      "hashPath": "roslynator.analyzers.4.12.10.nupkg.sha512"
     },
     "runtime.any.System.IO/4.3.0": {
       "type": "package",

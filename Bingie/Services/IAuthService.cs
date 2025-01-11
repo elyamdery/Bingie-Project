@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Bingie.Models;
-
-public interface IAuthService
+﻿public interface IAuthService
 {
     // Authenticates the user with the provided credentials (username & password).
     // Returns true if authentication is successful, otherwise false.

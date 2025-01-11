@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-
-namespace Bingie.Views
+﻿namespace Bingie.Views
 {
     public partial class DayStatisticsPage : ContentPage
     {
-        private DateTime selectedDate;
+        private readonly DateTime selectedDate;
 
         public DayStatisticsPage(DateTime date)
         {
@@ -39,7 +36,7 @@ namespace Bingie.Views
 
         private void OnBackButtonClicked(object sender, EventArgs e)
         {
-            Navigation.PopAsync();
+            _ = Navigation.PopAsync();
         }
     }
 }

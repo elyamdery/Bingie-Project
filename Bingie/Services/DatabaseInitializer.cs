@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using System.IO;
-
-namespace Bingie.Services
+﻿namespace Bingie.Services
 {
     public class DatabaseInitializer
     {
@@ -14,23 +11,23 @@ namespace Bingie.Services
 
         public void InitializeDatabase()
         {
-            using var connection = _connectionFactory.CreateConnection();
+            using Microsoft.Data.Sqlite.SqliteConnection connection = _connectionFactory.CreateConnection();
             connection.Open();
 
             // Create Users table
-            var createUserTableCmd = @"
+            string createUserTableCmd = @"
                 CREATE TABLE IF NOT EXISTS Users (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT NOT NULL,
                     Password TEXT NOT NULL
                 );";
 
-            using var command = connection.CreateCommand();
+            using Microsoft.Data.Sqlite.SqliteCommand command = connection.CreateCommand();
             command.CommandText = createUserTableCmd;
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
 
             // Create Binges table
-            var createBingesTableCmd = @"
+            string createBingesTableCmd = @"
                 CREATE TABLE IF NOT EXISTS Binges (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT NOT NULL,
@@ -39,7 +36,7 @@ namespace Bingie.Services
                 );";
 
             command.CommandText = createBingesTableCmd;
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
     }
 }

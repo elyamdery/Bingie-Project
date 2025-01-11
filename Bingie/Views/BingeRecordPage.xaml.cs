@@ -1,10 +1,5 @@
 ﻿using Bingie.Models;
 using Bingie.Services;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Bingie.Views
 {
@@ -23,8 +18,8 @@ namespace Bingie.Views
         {
             try
             {
-                var records = await _dataStore.GetItemsAsync();
-                var todayRecords = records.Where(r => r.Date.Date == DateTime.Today).ToList();
+                IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
+                List<BingeEntry> todayRecords = records.Where(r => r.Date.Date == DateTime.Today).ToList();
                 BingeRecordsCollectionView.ItemsSource = todayRecords;
             }
             catch (Exception ex)
@@ -37,7 +32,7 @@ namespace Bingie.Views
         {
             try
             {
-                var newRecord = new BingeEntry
+                BingeEntry newRecord = new()
                 {
                     Username = "User1", // Replace with logged-in user's username
                     Date = DateTime.Now,

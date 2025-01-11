@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Bingie.Services
+﻿namespace Bingie.Services
 {
     public interface IDataStore<T>
     {

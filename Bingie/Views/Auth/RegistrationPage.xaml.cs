@@ -1,7 +1,4 @@
-﻿using Bingie.Services;
-using Microsoft.Maui.Controls;
-
-namespace Bingie.Views.Auth
+﻿namespace Bingie.Views.Auth
 {
     public partial class RegistrationPage : ContentPage
     {
@@ -15,8 +12,8 @@ namespace Bingie.Views.Auth
 
         private async void OnRegisterClicked(object sender, EventArgs e)
         {
-            var username = UsernameEntry.Text;
-            var password = PasswordEntry.Text;
+            string username = UsernameEntry.Text;
+            string password = PasswordEntry.Text;
 
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
@@ -29,7 +26,7 @@ namespace Bingie.Views.Auth
             if (registrationSuccess)
             {
                 await DisplayAlert("Success", "Registration successful!", "OK");
-                await Navigation.PopAsync();
+                _ = await Navigation.PopAsync();
             }
             else
             {

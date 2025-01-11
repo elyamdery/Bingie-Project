@@ -1,19 +1,18 @@
 ﻿using Serilog;
 using Serilog.Events;
-using System.IO;
 
-namespace Bingie.Logging
+namespace Bingie.Loggin
 {
     public static class LoggingConfiguration
     {
         public static void ConfigureLogging()
         {
-            var logDirectory = Path.Combine(FileSystem.AppDataDirectory, "logs");
+            string logDirectory = Path.Combine(FileSystem.AppDataDirectory, "logs");
 
             // Ensure the logs directory exists
             if (!Directory.Exists(logDirectory))
             {
-                Directory.CreateDirectory(logDirectory);
+                _ = Directory.CreateDirectory(logDirectory);
             }
 
             Log.Logger = new LoggerConfiguration()

@@ -1,6 +1,5 @@
 ﻿using Bingie.Views;
 using Bingie.Views.Auth;
-using Microsoft.Maui.Controls;
 
 namespace Bingie
 {

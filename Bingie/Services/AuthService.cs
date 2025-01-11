@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Bingie.Models;
+﻿using Bingie.Models;
 using Bingie.Services; // Add this using directive
 
 public class AuthService : IAuthService
@@ -14,8 +12,8 @@ public class AuthService : IAuthService
 
     public async Task<bool> LoginAsync(string username, string password)
     {
-        var users = await _databaseService.GetItemsAsync();
-        var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
+        IEnumerable<User> users = await _databaseService.GetItemsAsync();
+        User? user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
         return user != null;
     }
 
@@ -26,19 +24,19 @@ public class AuthService : IAuthService
             return false;
         }
 
-        var users = await _databaseService.GetItemsAsync();
+        IEnumerable<User> users = await _databaseService.GetItemsAsync();
         if (users.Any(u => u.Username == username))
         {
             return false;
         }
 
-        var newUser = new User
+        User newUser = new()
         {
             Username = username,
             Password = password
         };
 
-        await _databaseService.AddItemAsync(newUser);
+        _ = await _databaseService.AddItemAsync(newUser);
         return true;
     }
 

@@ -1,17 +1,9 @@
-﻿using SQLite;
-using Bingie.Models;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace Bingie.Services
+﻿namespace Bingie.Services
 {
     public class DataStore<T> : IDataStore<T>
     {
         // Simulate a local data store (e.g., SQLite or any other storage mechanism).
-        private List<T> _dataStore = new List<T>();
+        private readonly List<T> _dataStore = [];
 
         // Adds a new item to the data store (e.g., SQLite database).
         // Returns true if the item was successfully added.
@@ -28,7 +20,7 @@ namespace Bingie.Services
         {
             // In a real implementation, this would involve querying the database (e.g., SQLite)
             // Simulating fetching an item by ID
-            var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simplified lookup
+            T? item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simplified lookup
             return await Task.FromResult(item);
         }
 
@@ -46,7 +38,7 @@ namespace Bingie.Services
         {
             // In a real implementation, this would involve updating the item in the database.
             // Simulating an update operation
-            var existingItem = _dataStore.FirstOrDefault(i => i.Equals(item));
+            T? existingItem = _dataStore.FirstOrDefault(i => i.Equals(item));
             if (existingItem != null)
             {
                 // Assuming the item was updated successfully.
@@ -61,10 +53,10 @@ namespace Bingie.Services
         public async Task<bool> DeleteItemAsync(string id)
         {
             // In a real implementation, this would involve deleting from the database.
-            var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simulated lookup
+            T? item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simulated lookup
             if (item != null)
             {
-                _dataStore.Remove(item); // Remove the item from the in-memory store
+                _ = _dataStore.Remove(item); // Remove the item from the in-memory store
                 return await Task.FromResult(true); // Item deleted
             }
 

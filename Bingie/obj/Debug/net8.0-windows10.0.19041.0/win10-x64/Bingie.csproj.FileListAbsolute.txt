@@ -313,3 +313,10 @@ C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-windows10.0.19041.0\wi
 C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\ProjectArchitectures.txt
 C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\SQLitePCLRaw.provider.e_sqlcipher.dll
 C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\e_sqlcipher.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.CodeAnalysis.CSharp.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.CodeAnalysis.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.CodeAnalysis.VisualBasic.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Roslyn.VisualStudio.Services.UnitTests.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Roslynator.Interfaces.dll

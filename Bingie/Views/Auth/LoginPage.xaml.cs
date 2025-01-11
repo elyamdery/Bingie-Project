@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
-
-namespace Bingie.Views.Auth
+﻿namespace Bingie.Views.Auth
 {
     public partial class LoginPage : ContentPage
     {
@@ -18,13 +15,13 @@ namespace Bingie.Views.Auth
             base.OnAppearing();
 
             // Load saved username from Preferences
-            var rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
+            string rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
             if (!string.IsNullOrEmpty(rememberedUsername))
             {
                 UsernameEntry.Text = rememberedUsername;
 
                 // Load saved password from SecureStorage
-                var rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
+                string? rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
                 if (!string.IsNullOrEmpty(rememberedPassword))
                 {
                     PasswordEntry.Text = rememberedPassword;
@@ -35,8 +32,8 @@ namespace Bingie.Views.Auth
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            var username = UsernameEntry.Text;
-            var password = PasswordEntry.Text;
+            string username = UsernameEntry.Text;
+            string password = PasswordEntry.Text;
 
             bool isLoggedIn = await _authService.LoginAsync(username, password);
 
@@ -50,7 +47,7 @@ namespace Bingie.Views.Auth
                 else
                 {
                     Preferences.Remove("RememberedUsername");
-                    SecureStorage.Remove("RememberedPassword");
+                    _ = SecureStorage.Remove("RememberedPassword");
                 }
 
                 await DisplayAlert("Success", "Login successful!", "OK");
@@ -64,7 +61,7 @@ namespace Bingie.Views.Auth
 
         private void OnRegisterClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new RegistrationPage(_authService));
+            _ = Navigation.PushAsync(new RegistrationPage(_authService));
         }
     }
 }

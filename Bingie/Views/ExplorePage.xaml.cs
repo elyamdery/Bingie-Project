@@ -1,13 +1,9 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-
-namespace Bingie.Views
+﻿namespace Bingie.Views
 {
     public partial class ExplorePage : ContentPage
     {
         private List<string> quotes;
-        private Random random;
+        private readonly Random random;
 
         public ExplorePage()
         {
@@ -19,13 +15,13 @@ namespace Bingie.Views
 
         private void LoadQuotes()
         {
-            quotes = new List<string>
-            {
+            quotes =
+            [
                 "Quote 1",
                 "Quote 2",
                 "Quote 3",
                 // Add more quotes here
-            };
+            ];
         }
 
         private void ShowRandomQuote()

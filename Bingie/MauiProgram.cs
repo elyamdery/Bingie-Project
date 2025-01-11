@@ -1,11 +1,8 @@
-﻿using Bingie.Views;
-using Bingie.Models;
+﻿using Bingie.Models;
+using Bingie.Services;
+using Bingie.Views;
 using Bingie.Views.Auth;
 using Serilog;
-using Bingie.Logging;
-using Microsoft.Extensions.Logging;
-using Bingie.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bingie
 {
@@ -13,14 +10,14 @@ namespace Bingie
     {
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
 
             // Configure the app and fonts
-            builder
+            _ = builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    _ = fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
             // Configure Serilog for logging
@@ -30,10 +27,10 @@ namespace Bingie
             RegisterServices(builder);
 
             // Build the app
-            var app = builder.Build();
+            MauiApp app = builder.Build();
 
             // Initialize the database after the app is built
-            var databaseInitializer = app.Services.GetRequiredService<DatabaseInitializer>();
+            DatabaseInitializer databaseInitializer = app.Services.GetRequiredService<DatabaseInitializer>();
             databaseInitializer.InitializeDatabase();
 
             return app;
@@ -56,23 +53,23 @@ namespace Bingie
         private static void RegisterServices(MauiAppBuilder builder)
         {
             // Register SqliteConnectionFactory
-            builder.Services.AddSingleton<SqliteConnectionFactory>();
+            _ = builder.Services.AddSingleton<SqliteConnectionFactory>();
 
             // Register DatabaseService using SqliteConnectionFactory
-            builder.Services.AddSingleton<IDataStore<BingeEntry>, DatabaseService>();
+            _ = builder.Services.AddSingleton<IDataStore<BingeEntry>, DatabaseService>();
 
             // Register DatabaseInitializer
-            builder.Services.AddSingleton<DatabaseInitializer>();
+            _ = builder.Services.AddSingleton<DatabaseInitializer>();
 
             // Register pages
-            builder.Services.AddTransient<BingeRecordsPage>();
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<RegistrationPage>();
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<HistoryPage>();
-            builder.Services.AddTransient<DayStatisticsPage>();
-            builder.Services.AddTransient<ExplorePage>();
-            builder.Services.AddTransient<StatisticsPage>();
+            _ = builder.Services.AddTransient<BingeRecordsPage>();
+            _ = builder.Services.AddTransient<LoginPage>();
+            _ = builder.Services.AddTransient<RegistrationPage>();
+            _ = builder.Services.AddTransient<MainPage>();
+            _ = builder.Services.AddTransient<HistoryPage>();
+            _ = builder.Services.AddTransient<DayStatisticsPage>();
+            _ = builder.Services.AddTransient<ExplorePage>();
+            _ = builder.Services.AddTransient<StatisticsPage>();
         }
     }
 }
