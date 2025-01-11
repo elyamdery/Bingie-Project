@@ -2,6 +2,7 @@
 using Bingie.Services;
 using Bingie.Views.Auth;
 using Serilog;
+
 // Add this using directive
 
 namespace Bingie;

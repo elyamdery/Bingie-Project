@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-01-11T01:18:27.632</Modified>
+      <Modified>2025-01-11T11:33:30.647</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2025-01-11T01:18:27.196</Modified>
+      <Modified>2025-01-11T11:33:30.140</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Bingie.runtimeconfig.json">
       <PackagePath>Bingie.runtimeconfig.json</PackagePath>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Bingie.dll">
       <PackagePath>Bingie.dll</PackagePath>
-      <Modified>2025-01-11T01:18:25.589</Modified>
+      <Modified>2025-01-11T11:33:28.268</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Bingie.exe</PackagePath>
-      <Modified>2025-01-11T01:18:25.668</Modified>
+      <Modified>2025-01-11T11:33:28.337</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -1124,7 +1124,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\Bingie.deps.json">
       <PackagePath>Bingie.deps.json</PackagePath>
-      <Modified>2025-01-10T17:13:23.476</Modified>
+      <Modified>2025-01-11T11:33:30.426</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\.nuget\packages\microsoft.entityframeworkcore.design\8.0.8\lib\net8.0\Microsoft.EntityFrameworkCore.Design.dll">
       <PackagePath>Microsoft.EntityFrameworkCore.Design.dll</PackagePath>
