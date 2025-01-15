@@ -1,15 +1,28 @@
-﻿using Serilog;
-
-// Importing Serilog for logging
+﻿using Bingie.Models;
+using Bingie.Services;
+using Serilog;
 
 namespace Bingie.Views;
 
 public partial class MainPage : ContentPage
 {
-    [Obsolete]
+    private readonly IDataStore<BingeEntry> _dataStore;
+    private readonly string _username;
+
+    // Default constructor
     public MainPage()
     {
         InitializeComponent();
+        // Initialize with default values or handle accordingly
+        _dataStore = null;
+        _username = string.Empty;
+    }
+
+    public MainPage(IDataStore<BingeEntry> dataStore, string username)
+    {
+        InitializeComponent();
+        _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
+        _username = username ?? throw new ArgumentNullException(nameof(username));
 
         // Initialize logging in the MainPage as well
         Log.Information("MainPage initialized."); // <-- Log when the MainPage is initialized
@@ -17,7 +30,6 @@ public partial class MainPage : ContentPage
         StartClock();
     }
 
-    [Obsolete]
     private void StartClock()
     {
         Device.StartTimer(TimeSpan.FromSeconds(1), () =>

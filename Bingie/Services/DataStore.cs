@@ -1,63 +1,131 @@
 ﻿namespace Bingie.Services;
 
-public class DataStore<T> : IDataStore<T>
+public class DataStore<T> : IDataStore<T> where T : class
 {
-    // Simulate a local data store (e.g., SQLite or any other storage mechanism).
-    private readonly List<T> _dataStore = [];
+    private readonly SqliteConnectionFactory _connectionFactory;
 
-    // Adds a new item to the data store (e.g., SQLite database).
-    // Returns true if the item was successfully added.
+    public DataStore(SqliteConnectionFactory connectionFactory)
+    {
+        _connectionFactory = connectionFactory;
+    }
+
     public async Task<bool> AddItemAsync(T item)
     {
-        // In a real implementation, this would involve database insertion (e.g., SQLite)
-        _dataStore.Add(item); // Adds the item to the in-memory store for simplicity
-        return await Task.FromResult(true); // Simulating an async operation
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
+
+        var tableName =
+            typeof(T).Name == "BingeEntry" ? "BingeEntrys" : typeof(T).Name + "s"; // Correct table name for BingeEntry
+        var properties = typeof(T).GetProperties();
+        var columns = string.Join(", ", properties.Select(p => p.Name));
+        var values = string.Join(", ", properties.Select(p => $"@{p.Name}"));
+
+        var insertCmd = $"INSERT INTO {tableName} ({columns}) VALUES ({values});";
+
+        using var command = connection.CreateCommand();
+        command.CommandText = insertCmd;
+
+        foreach (var property in properties)
+            command.Parameters.AddWithValue($"@{property.Name}", property.GetValue(item));
+
+        await command.ExecuteNonQueryAsync();
+        return true;
     }
 
-    // Retrieves a single item by its unique identifier.
-    // Returns the item if found, otherwise null.
     public async Task<T> GetItemAsync(string id)
     {
-        // In a real implementation, this would involve querying the database (e.g., SQLite)
-        // Simulating fetching an item by ID
-        var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simplified lookup
-        return await Task.FromResult(item);
-    }
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
 
-    // Retrieves all items from the data store.
-    // Returns an enumerable collection of items.
-    public async Task<IEnumerable<T>> GetItemsAsync()
-    {
-        // In a real implementation, this would fetch items from the database.
-        return await Task.FromResult(_dataStore.AsEnumerable());
-    }
+        var tableName =
+            typeof(T).Name == "BingeEntry" ? "BingeEntrys" : typeof(T).Name + "s"; // Correct table name for BingeEntry
+        var selectCmd = $"SELECT * FROM {tableName} WHERE Id = @id;";
 
-    // Updates an existing item in the data store.
-    // Returns true if the item was successfully updated, otherwise false.
-    public async Task<bool> UpdateItemAsync(T item)
-    {
-        // In a real implementation, this would involve updating the item in the database.
-        // Simulating an update operation
-        var existingItem = _dataStore.FirstOrDefault(i => i.Equals(item));
-        if (existingItem != null)
-            // Assuming the item was updated successfully.
-            return await Task.FromResult(true);
+        using var command = connection.CreateCommand();
+        command.CommandText = selectCmd;
+        command.Parameters.AddWithValue("@id", id);
 
-        return await Task.FromResult(false); // Item not found
-    }
-
-    // Deletes an item by its unique identifier.
-    // Returns true if the item was successfully deleted, otherwise false.
-    public async Task<bool> DeleteItemAsync(string id)
-    {
-        // In a real implementation, this would involve deleting from the database.
-        var item = _dataStore.FirstOrDefault(i => i.ToString() == id); // Simulated lookup
-        if (item != null)
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
         {
-            _ = _dataStore.Remove(item); // Remove the item from the in-memory store
-            return await Task.FromResult(true); // Item deleted
+            var item = Activator.CreateInstance<T>();
+            foreach (var property in typeof(T).GetProperties())
+            {
+                var value = reader[property.Name];
+                property.SetValue(item, value);
+            }
+
+            return item;
         }
 
-        return await Task.FromResult(false); // Item not found
+        return null;
+    }
+
+    public async Task<IEnumerable<T>> GetItemsAsync()
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
+
+        var tableName =
+            typeof(T).Name == "BingeEntry" ? "BingeEntrys" : typeof(T).Name + "s"; // Correct table name for BingeEntry
+        var selectCmd = $"SELECT * FROM {tableName};";
+
+        using var command = connection.CreateCommand();
+        command.CommandText = selectCmd;
+
+        using var reader = await command.ExecuteReaderAsync();
+        var items = new List<T>();
+        while (await reader.ReadAsync())
+        {
+            var item = Activator.CreateInstance<T>();
+            foreach (var property in typeof(T).GetProperties())
+            {
+                var value = reader[property.Name];
+                property.SetValue(item, value);
+            }
+
+            items.Add(item);
+        }
+
+        return items;
+    }
+
+    public async Task<bool> UpdateItemAsync(T item)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
+
+        var tableName =
+            typeof(T).Name == "BingeEntry" ? "BingeEntrys" : typeof(T).Name + "s"; // Correct table name for BingeEntry
+        var properties = typeof(T).GetProperties();
+        var setClause = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
+
+        var updateCmd = $"UPDATE {tableName} SET {setClause} WHERE Id = @Id;";
+
+        using var command = connection.CreateCommand();
+        command.CommandText = updateCmd;
+
+        foreach (var property in properties)
+            command.Parameters.AddWithValue($"@{property.Name}", property.GetValue(item));
+
+        await command.ExecuteNonQueryAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteItemAsync(string id)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
+
+        var tableName =
+            typeof(T).Name == "BingeEntry" ? "BingeEntrys" : typeof(T).Name + "s"; // Correct table name for BingeEntry
+        var deleteCmd = $"DELETE FROM {tableName} WHERE Id = @id;";
+
+        using var command = connection.CreateCommand();
+        command.CommandText = deleteCmd;
+        command.Parameters.AddWithValue("@id", id);
+
+        await command.ExecuteNonQueryAsync();
+        return true;
     }
 }

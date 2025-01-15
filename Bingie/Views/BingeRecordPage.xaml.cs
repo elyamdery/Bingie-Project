@@ -6,11 +6,13 @@ namespace Bingie.Views;
 public partial class BingeRecordsPage : ContentPage
 {
     private readonly IDataStore<BingeEntry> _dataStore;
+    private readonly string _username;
 
-    public BingeRecordsPage(IDataStore<BingeEntry> dataStore)
+    public BingeRecordsPage(IDataStore<BingeEntry> dataStore, string username)
     {
         InitializeComponent();
-        _dataStore = dataStore;
+        _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
+        _username = username ?? throw new ArgumentNullException(nameof(username));
         LoadBingeRecordsAsync();
     }
 
@@ -19,7 +21,8 @@ public partial class BingeRecordsPage : ContentPage
         try
         {
             IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
-            List<BingeEntry> todayRecords = records.Where(r => r.Date.Date == DateTime.Today).ToList();
+            List<BingeEntry> todayRecords =
+                records.Where(r => r.Date.Date == DateTime.Today && r.Username == _username).ToList();
             BingeRecordsCollectionView.ItemsSource = todayRecords;
         }
         catch (Exception ex)
@@ -34,7 +37,7 @@ public partial class BingeRecordsPage : ContentPage
         {
             BingeEntry newRecord = new()
             {
-                Username = "User1", // Replace with logged-in user's username
+                Username = _username,
                 Date = DateTime.Now,
                 Duration = TimeSpan.FromMinutes(20) // Example duration
             };

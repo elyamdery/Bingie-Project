@@ -1,9 +1,9 @@
-Bingie.MainActivity, Bingie;crc64ef972c8788a7721e.MainActivity
-Bingie.MainActivity;crc64ef972c8788a7721e.MainActivity
-bingie.MainActivity;crc64ef972c8788a7721e.MainActivity
-Bingie.MainApplication, Bingie;crc64ef972c8788a7721e.MainApplication
-Bingie.MainApplication;crc64ef972c8788a7721e.MainApplication
-bingie.MainApplication;crc64ef972c8788a7721e.MainApplication
+Bingie.Platforms.Android.MainActivity, Bingie;crc64f7277d189547f8e1.MainActivity
+Bingie.Platforms.Android.MainActivity;crc64f7277d189547f8e1.MainActivity
+bingie.platforms.android.MainActivity;crc64f7277d189547f8e1.MainActivity
+Bingie.Platforms.Android.MainApplication, Bingie;crc64f7277d189547f8e1.MainApplication
+Bingie.Platforms.Android.MainApplication;crc64f7277d189547f8e1.MainApplication
+bingie.platforms.android.MainApplication;crc64f7277d189547f8e1.MainApplication
 GoogleGson.IExclusionStrategy, GoogleGson;com.google.gson.ExclusionStrategy
 GoogleGson.IExclusionStrategy;com.google.gson.ExclusionStrategy
 com.google.gson.ExclusionStrategy;com.google.gson.ExclusionStrategy

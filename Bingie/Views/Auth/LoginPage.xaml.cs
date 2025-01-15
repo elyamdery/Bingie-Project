@@ -1,4 +1,7 @@
-﻿namespace Bingie.Views.Auth;
+﻿using Bingie.Models;
+using Bingie.Services;
+
+namespace Bingie.Views.Auth;
 
 public partial class LoginPage : ContentPage
 {
@@ -51,7 +54,10 @@ public partial class LoginPage : ContentPage
             }
 
             await DisplayAlert("Success", "Login successful!", "OK");
-            Application.Current.MainPage = new AppShell();
+
+            // Create an in-memory implementation of IDataStore<BingeEntry> and pass it along with the username
+            IDataStore<BingeEntry> dataStore = new InMemoryBingeEntryDataStore();
+            Application.Current.MainPage = new AppShell(dataStore, username);
         }
         else
         {
@@ -62,5 +68,52 @@ public partial class LoginPage : ContentPage
     private void OnRegisterClicked(object sender, EventArgs e)
     {
         _ = Navigation.PushAsync(new RegistrationPage(_authService));
+    }
+
+    // In-memory implementation of IDataStore<BingeEntry>
+    private class InMemoryBingeEntryDataStore : IDataStore<BingeEntry>
+    {
+        private readonly List<BingeEntry> _items = new();
+
+        public Task<bool> AddItemAsync(BingeEntry item)
+        {
+            _items.Add(item);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> UpdateItemAsync(BingeEntry item)
+        {
+            var oldItem = _items.Find(x => x.Id == item.Id);
+            if (oldItem != null)
+            {
+                _items.Remove(oldItem);
+                _items.Add(item);
+                return Task.FromResult(true);
+            }
+
+            return Task.FromResult(false);
+        }
+
+        public Task<bool> DeleteItemAsync(string id)
+        {
+            var oldItem = _items.Find(x => x.Id.ToString() == id);
+            if (oldItem != null)
+            {
+                _items.Remove(oldItem);
+                return Task.FromResult(true);
+            }
+
+            return Task.FromResult(false);
+        }
+
+        public Task<BingeEntry> GetItemAsync(string id)
+        {
+            return Task.FromResult(_items.Find(x => x.Id.ToString() == id));
+        }
+
+        public Task<IEnumerable<BingeEntry>> GetItemsAsync()
+        {
+            return Task.FromResult<IEnumerable<BingeEntry>>(_items);
+        }
     }
 }

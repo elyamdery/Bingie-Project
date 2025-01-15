@@ -428,3 +428,10 @@ C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-maccatalyst\maccatalys
 C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\Bingie.pdb
 C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\Bingie.genruntimeconfig.cache
 C:\Users\user\source\repos\Bingie\Bingie\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\Bingie.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CodeAnalysis.CSharp.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CodeAnalysis.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CodeAnalysis.VisualBasic.Features.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Roslyn.VisualStudio.Services.UnitTests.dll
+C:\Users\user\source\repos\Bingie\Bingie\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Roslynator.Interfaces.dll

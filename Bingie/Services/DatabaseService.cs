@@ -18,7 +18,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         await connection.OpenAsync();
 
         var insertCmd = @"
-                INSERT INTO Binges (Username, DateTime, Duration)
+                INSERT INTO BingeEntrys (Username, DateTime, Duration)
                 VALUES (@username, @dateTime, @duration);";
 
         using var command = connection.CreateCommand();
@@ -34,11 +34,11 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
     // Explicit implementation for BingeEntry
     async Task<IEnumerable<BingeEntry>> IDataStore<BingeEntry>.GetItemsAsync()
     {
-        List<BingeEntry> entries = [];
+        List<BingeEntry> entries = new();
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM Binges;";
+        var selectCmd = "SELECT * FROM BingeEntrys;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
 
@@ -61,7 +61,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM Binges WHERE Id = @id;";
+        var selectCmd = "SELECT * FROM BingeEntrys WHERE Id = @id;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
         _ = command.Parameters.AddWithValue("@id", id);
@@ -85,7 +85,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         await connection.OpenAsync();
 
         var updateCmd = @"
-                UPDATE Binges 
+                UPDATE BingeEntrys 
                 SET Username = @username, DateTime = @dateTime, Duration = @duration 
                 WHERE Id = @id;";
 
@@ -106,7 +106,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var deleteCmd = "DELETE FROM Binges WHERE Id = @id;";
+        var deleteCmd = "DELETE FROM BingeEntrys WHERE Id = @id;";
         using var command = connection.CreateCommand();
         command.CommandText = deleteCmd;
         _ = command.Parameters.AddWithValue("@id", id);
@@ -137,7 +137,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
     // Explicit implementation for User
     async Task<IEnumerable<User>> IDataStore<User>.GetItemsAsync()
     {
-        List<User> users = [];
+        List<User> users = new();
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 

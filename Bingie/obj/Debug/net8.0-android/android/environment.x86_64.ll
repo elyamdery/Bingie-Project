@@ -108,7 +108,7 @@ target triple = "x86_64-unknown-linux-android21"
 	i32 3, ; uint32_t package_naming_policy (0x3)
 	i32 12, ; uint32_t environment_variable_count (0xc)
 	i32 0, ; uint32_t system_property_count (0x0)
-	i32 373, ; uint32_t number_of_assemblies_in_apk (0x175)
+	i32 442, ; uint32_t number_of_assemblies_in_apk (0x1ba)
 	i32 70, ; uint32_t bundled_assembly_name_width (0x46)
 	i32 2, ; uint32_t number_of_assembly_store_files (0x2)
 	i32 44, ; uint32_t number_of_dso_cache_entries (0x2c)
@@ -144,13 +144,13 @@ target triple = "x86_64-unknown-linux-android21"
 	%struct.DSOCacheEntry {
 		i64 3207715548900369358, ; hash 0x2c84184be8b423ce, from name: e_sqlite3.so
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
+		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlite3.so
 		ptr null; void* handle (0x0)
 	}, ; 3
 	%struct.DSOCacheEntry {
 		i64 3452452921003304563, ; hash 0x2fe993a3c8296673, from name: e_sqlcipher
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlcipher.so
+		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlcipher.so
 		ptr null; void* handle (0x0)
 	}, ; 4
 	%struct.DSOCacheEntry {
@@ -162,13 +162,13 @@ target triple = "x86_64-unknown-linux-android21"
 	%struct.DSOCacheEntry {
 		i64 4459893396487739745, ; hash 0x3de4b96a21c31961, from name: libe_sqlite3.so
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
+		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlite3.so
 		ptr null; void* handle (0x0)
 	}, ; 6
 	%struct.DSOCacheEntry {
 		i64 5307006030405502290, ; hash 0x49a645ddef2d0552, from name: libe_sqlcipher
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlcipher.so
+		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlcipher.so
 		ptr null; void* handle (0x0)
 	}, ; 7
 	%struct.DSOCacheEntry {
@@ -252,7 +252,7 @@ target triple = "x86_64-unknown-linux-android21"
 	%struct.DSOCacheEntry {
 		i64 8027067278921088108, ; hash 0x6f65df293440bc6c, from name: libe_sqlite3
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
+		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlite3.so
 		ptr null; void* handle (0x0)
 	}, ; 21
 	%struct.DSOCacheEntry {
@@ -276,7 +276,7 @@ target triple = "x86_64-unknown-linux-android21"
 	%struct.DSOCacheEntry {
 		i64 8996927521954684202, ; hash 0x7cdb81e9d80b5d2a, from name: e_sqlite3
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
+		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlite3.so
 		ptr null; void* handle (0x0)
 	}, ; 25
 	%struct.DSOCacheEntry {
@@ -312,13 +312,13 @@ target triple = "x86_64-unknown-linux-android21"
 	%struct.DSOCacheEntry {
 		i64 11849377614375267324, ; hash 0xa4717228da4dabfc, from name: e_sqlcipher.so
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlcipher.so
+		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlcipher.so
 		ptr null; void* handle (0x0)
 	}, ; 31
 	%struct.DSOCacheEntry {
 		i64 14386979145226910985, ; hash 0xc7a8d14e9e33fd09, from name: libe_sqlcipher.so
 		i8 0, ; bool ignore
-		ptr @.DSOCacheEntry.1_name, ; name: libe_sqlcipher.so
+		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlcipher.so
 		ptr null; void* handle (0x0)
 	}, ; 32
 	%struct.DSOCacheEntry {
@@ -762,9 +762,78 @@ target triple = "x86_64-unknown-linux-android21"
 @_XamarinAndroidBundledAssembly_name_172_172 = internal dso_local global [70 x i8] zeroinitializer, align 16
 @_XamarinAndroidBundledAssembly_name_173_173 = internal dso_local global [70 x i8] zeroinitializer, align 16
 @_XamarinAndroidBundledAssembly_name_174_174 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_175_175 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_176_176 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_177_177 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_178_178 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_179_179 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17a_17a = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17b_17b = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17c_17c = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17d_17d = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17e_17e = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_17f_17f = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_180_180 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_181_181 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_182_182 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_183_183 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_184_184 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_185_185 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_186_186 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_187_187 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_188_188 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_189_189 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18a_18a = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18b_18b = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18c_18c = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18d_18d = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18e_18e = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_18f_18f = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_190_190 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_191_191 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_192_192 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_193_193 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_194_194 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_195_195 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_196_196 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_197_197 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_198_198 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_199_199 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19a_19a = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19b_19b = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19c_19c = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19d_19d = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19e_19e = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_19f_19f = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a0_1a0 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a1_1a1 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a2_1a2 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a3_1a3 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a4_1a4 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a5_1a5 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a6_1a6 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a7_1a7 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a8_1a8 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1a9_1a9 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1aa_1aa = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1ab_1ab = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1ac_1ac = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1ad_1ad = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1ae_1ae = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1af_1af = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b0_1b0 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b1_1b1 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b2_1b2 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b3_1b3 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b4_1b4 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b5_1b5 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b6_1b6 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b7_1b7 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b8_1b8 = internal dso_local global [70 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_1b9_1b9 = internal dso_local global [70 x i8] zeroinitializer, align 16
 
 ; Bundled assembly name buffers, all 70 bytes long
-@bundled_assemblies = dso_local local_unnamed_addr global [373 x %struct.XamarinAndroidBundledAssembly] [
+@bundled_assemblies = dso_local local_unnamed_addr global [442 x %struct.XamarinAndroidBundledAssembly] [
 	%struct.XamarinAndroidBundledAssembly {
 		i32 -1, ; int32_t apk_fd (0xffffffff)
 		i32 0, ; uint32_t data_offset (0x0)
@@ -3748,7 +3817,559 @@ target triple = "x86_64-unknown-linux-android21"
 		ptr null, ; uint8_t* data (0x0)
 		i32 70, ; uint32_t name_length (0x46)
 		ptr @_XamarinAndroidBundledAssembly_name_174_174; char* name
-	} ; 372
+	}, ; 372
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_175_175; char* name
+	}, ; 373
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_176_176; char* name
+	}, ; 374
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_177_177; char* name
+	}, ; 375
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_178_178; char* name
+	}, ; 376
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_179_179; char* name
+	}, ; 377
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17a_17a; char* name
+	}, ; 378
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17b_17b; char* name
+	}, ; 379
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17c_17c; char* name
+	}, ; 380
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17d_17d; char* name
+	}, ; 381
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17e_17e; char* name
+	}, ; 382
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_17f_17f; char* name
+	}, ; 383
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_180_180; char* name
+	}, ; 384
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_181_181; char* name
+	}, ; 385
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_182_182; char* name
+	}, ; 386
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_183_183; char* name
+	}, ; 387
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_184_184; char* name
+	}, ; 388
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_185_185; char* name
+	}, ; 389
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_186_186; char* name
+	}, ; 390
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_187_187; char* name
+	}, ; 391
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_188_188; char* name
+	}, ; 392
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_189_189; char* name
+	}, ; 393
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18a_18a; char* name
+	}, ; 394
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18b_18b; char* name
+	}, ; 395
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18c_18c; char* name
+	}, ; 396
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18d_18d; char* name
+	}, ; 397
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18e_18e; char* name
+	}, ; 398
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_18f_18f; char* name
+	}, ; 399
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_190_190; char* name
+	}, ; 400
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_191_191; char* name
+	}, ; 401
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_192_192; char* name
+	}, ; 402
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_193_193; char* name
+	}, ; 403
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_194_194; char* name
+	}, ; 404
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_195_195; char* name
+	}, ; 405
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_196_196; char* name
+	}, ; 406
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_197_197; char* name
+	}, ; 407
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_198_198; char* name
+	}, ; 408
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_199_199; char* name
+	}, ; 409
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19a_19a; char* name
+	}, ; 410
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19b_19b; char* name
+	}, ; 411
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19c_19c; char* name
+	}, ; 412
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19d_19d; char* name
+	}, ; 413
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19e_19e; char* name
+	}, ; 414
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_19f_19f; char* name
+	}, ; 415
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a0_1a0; char* name
+	}, ; 416
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a1_1a1; char* name
+	}, ; 417
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a2_1a2; char* name
+	}, ; 418
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a3_1a3; char* name
+	}, ; 419
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a4_1a4; char* name
+	}, ; 420
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a5_1a5; char* name
+	}, ; 421
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a6_1a6; char* name
+	}, ; 422
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a7_1a7; char* name
+	}, ; 423
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a8_1a8; char* name
+	}, ; 424
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1a9_1a9; char* name
+	}, ; 425
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1aa_1aa; char* name
+	}, ; 426
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1ab_1ab; char* name
+	}, ; 427
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1ac_1ac; char* name
+	}, ; 428
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1ad_1ad; char* name
+	}, ; 429
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1ae_1ae; char* name
+	}, ; 430
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1af_1af; char* name
+	}, ; 431
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b0_1b0; char* name
+	}, ; 432
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b1_1b1; char* name
+	}, ; 433
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b2_1b2; char* name
+	}, ; 434
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b3_1b3; char* name
+	}, ; 435
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b4_1b4; char* name
+	}, ; 436
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b5_1b5; char* name
+	}, ; 437
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b6_1b6; char* name
+	}, ; 438
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b7_1b7; char* name
+	}, ; 439
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b8_1b8; char* name
+	}, ; 440
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t apk_fd (0xffffffff)
+		i32 0, ; uint32_t data_offset (0x0)
+		i32 0, ; uint32_t data_size (0x0)
+		ptr null, ; uint8_t* data (0x0)
+		i32 70, ; uint32_t name_length (0x46)
+		ptr @_XamarinAndroidBundledAssembly_name_1b9_1b9; char* name
+	} ; 441
 ], align 16
 
 @assembly_store_bundled_assemblies = dso_local local_unnamed_addr global [0 x %struct.AssemblyStoreSingleAssemblyRuntimeData] zeroinitializer, align 8
@@ -3766,7 +4387,7 @@ target triple = "x86_64-unknown-linux-android21"
 @.env.4 = private unnamed_addr constant [15 x i8] c"MONO_LOG_LEVEL\00", align 1
 @.env.5 = private unnamed_addr constant [5 x i8] c"info\00", align 1
 @.env.6 = private unnamed_addr constant [17 x i8] c"XAMARIN_BUILD_ID\00", align 16
-@.env.7 = private unnamed_addr constant [37 x i8] c"7ad1c309-afd0-4945-b575-b2c15fb852d0\00", align 16
+@.env.7 = private unnamed_addr constant [37 x i8] c"fc9dcd5d-b490-4f63-b3ef-9d7633abc035\00", align 16
 @.env.8 = private unnamed_addr constant [28 x i8] c"XA_HTTP_CLIENT_HANDLER_TYPE\00", align 16
 @.env.9 = private unnamed_addr constant [42 x i8] c"Xamarin.Android.Net.AndroidMessageHandler\00", align 16
 @.env.10 = private unnamed_addr constant [29 x i8] c"__XA_PACKAGE_NAMING_POLICY__\00", align 16
@@ -3776,8 +4397,8 @@ target triple = "x86_64-unknown-linux-android21"
 @.ApplicationConfig.0_android_package_name = private unnamed_addr constant [23 x i8] c"com.companyname.bingie\00", align 16
 
 ;DSOCacheEntry
-@.DSOCacheEntry.0_name = private unnamed_addr constant [16 x i8] c"libe_sqlite3.so\00", align 16
-@.DSOCacheEntry.1_name = private unnamed_addr constant [18 x i8] c"libe_sqlcipher.so\00", align 16
+@.DSOCacheEntry.0_name = private unnamed_addr constant [18 x i8] c"libe_sqlcipher.so\00", align 16
+@.DSOCacheEntry.1_name = private unnamed_addr constant [16 x i8] c"libe_sqlite3.so\00", align 16
 @.DSOCacheEntry.2_name = private unnamed_addr constant [35 x i8] c"libSystem.IO.Compression.Native.so\00", align 16
 @.DSOCacheEntry.3_name = private unnamed_addr constant [20 x i8] c"libSystem.Native.so\00", align 16
 @.DSOCacheEntry.4_name = private unnamed_addr constant [50 x i8] c"libSystem.Security.Cryptography.Native.Android.so\00", align 16

@@ -1,8 +1,6 @@
 ﻿using Bingie.Models;
 using Bingie.Services;
 
-// Add this using directive
-
 public class AuthService : IAuthService
 {
     private readonly IDataStore<User> _databaseService;
