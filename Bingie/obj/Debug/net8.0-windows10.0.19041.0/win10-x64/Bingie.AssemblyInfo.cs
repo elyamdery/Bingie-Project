@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Bingie")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ebb5d57c53c2c41a4446f98cce42f8ebd9897165")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+1b30bab38b28d09849f5a5ef4e841c48b708b5d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Bingie")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Bingie")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
