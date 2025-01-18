@@ -98513,88 +98513,88 @@ target triple = "aarch64-unknown-linux-android21"
 		ptr @.TypeMapEntry.21651_from; char* to
 	}, ; 10269
 	%struct.TypeMapEntry {
-		ptr @.TypeMapEntry.14332_to, ; char* from
-		ptr @.TypeMapEntry.14331_from; char* to
-	}, ; 10270
-	%struct.TypeMapEntry {
-		ptr @.TypeMapEntry.14334_to, ; char* from
-		ptr @.TypeMapEntry.14333_from; char* to
-	}, ; 10271
-	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22864_to, ; char* from
 		ptr @.TypeMapEntry.22863_from; char* to
-	}, ; 10272
+	}, ; 10270
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22866_to, ; char* from
 		ptr @.TypeMapEntry.22865_from; char* to
-	}, ; 10273
+	}, ; 10271
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22868_to, ; char* from
 		ptr @.TypeMapEntry.22867_from; char* to
-	}, ; 10274
+	}, ; 10272
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22870_to, ; char* from
 		ptr @.TypeMapEntry.22869_from; char* to
-	}, ; 10275
+	}, ; 10273
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22872_to, ; char* from
 		ptr @.TypeMapEntry.22871_from; char* to
-	}, ; 10276
+	}, ; 10274
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22874_to, ; char* from
 		ptr @.TypeMapEntry.22873_from; char* to
-	}, ; 10277
+	}, ; 10275
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22876_to, ; char* from
 		ptr @.TypeMapEntry.22875_from; char* to
-	}, ; 10278
+	}, ; 10276
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22878_to, ; char* from
 		ptr @.TypeMapEntry.22877_from; char* to
-	}, ; 10279
+	}, ; 10277
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22880_to, ; char* from
 		ptr @.TypeMapEntry.22879_from; char* to
-	}, ; 10280
+	}, ; 10278
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22882_to, ; char* from
 		ptr @.TypeMapEntry.22881_from; char* to
-	}, ; 10281
+	}, ; 10279
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.22884_to, ; char* from
 		ptr @.TypeMapEntry.22883_from; char* to
-	}, ; 10282
+	}, ; 10280
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21595_to, ; char* from
 		ptr @.TypeMapEntry.21594_from; char* to
-	}, ; 10283
+	}, ; 10281
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21597_to, ; char* from
 		ptr @.TypeMapEntry.21596_from; char* to
-	}, ; 10284
+	}, ; 10282
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21599_to, ; char* from
 		ptr @.TypeMapEntry.21598_from; char* to
-	}, ; 10285
+	}, ; 10283
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21601_to, ; char* from
 		ptr @.TypeMapEntry.21600_from; char* to
-	}, ; 10286
+	}, ; 10284
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21603_to, ; char* from
 		ptr @.TypeMapEntry.21602_from; char* to
-	}, ; 10287
+	}, ; 10285
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21605_to, ; char* from
 		ptr @.TypeMapEntry.21604_from; char* to
-	}, ; 10288
+	}, ; 10286
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21607_to, ; char* from
 		ptr @.TypeMapEntry.21606_from; char* to
-	}, ; 10289
+	}, ; 10287
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21609_to, ; char* from
 		ptr @.TypeMapEntry.21608_from; char* to
+	}, ; 10288
+	%struct.TypeMapEntry {
+		ptr @.TypeMapEntry.14332_to, ; char* from
+		ptr @.TypeMapEntry.14331_from; char* to
+	}, ; 10289
+	%struct.TypeMapEntry {
+		ptr @.TypeMapEntry.14334_to, ; char* from
+		ptr @.TypeMapEntry.14333_from; char* to
 	}, ; 10290
 	%struct.TypeMapEntry {
 		ptr @.TypeMapEntry.21585_to, ; char* from
@@ -129172,10 +129172,10 @@ target triple = "aarch64-unknown-linux-android21"
 @.TypeMapEntry.14328_from = private unnamed_addr constant [78 x i8] c"AndroidX.Window.Layout.WindowMetricsCalculatorConsts, Xamarin.AndroidX.Window\00", align 1
 @.TypeMapEntry.14329_from = private unnamed_addr constant [58 x i8] c"AndroidX.Window.WindowProperties, Xamarin.AndroidX.Window\00", align 1
 @.TypeMapEntry.14330_to = private unnamed_addr constant [33 x i8] c"androidx/window/WindowProperties\00", align 1
-@.TypeMapEntry.14331_from = private unnamed_addr constant [28 x i8] c"Bingie.MainActivity, Bingie\00", align 1
-@.TypeMapEntry.14332_to = private unnamed_addr constant [35 x i8] c"crc64ef972c8788a7721e/MainActivity\00", align 1
-@.TypeMapEntry.14333_from = private unnamed_addr constant [31 x i8] c"Bingie.MainApplication, Bingie\00", align 1
-@.TypeMapEntry.14334_to = private unnamed_addr constant [38 x i8] c"crc64ef972c8788a7721e/MainApplication\00", align 1
+@.TypeMapEntry.14331_from = private unnamed_addr constant [46 x i8] c"Bingie.Platforms.Android.MainActivity, Bingie\00", align 1
+@.TypeMapEntry.14332_to = private unnamed_addr constant [35 x i8] c"crc64f7277d189547f8e1/MainActivity\00", align 1
+@.TypeMapEntry.14333_from = private unnamed_addr constant [49 x i8] c"Bingie.Platforms.Android.MainApplication, Bingie\00", align 1
+@.TypeMapEntry.14334_to = private unnamed_addr constant [38 x i8] c"crc64f7277d189547f8e1/MainApplication\00", align 1
 @.TypeMapEntry.14335_from = private unnamed_addr constant [84 x i8] c"Bumptech.Glide.DiskLruCache.DiskLruCache+Editor, Xamarin.Android.Glide.DiskLruCache\00", align 1
 @.TypeMapEntry.14336_to = private unnamed_addr constant [52 x i8] c"com/bumptech/glide/disklrucache/DiskLruCache$Editor\00", align 1
 @.TypeMapEntry.14337_from = private unnamed_addr constant [83 x i8] c"Bumptech.Glide.DiskLruCache.DiskLruCache+Value, Xamarin.Android.Glide.DiskLruCache\00", align 1

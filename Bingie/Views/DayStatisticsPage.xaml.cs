@@ -1,45 +1,47 @@
-﻿using System;
-using Microsoft.Maui.Controls;
+﻿using Bingie.Models;
+using Bingie.Services;
 
-namespace Bingie.Views
+namespace Bingie.Views;
+
+public partial class DayStatisticsPage : ContentPage
 {
-    public partial class DayStatisticsPage : ContentPage
+    private readonly IDataStore<BingeEntry> _dataStore;
+    private readonly DateTime _selectedDate;
+    private readonly string _username;
+
+    public DayStatisticsPage(DateTime date, IDataStore<BingeEntry> dataStore, string username)
     {
-        private DateTime selectedDate;
+        InitializeComponent();
+        _selectedDate = date;
+        _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
+        _username = username ?? throw new ArgumentNullException(nameof(username));
+        DisplayStatisticsAsync();
+    }
 
-        public DayStatisticsPage(DateTime date)
+    private async void DisplayStatisticsAsync()
+    {
+        try
         {
-            InitializeComponent();
-            selectedDate = date;
-            DisplayStatistics();
+            SelectedDateLabel.Text = _selectedDate.ToString("MMMM dd, yyyy");
+            var bingeCount = await GetBingeCountForDateAsync(_selectedDate);
+            BingeCountLabel.Text = $"You binged {bingeCount} times on this day.";
         }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Error in DisplayStatistics: {ex.Message}");
+            BingeCountLabel.Text = "Unable to retrieve binge count.";
+        }
+    }
 
-        private void DisplayStatistics()
-        {
-            try
-            {
-                SelectedDateLabel.Text = selectedDate.ToString("MMMM dd, yyyy");
-                int bingeCount = GetBingeCountForDate(selectedDate);
-                BingeCountLabel.Text = $"You binged {bingeCount} times on this day.";
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine($"Error in DisplayStatistics: {ex.Message}");
-                BingeCountLabel.Text = "Unable to retrieve binge count.";
-            }
-        }
+    private async Task<int> GetBingeCountForDateAsync(DateTime date)
+    {
+        IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
+        return records.Count(r => r.Username == _username && r.Date.Date == date.Date);
+    }
 
-        private int GetBingeCountForDate(DateTime date)
-        {
-            // TODO: Implement actual logic to retrieve binge count from your data storage
-            // For now, we'll return a random number between 0 and 5
-            return new Random().Next(0, 6);
-        }
-
-        private void OnBackButtonClicked(object sender, EventArgs e)
-        {
-            Navigation.PopAsync();
-        }
+    private void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        _ = Navigation.PopAsync();
     }
 }

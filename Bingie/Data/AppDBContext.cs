@@ -1,32 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Bingie.Models;
+﻿using Bingie.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Bingie.Data
+namespace Bingie.Data;
+
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    private readonly string _connectionString;
+
+    public AppDbContext(string connectionString)
     {
-        private readonly string _connectionString;
+        _connectionString = connectionString;
+        _ = Database.EnsureCreated();
+    }
 
-        public AppDbContext(string connectionString)
-        {
-            _connectionString = connectionString;
-            Database.EnsureCreated();
-        }
+    public DbSet<User> Users { get; set; }
+    public DbSet<BingeEntry> BingeEntries { get; set; }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<BingeEntry> BingeEntries { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        _ = optionsBuilder.UseSqlite(_connectionString);
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(_connectionString);
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // Ensure usernames are unique
-            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-        }
+        // Ensure usernames are unique
+        _ = modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
     }
 }
