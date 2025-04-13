@@ -51,6 +51,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Resources.Styles.St
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/Users/user/source/repos/Bingie/Bingie/Views/ArticleDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.ArticleDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ArticleDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ArticleDetailPage.xaml
+
 [C:/Users/user/source/repos/Bingie/Bingie/Views/Auth/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.Auth.LoginPage.xaml

@@ -7,27 +7,29 @@
 
     <StackLayout Padding="10">
 
-        <!-- Date Label -->
-        <Label x:Name="SelectedDateLabel"
-               FontSize="24"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               TextColor="Blue" />
-
-        <!-- Binge Count Label -->
-        <Label x:Name="BingeCountLabel"
-               FontSize="20"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               TextColor="Red"
-               Margin="0,20,0,0" />
-
         <!-- Back Button -->
         <Button Text="Back to History"
                 FontSize="18"
                 HorizontalOptions="Center"
-                VerticalOptions="CenterAndExpand"
+                VerticalOptions="Start"
                 Clicked="OnBackButtonClicked" />
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+            <!-- Date Label -->
+            <Label x:Name="SelectedDateLabel"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="Blue" />
+
+            <!-- Binge Count Label -->
+            <Label x:Name="BingeCountLabel"
+                   FontSize="28"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="Red"
+                   Margin="0,20,0,0" />
+        </StackLayout>
 
     </StackLayout>
 </ContentPage>

@@ -23,7 +23,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("daystatistics", typeof(DayStatisticsPage));
         Routing.RegisterRoute("register", typeof(RegistrationPage));
         Routing.RegisterRoute("statistics", typeof(StatisticsPage));
-        Routing.RegisterRoute("bingeRecords", typeof(BingeRecordsPage));
+        Routing.RegisterRoute("bingeRecords", typeof(BingeRecordPage));
 
         // Set the ContentTemplate for the History tab
         var historyTab = new ShellContent
@@ -51,7 +51,7 @@ public partial class AppShell : Shell
                     Title = "Explore",
                     Icon = "explore.png",
                     Route = "explore",
-                    ContentTemplate = new DataTemplate(() => new ExplorePage())
+                    ContentTemplate = new DataTemplate(() => new ExplorePage(_dataStore, _username))
                 }
             }
         });

@@ -33,6 +33,11 @@
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+		<!-- iOS specific settings -->
+		<CreatePackage Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">false</CreatePackage>
+		<CodesignKey Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">iPhone Developer</CodesignKey>
+		<CodesignProvision Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'"></CodesignProvision>
+		<RuntimeIdentifier Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">iossimulator-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>

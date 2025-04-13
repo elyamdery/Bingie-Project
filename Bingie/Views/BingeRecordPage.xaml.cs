@@ -3,12 +3,12 @@ using Bingie.Services;
 
 namespace Bingie.Views;
 
-public partial class BingeRecordsPage : ContentPage
+public partial class BingeRecordPage : ContentPage
 {
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly string _username;
 
-    public BingeRecordsPage(IDataStore<BingeEntry> dataStore, string username)
+    public BingeRecordPage(IDataStore<BingeEntry> dataStore, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));

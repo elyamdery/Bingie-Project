@@ -1,4 +1,6 @@
-﻿public interface IAuthService
+﻿namespace Bingie.Services;
+
+public interface IAuthService
 {
     // Authenticates the user with the provided credentials (username & password).
     // Returns true if authentication is successful, otherwise false.
@@ -11,4 +13,12 @@
     // Registers a new user with the provided username and password.
     // Returns true if registration is successful, otherwise false.
     Task<bool> RegisterAsync(string username, string password);
+
+    // Checks if the user is currently authenticated.
+    // Returns true if the user is authenticated, otherwise false.
+    bool IsAuthenticated();
+
+    // Gets the username of the currently authenticated user.
+    // Returns the username if authenticated, otherwise an empty string.
+    string GetCurrentUsername();
 }

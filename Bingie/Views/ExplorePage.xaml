@@ -3,19 +3,280 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.ExplorePage"
-             Title="Explore">
-    <StackLayout Padding="10">
-        <Label Text="Explore"
-               FontSize="36"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Margin="0,20,0,0" />
+             Title="Explore"
+             BackgroundColor="#f8f9fa">
 
-        <Label x:Name="RandomQuoteLabel"
-               FontSize="20"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Margin="0,10,0,20" />
-    </StackLayout>
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Spacing="15" Margin="0,10,0,20">
+            <Label Text="Explore"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#343a40"
+                   HorizontalOptions="Start" />
+
+            <Label Text="Discover resources and community"
+                   FontSize="16"
+                   TextColor="#6c757d"
+                   HorizontalOptions="Start"
+                   Margin="0,-10,0,0" />
+        </StackLayout>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Spacing="20">
+                <!-- Motivational Quote -->
+                <Frame BackgroundColor="#4dabf7"
+                       CornerRadius="15"
+                       Padding="20"
+                       HasShadow="True">
+                    <StackLayout>
+                        <Label Text="Daily Inspiration"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label x:Name="RandomQuoteLabel"
+                               FontSize="16"
+                               TextColor="White"
+                               FontAttributes="Italic"
+                               Margin="0,10,0,0" />
+                    </StackLayout>
+                </Frame>
+
+                <!-- Leaderboard -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       Padding="20"
+                       HasShadow="True">
+                    <StackLayout>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackLayout Grid.Column="0">
+                                <Label Text="Leaderboard"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#343a40" />
+                                <Label Text="Recovery Champions"
+                                       FontSize="14"
+                                       TextColor="#6c757d"
+                                       Margin="0,-5,0,0" />
+                            </StackLayout>
+
+                            <Frame Grid.Column="1"
+                                   BackgroundColor="#e9ecef"
+                                   CornerRadius="20"
+                                   Padding="10,5"
+                                   HasShadow="False">
+                                <Label x:Name="YourRankLabel"
+                                       Text="Your Rank: --"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#495057" />
+                            </Frame>
+                        </Grid>
+
+                        <BoxView Color="#dee2e6" HeightRequest="1" Margin="0,15" />
+
+                        <CollectionView x:Name="LeaderboardCollectionView"
+                                        HeightRequest="250">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10,12" ColumnDefinitions="Auto,Auto,*,Auto">
+                                        <!-- Rank Circle -->
+                                        <Frame Grid.Column="0"
+                                               BackgroundColor="#e9ecef"
+                                               CornerRadius="15"
+                                               HeightRequest="30"
+                                               WidthRequest="30"
+                                               Padding="0"
+                                               HasShadow="False">
+                                            <Label Text="{Binding Rank}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   TextColor="#495057"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Frame>
+
+                                        <!-- Username -->
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Username}"
+                                               FontSize="16"
+                                               TextColor="#343a40"
+                                               Margin="15,0,0,0"
+                                               VerticalOptions="Center" />
+
+                                        <!-- Score Badge -->
+                                        <Frame Grid.Column="3"
+                                               BackgroundColor="#28a745"
+                                               CornerRadius="10"
+                                               Padding="10,5"
+                                               HasShadow="False">
+                                            <Label Text="{Binding Score, StringFormat='{0} pts'}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   TextColor="White" />
+                                        </Frame>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="No data available"
+                                           FontSize="16"
+                                           TextColor="#6c757d"
+                                           HorizontalOptions="Center" />
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Articles -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       Padding="20"
+                       HasShadow="True">
+                    <StackLayout>
+                        <Label Text="Recovery Articles"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#343a40"
+                               Margin="0,0,0,15" />
+
+                        <CollectionView x:Name="ArticlesCollectionView"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnArticleSelected"
+                                        EmptyView="No articles available">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Margin="0,8"
+                                           Padding="15"
+                                           BorderColor="#dee2e6"
+                                           BackgroundColor="#f8f9fa"
+                                           CornerRadius="10"
+                                           HasShadow="False">
+                                        <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+                                            <Label Grid.Row="0"
+                                                   Text="{Binding Title}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="16"
+                                                   TextColor="#343a40" />
+
+                                            <Label Grid.Row="1"
+                                                   Text="{Binding Summary}"
+                                                   FontSize="14"
+                                                   TextColor="#6c757d"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="2" />
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Resources -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       Padding="20"
+                       HasShadow="True"
+                       Margin="0,0,0,20">
+                    <StackLayout>
+                        <Label Text="Helpful Resources"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#343a40"
+                               Margin="0,0,0,15" />
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="15" RowSpacing="15">
+                            <!-- Resource 1 -->
+                            <Frame Grid.Row="0" Grid.Column="0"
+                                   BackgroundColor="#f8f9fa"
+                                   BorderColor="#dee2e6"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Support Groups"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           TextColor="#343a40" />
+                                    <Label Text="Find local and online support"
+                                           FontSize="12"
+                                           TextColor="#6c757d" />
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnResourceTapped" CommandParameter="support" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
+                            <!-- Resource 2 -->
+                            <Frame Grid.Row="0" Grid.Column="1"
+                                   BackgroundColor="#f8f9fa"
+                                   BorderColor="#dee2e6"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Therapy Options"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           TextColor="#343a40" />
+                                    <Label Text="Professional help resources"
+                                           FontSize="12"
+                                           TextColor="#6c757d" />
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnResourceTapped" CommandParameter="therapy" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
+                            <!-- Resource 3 -->
+                            <Frame Grid.Row="1" Grid.Column="0"
+                                   BackgroundColor="#f8f9fa"
+                                   BorderColor="#dee2e6"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Nutrition Guide"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           TextColor="#343a40" />
+                                    <Label Text="Healthy eating patterns"
+                                           FontSize="12"
+                                           TextColor="#6c757d" />
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnResourceTapped" CommandParameter="nutrition" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
+                            <!-- Resource 4 -->
+                            <Frame Grid.Row="1" Grid.Column="1"
+                                   BackgroundColor="#f8f9fa"
+                                   BorderColor="#dee2e6"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Crisis Hotlines"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           TextColor="#343a40" />
+                                    <Label Text="24/7 emergency support"
+                                           FontSize="12"
+                                           TextColor="#6c757d" />
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnResourceTapped" CommandParameter="crisis" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

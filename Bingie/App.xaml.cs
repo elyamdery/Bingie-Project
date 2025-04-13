@@ -1,9 +1,8 @@
 ﻿using Bingie.Loggin;
+using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views.Auth;
 using Serilog;
-
-// Add this using directive
 
 namespace Bingie;
 
@@ -17,9 +16,42 @@ public partial class App : Application
         LoggingConfiguration.ConfigureLogging();
         Log.Information("Application Started");
 
-        // Initialize the main page with AuthService
-        DatabaseService databaseService = new(new SqliteConnectionFactory());
+        // Initialize services
+        SqliteConnectionFactory connectionFactory = new();
+
+        // Initialize database
+        DatabaseInitializer databaseInitializer = new(connectionFactory);
+        databaseInitializer.InitializeDatabase();
+
+        DatabaseService databaseService = new(connectionFactory);
         AuthService authService = new(databaseService);
-        MainPage = new NavigationPage(new LoginPage(authService));
+
+        // Log database path for debugging
+        Log.Information("Database path: {Path}", SqliteConnectionFactory.DatabasePath);
+
+        // TEMPORARY: Always bypass authentication for testing
+        Log.Information("Bypassing authentication for testing");
+
+        // Create data store and set up main shell
+        IDataStore<BingeEntry> dataStore = new DatabaseService(connectionFactory);
+        MainPage = new AppShell(dataStore, "test");
+
+        /* Original authentication code
+        // Check if user is already authenticated
+        if (authService.IsAuthenticated())
+        {
+            Log.Information("User already authenticated: {Username}", authService.GetCurrentUsername());
+
+            // Create data store and set up main shell
+            IDataStore<BingeEntry> dataStore = new DatabaseService(connectionFactory);
+            MainPage = new AppShell(dataStore, authService.GetCurrentUsername());
+        }
+        else
+        {
+            // User needs to log in
+            Log.Information("No authenticated user found, showing login page");
+            MainPage = new NavigationPage(new LoginPage(authService));
+        }
+        */
     }
 }

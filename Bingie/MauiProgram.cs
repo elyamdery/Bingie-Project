@@ -60,7 +60,7 @@ public static class MauiProgram
         _ = builder.Services.AddSingleton<DatabaseInitializer>();
 
         // Register pages
-        _ = builder.Services.AddTransient<BingeRecordsPage>();
+        _ = builder.Services.AddTransient<BingeRecordPage>();
         _ = builder.Services.AddTransient<LoginPage>();
         _ = builder.Services.AddTransient<RegistrationPage>();
         _ = builder.Services.AddTransient<MainPage>();

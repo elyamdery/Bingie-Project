@@ -1,4 +1,5 @@
-﻿using Bingie.Models;
+﻿using System.Diagnostics;
+using Bingie.Models;
 using Bingie.Services;
 
 namespace Bingie.Views;
@@ -22,6 +23,7 @@ public partial class DayStatisticsPage : ContentPage
     {
         try
         {
+            Debug.WriteLine($"DayStatisticsPage: Displaying stats for {_selectedDate}");
             SelectedDateLabel.Text = _selectedDate.ToString("MMMM dd, yyyy");
             var bingeCount = await GetBingeCountForDateAsync(_selectedDate);
             BingeCountLabel.Text = $"You binged {bingeCount} times on this day.";
@@ -36,8 +38,17 @@ public partial class DayStatisticsPage : ContentPage
 
     private async Task<int> GetBingeCountForDateAsync(DateTime date)
     {
-        IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
-        return records.Count(r => r.Username == _username && r.Date.Date == date.Date);
+        try
+        {
+            Debug.WriteLine($"DayStatisticsPage: Retrieving binge count for {date}");
+            IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
+            return records.Count(r => r.Username == _username && r.Date.Date == date.Date);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in GetBingeCountForDateAsync: {ex.Message}");
+            throw;
+        }
     }
 
     private void OnBackButtonClicked(object sender, EventArgs e)

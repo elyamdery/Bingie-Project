@@ -3,13 +3,203 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.HistoryPage"
-             Title="History">
-    <StackLayout>
-        <Label x:Name="CurrentDateLabel" />
-        <Button Text="Previous Week" Clicked="OnPreviousWeekClicked" />
-        <Button Text="Next Week" Clicked="OnNextWeekClicked" />
-        <Grid x:Name="CalendarGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*,*,*,*,*">
-            <!-- Calendar days will be added here programmatically -->
-        </Grid>
-    </StackLayout>
+             Title="History"
+             BackgroundColor="#f8f9fa">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Spacing="15" Margin="0,10,0,20">
+            <Label Text="Your History"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#343a40"
+                   HorizontalOptions="Start" />
+
+            <Label Text="Track your progress over time"
+                   FontSize="16"
+                   TextColor="#6c757d"
+                   HorizontalOptions="Start"
+                   Margin="0,-10,0,0" />
+        </StackLayout>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Spacing="20">
+                <!-- Week Navigation -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       HasShadow="True"
+                       Padding="15">
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                        <Button Grid.Column="0" Grid.Row="0"
+                                Text="←"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                BackgroundColor="#e9ecef"
+                                TextColor="#495057"
+                                CornerRadius="10"
+                                HeightRequest="50"
+                                WidthRequest="50"
+                                Clicked="OnPreviousWeekClicked" />
+
+                        <StackLayout Grid.Column="1" Grid.Row="0"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                            <Label x:Name="WeekNumberLabel"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#343a40"
+                                   HorizontalOptions="Center" />
+                            <Label x:Name="DateRangeLabel"
+                                   FontSize="14"
+                                   TextColor="#6c757d"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+
+                        <Button Grid.Column="2" Grid.Row="0"
+                                Text="→"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                BackgroundColor="#e9ecef"
+                                TextColor="#495057"
+                                CornerRadius="10"
+                                HeightRequest="50"
+                                WidthRequest="50"
+                                Clicked="OnNextWeekClicked" />
+
+                        <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
+                                Text="Today's Statistics"
+                                FontAttributes="Bold"
+                                BackgroundColor="#4dabf7"
+                                TextColor="White"
+                                CornerRadius="10"
+                                Margin="0,15,0,0"
+                                Clicked="OnShowCurrentDayStatsClicked" />
+                    </Grid>
+                </Frame>
+
+                <!-- Calendar -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       HasShadow="True"
+                       Padding="15">
+                    <StackLayout>
+                        <Label Text="Weekly Calendar"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#343a40"
+                               Margin="0,0,0,15" />
+
+                        <!-- Day of Week Headers -->
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,0,0,10">
+                            <Label Text="Sun" Grid.Column="0" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Mon" Grid.Column="1" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Tue" Grid.Column="2" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Wed" Grid.Column="3" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Thu" Grid.Column="4" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Fri" Grid.Column="5" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                            <Label Text="Sat" Grid.Column="6" HorizontalOptions="Center" TextColor="#6c757d" FontSize="14" />
+                        </Grid>
+
+                        <!-- Calendar Grid -->
+                        <Grid x:Name="CalendarGrid"
+                              RowDefinitions="Auto"
+                              ColumnDefinitions="*,*,*,*,*,*,*"
+                              RowSpacing="10"
+                              ColumnSpacing="5">
+                            <!-- Calendar days will be added here programmatically -->
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Monthly Summary -->
+                <Frame BackgroundColor="White"
+                       CornerRadius="15"
+                       HasShadow="True"
+                       Padding="15">
+                    <StackLayout>
+                        <Label Text="Monthly Summary"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#343a40"
+                               Margin="0,0,0,15" />
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="15" ColumnSpacing="15">
+                            <!-- Total Episodes -->
+                            <Frame Grid.Row="0" Grid.Column="0"
+                                   BackgroundColor="#e9ecef"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Total Episodes"
+                                           FontSize="14"
+                                           TextColor="#6c757d" />
+                                    <Label x:Name="TotalEpisodesLabel"
+                                           Text="0"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="#343a40" />
+                                </StackLayout>
+                            </Frame>
+
+                            <!-- Average Per Day -->
+                            <Frame Grid.Row="0" Grid.Column="1"
+                                   BackgroundColor="#e9ecef"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Daily Average"
+                                           FontSize="14"
+                                           TextColor="#6c757d" />
+                                    <Label x:Name="AveragePerDayLabel"
+                                           Text="0"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="#343a40" />
+                                </StackLayout>
+                            </Frame>
+
+                            <!-- Most Active Day -->
+                            <Frame Grid.Row="1" Grid.Column="0"
+                                   BackgroundColor="#e9ecef"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Most Active Day"
+                                           FontSize="14"
+                                           TextColor="#6c757d" />
+                                    <Label x:Name="MostActiveDayLabel"
+                                           Text="-"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="#343a40" />
+                                </StackLayout>
+                            </Frame>
+
+                            <!-- Progress -->
+                            <Frame Grid.Row="1" Grid.Column="1"
+                                   BackgroundColor="#e9ecef"
+                                   CornerRadius="10"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <StackLayout>
+                                    <Label Text="Trend"
+                                           FontSize="14"
+                                           TextColor="#6c757d" />
+                                    <Label x:Name="TrendLabel"
+                                           Text="-"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="#343a40" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

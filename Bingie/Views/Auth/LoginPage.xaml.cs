@@ -1,5 +1,6 @@
 ﻿using Bingie.Models;
 using Bingie.Services;
+using System.Diagnostics;
 
 namespace Bingie.Views.Auth;
 
@@ -35,33 +36,83 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        var username = UsernameEntry.Text;
-        var password = PasswordEntry.Text;
-
-        var isLoggedIn = await _authService.LoginAsync(username, password);
-
-        if (isLoggedIn)
+        try
         {
-            if (RememberMeCheckBox.IsChecked)
+            // TEMPORARY: Bypass login completely for testing
+            // Create a database-backed implementation of IDataStore<BingeEntry>
+            SqliteConnectionFactory factory = new();
+            IDataStore<BingeEntry> store = new DatabaseService(factory);
+            Application.Current.MainPage = new AppShell(store, "test");
+            return;
+
+            // Show loading indicator
+            ActivityIndicator.IsVisible = true;
+            LoginButton.IsEnabled = false;
+            RegisterButton.IsEnabled = false;
+
+            var username = UsernameEntry.Text;
+            var password = PasswordEntry.Text;
+
+            // Validate input
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                Preferences.Set("RememberedUsername", username);
-                await SecureStorage.SetAsync("RememberedPassword", password);
+                await DisplayAlert("Error", "Please enter both username and password.", "OK");
+                return;
+            }
+
+            // For testing purposes, allow login with test/test
+            if (username == "test" && password == "test")
+            {
+                await DisplayAlert("Success", "Login successful with test account!", "OK");
+
+                // Create a database-backed implementation of IDataStore<BingeEntry>
+                SqliteConnectionFactory cf = new();
+                IDataStore<BingeEntry> ds = new DatabaseService(cf);
+                Application.Current.MainPage = new AppShell(ds, username);
+                return;
+            }
+
+            Debug.WriteLine($"Attempting to login with username: {username}");
+            var isLoggedIn = await _authService.LoginAsync(username, password);
+            Debug.WriteLine($"Login result: {isLoggedIn}");
+
+            if (isLoggedIn)
+            {
+                if (RememberMeCheckBox.IsChecked)
+                {
+                    Preferences.Set("RememberedUsername", username);
+                    await SecureStorage.SetAsync("RememberedPassword", password);
+                }
+                else
+                {
+                    Preferences.Remove("RememberedUsername");
+                    _ = SecureStorage.Remove("RememberedPassword");
+                }
+
+                await DisplayAlert("Success", "Login successful!", "OK");
+
+                // Create a database-backed implementation of IDataStore<BingeEntry>
+                SqliteConnectionFactory connectionFactory = new();
+                IDataStore<BingeEntry> dataStore = new DatabaseService(connectionFactory);
+                Application.Current.MainPage = new AppShell(dataStore, username);
             }
             else
             {
-                Preferences.Remove("RememberedUsername");
-                _ = SecureStorage.Remove("RememberedPassword");
+                await DisplayAlert("Error", "Invalid username or password. Try using test/test.", "OK");
             }
-
-            await DisplayAlert("Success", "Login successful!", "OK");
-
-            // Create an in-memory implementation of IDataStore<BingeEntry> and pass it along with the username
-            IDataStore<BingeEntry> dataStore = new InMemoryBingeEntryDataStore();
-            Application.Current.MainPage = new AppShell(dataStore, username);
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "Invalid username or password.", "OK");
+            Debug.WriteLine($"Login error: {ex.Message}");
+            Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+            await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+        }
+        finally
+        {
+            // Hide loading indicator
+            ActivityIndicator.IsVisible = false;
+            LoginButton.IsEnabled = true;
+            RegisterButton.IsEnabled = true;
         }
     }
 

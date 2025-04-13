@@ -2,7 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bingie.Views.BingeRecordsPage">
+             x:Class="Bingie.Views.BingeRecordPage">
     <StackLayout Padding="10">
         <Label Text="Binge Records" FontSize="24" HorizontalOptions="Center" />
         <CollectionView x:Name="BingeRecordsCollectionView"
