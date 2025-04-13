@@ -36,11 +36,58 @@ public class DatabaseInitializer
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         Username TEXT NOT NULL,
                         DateTime TEXT NOT NULL,
-                        Duration TEXT NOT NULL
+                        Duration TEXT NOT NULL,
+                        WasUrgeResisted INTEGER DEFAULT 0,
+                        Points INTEGER DEFAULT 0,
+                        Notes TEXT DEFAULT ''
                     );";
 
             command.CommandText = createBingesTableCmd;
             _ = command.ExecuteNonQuery();
+
+            // Check if we need to add new columns to the existing table
+            try {
+                // Check if WasUrgeResisted column exists
+                command.CommandText = "PRAGMA table_info(BingeEntrys)";
+                using var reader = command.ExecuteReader();
+                bool hasWasUrgeResisted = false;
+                bool hasPoints = false;
+                bool hasNotes = false;
+
+                while (reader.Read())
+                {
+                    string columnName = reader.GetString(1);
+                    if (columnName == "WasUrgeResisted") hasWasUrgeResisted = true;
+                    if (columnName == "Points") hasPoints = true;
+                    if (columnName == "Notes") hasNotes = true;
+                }
+
+                // Add missing columns if needed
+                if (!hasWasUrgeResisted)
+                {
+                    command.CommandText = "ALTER TABLE BingeEntrys ADD COLUMN WasUrgeResisted INTEGER DEFAULT 0";
+                    command.ExecuteNonQuery();
+                    Debug.WriteLine("Added WasUrgeResisted column to BingeEntrys table");
+                }
+
+                if (!hasPoints)
+                {
+                    command.CommandText = "ALTER TABLE BingeEntrys ADD COLUMN Points INTEGER DEFAULT 0";
+                    command.ExecuteNonQuery();
+                    Debug.WriteLine("Added Points column to BingeEntrys table");
+                }
+
+                if (!hasNotes)
+                {
+                    command.CommandText = "ALTER TABLE BingeEntrys ADD COLUMN Notes TEXT DEFAULT ''";
+                    command.ExecuteNonQuery();
+                    Debug.WriteLine("Added Notes column to BingeEntrys table");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error checking or adding columns: {ex.Message}");
+            }
 
             // Check if we need to add a default user
             command.CommandText = "SELECT COUNT(*) FROM Users;";

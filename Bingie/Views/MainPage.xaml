@@ -3,7 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.MainPage"
-             BackgroundColor="#f8f9fa">
+             BackgroundColor="#EBF5FB"
+             xmlns:graphics="clr-namespace:Microsoft.Maui.Graphics;assembly=Microsoft.Maui.Graphics">
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="20">
         <!-- Header -->
@@ -12,40 +13,43 @@
                 <Label Text="Bingie"
                        FontSize="32"
                        FontAttributes="Bold"
-                       TextColor="#343a40" />
+                       TextColor="#2874A6" />
                 <Label Text="Track your progress"
                        FontSize="16"
-                       TextColor="#6c757d" />
+                       TextColor="#5499C7" />
             </StackLayout>
 
             <Frame Grid.Column="1"
-                   BackgroundColor="#e9ecef"
+                   BackgroundColor="#D6EAF8"
                    CornerRadius="10"
                    Padding="15,10"
-                   HasShadow="True">
+                   HasShadow="True"
+                   BorderColor="#AED6F1">
                 <Label x:Name="CurrentTimeLabel"
                        FontSize="16"
                        FontAttributes="Bold"
-                       TextColor="#495057"
+                       TextColor="#2874A6"
                        HorizontalOptions="Center" />
             </Frame>
         </Grid>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1" RowDefinitions="*,Auto,Auto">
+        <Grid Grid.Row="1" RowDefinitions="*,Auto,Auto,Auto">
             <!-- Button Area -->
             <Frame Grid.Row="0"
                    BackgroundColor="White"
                    CornerRadius="20"
                    Margin="0,10,0,20"
                    HasShadow="True"
+                   BorderColor="#AED6F1"
                    VerticalOptions="FillAndExpand">
                 <Grid RowDefinitions="*,Auto">
                     <Button Grid.Row="0"
+                            x:Name="BingeButton"
                             Text="I Binged"
                             FontSize="28"
                             FontAttributes="Bold"
-                            BackgroundColor="#dc3545"
+                            BackgroundColor="#3498DB"
                             TextColor="White"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
@@ -55,7 +59,7 @@
                             CornerRadius="110"
                             Margin="0,20,0,10">
                         <Button.Shadow>
-                            <Shadow Brush="#6c757d" Opacity="0.5" Offset="3,3" Radius="15" />
+                            <Shadow Brush="#2874A6" Opacity="0.5" Offset="3,3" Radius="15" />
                         </Button.Shadow>
                     </Button>
 
@@ -64,7 +68,7 @@
                            FontSize="22"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
-                           TextColor="#343a40"
+                           TextColor="#2874A6"
                            Margin="0,10,0,20" />
                 </Grid>
             </Frame>
@@ -75,19 +79,20 @@
                    CornerRadius="15"
                    Margin="0,0,0,20"
                    Padding="20"
-                   HasShadow="True">
+                   HasShadow="True"
+                   BorderColor="#AED6F1">
                 <StackLayout>
                     <Label Text="Today's Progress"
                            FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="#343a40"
+                           TextColor="#2874A6"
                            Margin="0,0,0,10" />
 
-                    <Frame BackgroundColor="#f8f9fa"
+                    <Frame BackgroundColor="#EBF5FB"
                            CornerRadius="10"
                            Padding="15"
                            HasShadow="False"
-                           BorderColor="#dee2e6">
+                           BorderColor="#AED6F1">
                         <StackLayout x:Name="DotsContainer"
                                      Orientation="Horizontal"
                                      HorizontalOptions="Center"
@@ -96,12 +101,46 @@
                 </StackLayout>
             </Frame>
 
-            <!-- Motivation Quote -->
+            <!-- Urge Surfing Feature -->
             <Frame Grid.Row="2"
-                   BackgroundColor="#4dabf7"
+                   BackgroundColor="#85C1E9"
+                   CornerRadius="15"
+                   Margin="0,0,0,20"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="#5DADE2">
+                <StackLayout>
+                    <Label Text="Urge Surfing"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Feel an urge to binge? Try surfing the urge instead of acting on it."
+                           FontSize="14"
+                           TextColor="White"
+                           Margin="0,5,0,10" />
+                    <Button x:Name="UrgeSurfingButton"
+                            Text="Start Urge Surfing"
+                            BackgroundColor="White"
+                            TextColor="#2874A6"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Clicked="OnUrgeSurfingButtonClicked" />
+                    <Label x:Name="PointsLabel"
+                           Text="Points earned: 0"
+                           FontSize="14"
+                           TextColor="White"
+                           HorizontalOptions="End"
+                           Margin="0,10,0,0" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Motivation Quote -->
+            <Frame Grid.Row="3"
+                   BackgroundColor="#3498DB"
                    CornerRadius="15"
                    Padding="20"
-                   HasShadow="True">
+                   HasShadow="True"
+                   BorderColor="#2874A6">
                 <StackLayout>
                     <Label Text="Daily Motivation"
                            FontSize="16"
@@ -120,7 +159,7 @@
         <Label Grid.Row="2"
                Text="Tap the button whenever you experience a binge episode"
                FontSize="13"
-               TextColor="#6c757d"
+               TextColor="#5499C7"
                HorizontalOptions="Center"
                Margin="0,20,0,0" />
     </Grid>

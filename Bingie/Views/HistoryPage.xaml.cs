@@ -105,8 +105,8 @@ public partial class HistoryPage : ContentPage
                 // Create a frame to hold the day content
                 Frame dayFrame = new()
                 {
-                    BackgroundColor = isToday ? "#e9ecef" : "#f8f9fa",
-                    BorderColor = isToday ? "#4dabf7" : "#dee2e6",
+                    BackgroundColor = isToday ? Color.FromArgb("#e9ecef") : Color.FromArgb("#f8f9fa"),
+                    BorderColor = isToday ? Color.FromArgb("#4dabf7") : Color.FromArgb("#dee2e6"),
                     CornerRadius = 10,
                     Padding = new Thickness(5),
                     HasShadow = isToday,
@@ -129,7 +129,7 @@ public partial class HistoryPage : ContentPage
                     Text = currentDay.Day.ToString(),
                     FontSize = 18,
                     FontAttributes = isToday ? FontAttributes.Bold : FontAttributes.None,
-                    TextColor = isToday ? "#343a40" : "#6c757d",
+                    TextColor = isToday ? Color.FromArgb("#343a40") : Color.FromArgb("#6c757d"),
                     HorizontalOptions = LayoutOptions.Center
                 };
 
