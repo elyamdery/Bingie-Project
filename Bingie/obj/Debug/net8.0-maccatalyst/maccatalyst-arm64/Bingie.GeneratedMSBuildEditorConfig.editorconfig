@@ -1,0 +1,97 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0-maccatalyst
+build_property.TargetFramework = net8.0-maccatalyst
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Bingie
+build_property.ProjectDir = /Users/elyamdery/VSCProjects/Bingie/Bingie/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources/Styles/Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources/Styles/Colors.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources/Styles/Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources/Styles/Styles.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/Auth/LoginPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.Auth.LoginPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/Auth/LoginPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/Auth/LoginPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/Auth/RegistrationPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.Auth.RegistrationPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/Auth/RegistrationPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/Auth/RegistrationPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/BingeRecordPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.BingeRecordPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/BingeRecordPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/BingeRecordPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/DayStatisticsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.DayStatisticsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/DayStatisticsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/DayStatisticsPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/ExplorePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.ExplorePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/ExplorePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/ExplorePage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/HistoryPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.HistoryPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/HistoryPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/HistoryPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/MainPage.xaml
+
+[/Users/elyamdery/VSCProjects/Bingie/Bingie/Views/StatisticsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Bingie.Views.StatisticsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/StatisticsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/StatisticsPage.xaml

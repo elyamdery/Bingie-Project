@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.DayStatisticsPage"
+             Title="Day Statistics">
+
+    <StackLayout Padding="10">
+
+        <!-- Date Label -->
+        <Label x:Name="SelectedDateLabel"
+               FontSize="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               TextColor="Blue" />
+
+        <!-- Binge Count Label -->
+        <Label x:Name="BingeCountLabel"
+               FontSize="20"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               TextColor="Red"
+               Margin="0,20,0,0" />
+
+        <!-- Back Button -->
+        <Button Text="Back to History"
+                FontSize="18"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                Clicked="OnBackButtonClicked" />
+
+    </StackLayout>
+</ContentPage>
