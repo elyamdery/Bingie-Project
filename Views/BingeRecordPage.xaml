@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.BingeRecordPage"
+             Title="Binge Records">
+    <StackLayout Padding="10">
+        <Label Text="Binge Records" FontSize="24" HorizontalOptions="Center" />
+        <CollectionView x:Name="BingeRecordsCollectionView"
+                        ItemsSource="{Binding BingeRecords}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="5">
+                        <Label Text="{Binding Date}" FontSize="14" />
+                        <Label Text="{Binding Duration}" FontSize="14" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="Add New Record" Clicked="OnAddBingeRecordClicked" />
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Views/Auth/RegistrationPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.Auth.RegistrationPage"
+             Title="Create Account">
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="15">
+            
+            <!-- Header -->
+            <Label Text="Join Bingie" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   Margin="0,20,0,30" />
+            
+            <!-- Username Entry -->
+            <StackLayout Spacing="5">
+                <Label Text="Username" FontSize="16" />
+                <Entry x:Name="UsernameEntry" 
+                       Placeholder="Enter your username"
+                       MaxLength="50" />
+            </StackLayout>
+            
+            <!-- Email Entry -->
+            <StackLayout Spacing="5">
+                <Label Text="Email" FontSize="16" />
+                <Entry x:Name="EmailEntry" 
+                       Placeholder="Enter your email address"
+                       Keyboard="Email"
+                       MaxLength="100" />
+            </StackLayout>
+            
+            <!-- Password Entry -->
+            <StackLayout Spacing="5">
+                <Label Text="Password" FontSize="16" />
+                <Entry x:Name="PasswordEntry" 
+                       Placeholder="Enter your password"
+                       IsPassword="True"
+                       MaxLength="255" />
+                <Label Text="Password must be at least 6 characters long" 
+                       FontSize="12" 
+                       TextColor="Gray" />
+            </StackLayout>
+            
+            <!-- Confirm Password Entry -->
+            <StackLayout Spacing="5">
+                <Label Text="Confirm Password" FontSize="16" />
+                <Entry x:Name="ConfirmPasswordEntry" 
+                       Placeholder="Confirm your password"
+                       IsPassword="True" />
+            </StackLayout>
+            
+            <!-- Register Button -->
+            <Button x:Name="RegisterButton"
+                    Text="Create Account" 
+                    Clicked="OnRegisterClicked"
+                    BackgroundColor="#007ACC"
+                    TextColor="White"
+                    CornerRadius="5"
+                    Padding="15"
+                    Margin="0,20,0,10" />
+                    
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

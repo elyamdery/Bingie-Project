@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.HistoryPage"
+             Title="History">
+    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="PreviousWeekButton" Text="←" Grid.Column="0" />
+            <Label x:Name="WeekNumberLabel" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" />
+            <Button x:Name="NextWeekButton" Text="→" Grid.Column="2" />
+        </Grid>
+        <Button x:Name="ShowCurrentDayStatsButton" Text="Show Current Day Stats" />
+        <Grid x:Name="CalendarGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowDefinitions="Auto" ColumnDefinitions="*,*,*,*,*,*,*">
+            <!-- Calendar days will be added here programmatically -->
+        </Grid>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,87 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\user\\source\\repos\\Bingie\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|c:\\users\\user\\source\\repos\\bingie\\views\\historypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|solutionrelative:views\\historypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|c:\\users\\user\\source\\repos\\bingie\\views\\historypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|solutionrelative:views\\historypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|c:\\users\\user\\source\\repos\\bingie\\bingie.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{5F42A83F-B57A-4BDA-ECB2-5F8C70F61801}|Bingie.csproj|solutionrelative:bingie.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d820ab17-251c-5a71-94e2-6aa5bc339a8d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bingie",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Bingie\\Bingie.csproj",
+              "RelativeDocumentMoniker": "Bingie.csproj",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Bingie\\Bingie.csproj",
+              "RelativeToolTip": "Bingie.csproj",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-06-01T16:41:53.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HistoryPage.xaml",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Bingie\\Views\\HistoryPage.xaml",
+              "RelativeDocumentMoniker": "Views\\HistoryPage.xaml",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Bingie\\Views\\HistoryPage.xaml",
+              "RelativeToolTip": "Views\\HistoryPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-01T16:41:06.909Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HistoryPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Bingie\\Views\\HistoryPage.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\HistoryPage.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\Bingie\\Views\\HistoryPage.xaml.cs",
+              "RelativeToolTip": "Views\\HistoryPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-01T16:41:06.187Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

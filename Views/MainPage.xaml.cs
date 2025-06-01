@@ -1,0 +1,73 @@
+﻿using Bingie.Models;
+using Bingie.Data;
+using Serilog;
+
+namespace Bingie.Views;
+
+public partial class MainPage : ContentPage
+{
+    private readonly AppDBContext? _context;
+    private int _bingeCount;    // Default constructor
+    public MainPage()
+    {
+        InitializeComponent();
+        // Initialize with default values or handle accordingly
+        _context = null;
+        _bingeCount = 0;
+        StartClock(); // Ensure the clock starts in the default constructor
+        UpdateBingeCountLabel();
+    }    public MainPage(AppDBContext context)
+    {
+        InitializeComponent();
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _bingeCount = 0;
+
+        // Initialize logging in the MainPage as well
+        Log.Information("MainPage initialized."); // <-- Log when the MainPage is initialized
+
+        StartClock();
+        UpdateBingeCountLabel();
+    }    private void StartClock()
+    {
+        Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
+        {
+            // Log the time update
+            Log.Information("Current time: {Time}", DateTime.UtcNow.AddHours(3).ToString("HH:mm:ss"));
+
+            CurrentTimeLabel.Text = DateTime.UtcNow.AddHours(3).ToString("HH:mm:ss"); // Adjust to Israel Time (UTC+3)
+            return true;
+        });
+    }
+
+    private void OnBingeButtonClicked(object sender, EventArgs e)
+    {
+        // Log when the binge button is clicked
+        Log.Information("Binge button clicked at {Time}", DateTime.UtcNow.ToString("HH:mm:ss"));
+
+        BoxView dot = new()
+        {
+            Color = Colors.Red,
+            WidthRequest = 15, // Make the dot bigger
+            HeightRequest = 15, // Make the dot bigger
+            Margin = new Thickness(2, 0, 2, 0)
+        };        // Create a new horizontal row every 10 dots
+        if (DotsContainer.Children.Count == 0 ||
+            (DotsContainer.Children[DotsContainer.Children.Count - 1] as StackLayout)?.Children.Count >= 10)
+            DotsContainer.Children.Add(new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Margin = new Thickness(0, 5)
+            });
+
+        var currentRow = DotsContainer.Children[DotsContainer.Children.Count - 1] as StackLayout;
+        currentRow?.Children.Add(dot);
+
+        _bingeCount++;
+        UpdateBingeCountLabel();
+    }
+
+    private void UpdateBingeCountLabel()
+    {
+        BingeCountLabel.Text = $"Binge Count: {_bingeCount}";
+    }
+}

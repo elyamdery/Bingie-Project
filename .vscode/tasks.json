@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Bingie on Windows",
+			"type": "shell",
+			"command": "dotnet build && dotnet run --framework net8.0-windows10.0.19041.0",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		}
+	]
+}
