@@ -43,15 +43,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Bingie",
+              "Title": "Bingie.csproj",
               "DocumentMoniker": "C:\\Users\\user\\source\\repos\\Bingie\\Bingie.csproj",
               "RelativeDocumentMoniker": "Bingie.csproj",
               "ToolTip": "C:\\Users\\user\\source\\repos\\Bingie\\Bingie.csproj",
               "RelativeToolTip": "Bingie.csproj",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-01T16:41:53.173Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-01T16:41:53.173Z"
             },
             {
               "$type": "Document",
@@ -63,8 +62,7 @@
               "RelativeToolTip": "Views\\HistoryPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-01T16:41:06.909Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-01T16:41:06.909Z"
             },
             {
               "$type": "Document",
@@ -74,7 +72,7 @@
               "RelativeDocumentMoniker": "Views\\HistoryPage.xaml.cs",
               "ToolTip": "C:\\Users\\user\\source\\repos\\Bingie\\Views\\HistoryPage.xaml.cs",
               "RelativeToolTip": "Views\\HistoryPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAjwGMAAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-01T16:41:06.187Z",
               "EditorCaption": ""
