@@ -7,6 +7,7 @@ namespace Bingie.Views;
 public partial class BingeRecordPage : ContentPage
 {    private readonly AppDBContext _context;
 
+    public BingeRecordPage() : this(IPlatformApplication.Current?.Services?.GetService(typeof(AppDBContext)) as AppDBContext ?? throw new InvalidOperationException("AppDBContext not available")) {}
     public BingeRecordPage(AppDBContext context)
     {
         InitializeComponent();

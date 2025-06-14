@@ -30,7 +30,7 @@
     <AppXManifest Include="C:\Users\user\source\repos\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-06-03T05:58:50.800</Modified>
+      <Modified>2025-06-06T09:44:25.798</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Bingie.dll">
       <PackagePath>Bingie.dll</PackagePath>
-      <Modified>2025-06-03T05:58:49.717</Modified>
+      <Modified>2025-06-06T09:44:23.998</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Bingie.exe</PackagePath>
-      <Modified>2025-06-03T05:58:49.733</Modified>
+      <Modified>2025-06-06T09:44:24.074</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\source\repos\Bingie\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>

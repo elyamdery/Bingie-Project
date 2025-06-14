@@ -1,10 +1,11 @@
-﻿using Bingie.Models;
+﻿
+using Bingie.Models;
 using Bingie.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-namespace Bingie.Views;
-
+namespace Bingie.Views
+{
 public class DailyCount
 {
     public DateTime Date { get; set; }
@@ -13,6 +14,20 @@ public class DailyCount
 
 public partial class StatisticsPage : ContentPage
 {
+    // Parameterless constructor for XAML navigation and default usage
+    public StatisticsPage() : this(IPlatformApplication.Current?.Services?.GetService(typeof(AppDBContext)) as AppDBContext ?? throw new InvalidOperationException("AppDBContext not available")) {}
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PopAsync();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to go back: {ex.Message}", "OK");
+        }
+    }
+
     private readonly AppDBContext _context;
     private readonly string _username;
     private string _currentPeriod = "week";
@@ -37,7 +52,9 @@ public partial class StatisticsPage : ContentPage
         {
             Debug.WriteLine($"Exception in LoadStatisticsAsync: {ex.Message}");
         }
-    }    private async Task UpdateStatistics()
+    }
+
+    private async Task UpdateStatistics()
     {
         var (startDate, endDate) = GetDateRange(_currentPeriod);
         
@@ -213,23 +230,13 @@ public partial class StatisticsPage : ContentPage
         _currentPeriod = "year";
         UpdateButtonStyles(_currentPeriod);
         await UpdateStatistics();
-    }    private async void OnAllTimeClicked(object sender, EventArgs e)
+    }
+
+    private async void OnAllTimeClicked(object sender, EventArgs e)
     {
         _currentPeriod = "alltime";
         UpdateButtonStyles(_currentPeriod);
         await UpdateStatistics();
     }
-
-    private async void OnBackClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            Debug.WriteLine("StatisticsPage: Back button clicked");
-            await Navigation.PopAsync();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in OnBackClicked: {ex.Message}");
-        }
-    }
+}
 }

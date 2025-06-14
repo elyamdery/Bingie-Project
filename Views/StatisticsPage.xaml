@@ -4,37 +4,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.StatisticsPage"
              Title="Detailed Statistics"
-             BackgroundColor="#F8F9FA">    <ScrollView>
+             BackgroundColor="#F8F9FA">
+
+    <ScrollView>
         <StackLayout Padding="20" Spacing="20">
-            
-            <!-- Header with Back Button -->
-            <Frame BackgroundColor="White" 
-                   CornerRadius="15" 
-                   HasShadow="True" 
-                   Padding="15">
-                <StackLayout>
-                    <Grid ColumnDefinitions="Auto,*" 
-                          Margin="0,0,0,10">
-                        <Button x:Name="BackButton" 
-                                Grid.Column="0"
-                                Text="◀ Back" 
-                                BackgroundColor="#E74C3C" 
-                                TextColor="White" 
-                                CornerRadius="15" 
-                                FontSize="14"
-                                Padding="15,8"
-                                Clicked="OnBackClicked"/>
-                        
-                        <Label Text="📊 Statistics Overview" 
-                               Grid.Column="1"
-                               FontSize="20" 
-                               FontAttributes="Bold" 
-                               TextColor="#2C3E50" 
-                               HorizontalOptions="Center" 
-                               VerticalOptions="Center"/>
-                    </Grid>
-                </StackLayout>
-            </Frame>
+            <!-- Back Button -->
+            <Button Text="◀ Back"
+                    BackgroundColor="#E74C3C"
+                    TextColor="White"
+                    CornerRadius="15"
+                    FontSize="14"
+                    Padding="15,8"
+                    HorizontalOptions="Start"
+                    Clicked="OnBackClicked"/>
             
             <!-- Time Period Selector -->
             <Frame BackgroundColor="White" 
@@ -42,14 +24,14 @@
                    HasShadow="True" 
                    Padding="15">
                 <StackLayout>
-                    <Label Text="Time Period" 
-                           FontSize="16" 
+                    <Label Text="📊 Statistics Overview" 
+                           FontSize="20" 
                            FontAttributes="Bold" 
                            TextColor="#2C3E50" 
                            HorizontalOptions="Center" 
                            Margin="0,0,0,15"/>
                     
-                    <StackLayout Orientation="Horizontal"
+                    <StackLayout Orientation="Horizontal" 
                                  HorizontalOptions="Center" 
                                  Spacing="10">
                         <Button x:Name="WeekBtn" 

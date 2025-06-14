@@ -4,22 +4,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.HistoryPage"
              Title="Binge Tracker"
-             BackgroundColor="#F8F9FA">    <ScrollView>
+             BackgroundColor="#F8F9FA">
+
+    <ScrollView>
         <StackLayout Padding="20" Spacing="20">
-            
-            <!-- Header Section -->
+              <!-- Header Section -->
             <Frame BackgroundColor="White" 
                    CornerRadius="15" 
                    HasShadow="True" 
                    Padding="20">
                 <StackLayout>
+                    <!-- Top row with back button and title -->
                     <Label x:Name="WeekLabel" 
                            FontSize="24" 
                            FontAttributes="Bold" 
                            TextColor="#2C3E50" 
-                           HorizontalOptions="Center"/>
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"/>
                     
-                    <StackLayout Orientation="Horizontal"
+                    <StackLayout Orientation="Horizontal" 
                                  HorizontalOptions="Center" 
                                  Spacing="15" 
                                  Margin="0,10,0,0">

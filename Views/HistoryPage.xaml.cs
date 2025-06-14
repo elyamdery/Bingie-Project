@@ -17,7 +17,8 @@ public partial class HistoryPage : ContentPage
     private DateTime _currentWeekStart;
     private readonly string[] _dayNames = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
-    public HistoryPage() : this(MauiProgram.CreateMauiApp().Services?.GetService<AppDBContext>() ?? throw new InvalidOperationException("AppDBContext not available")) {}    public HistoryPage(AppDBContext dbContext)
+    public HistoryPage() : this(IPlatformApplication.Current?.Services?.GetService(typeof(AppDBContext)) as AppDBContext ?? throw new InvalidOperationException("AppDBContext not available")) {}
+    public HistoryPage(AppDBContext dbContext)
     {
         InitializeComponent();
         _dbContext = dbContext;
@@ -100,18 +101,9 @@ public partial class HistoryPage : ContentPage
             WeekCalendarGrid.Children.Clear();            // Get binge data for the current week
             var weekStart = _currentWeekStart;
             var weekEndDate = _currentWeekStart.AddDays(7);
-              Debug.WriteLine($"HistoryPage: Querying data for week {weekStart:yyyy-MM-dd} to {weekEndDate:yyyy-MM-dd}");
+            
+            Debug.WriteLine($"HistoryPage: Querying data for week {weekStart:yyyy-MM-dd} to {weekEndDate:yyyy-MM-dd}");
             Debug.WriteLine($"HistoryPage: Looking for username: {_username}");
-            
-            // Debug: Check total number of binge entries and users
-            var totalBingeEntries = await _bingeEntries.CountAsync();
-            var totalUsers = await _dbContext.Users.CountAsync();
-            Debug.WriteLine($"HistoryPage: Total binge entries in DB: {totalBingeEntries}");
-            Debug.WriteLine($"HistoryPage: Total users in DB: {totalUsers}");
-            
-            // Debug: List all users
-            var allUsers = await _dbContext.Users.Select(u => u.Username).ToListAsync();
-            Debug.WriteLine($"HistoryPage: All users: {string.Join(", ", allUsers)}");
             
             var records = await _bingeEntries
                 .Include(b => b.User)
@@ -338,6 +330,8 @@ public partial class HistoryPage : ContentPage
             Debug.WriteLine($"Exception in OnStatisticsClicked: {ex.Message}");
         }
     }
+
+
 
     private int GetWeekOfYear(DateTime date)
     {
