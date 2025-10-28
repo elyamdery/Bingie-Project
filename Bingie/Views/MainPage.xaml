@@ -13,6 +13,63 @@
         </Grid.Background>
 
         <StackLayout Padding="24" Spacing="18">
+        <VerticalStackLayout x:Name="AvatarFeedbackSection"
+                              Spacing="8"
+                              Margin="0,4,0,12"
+                              IsVisible="False">
+            <Frame x:Name="AvatarBackgroundFrame"
+                   Padding="18"
+                   CornerRadius="18"
+                   HasShadow="True"
+                   BackgroundColor="#222845">
+                <VerticalStackLayout Spacing="4">
+                    <Label x:Name="AvatarEnergyTitle"
+                           Text="Avatar energy"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label x:Name="AvatarScoreLabel"
+                           FontSize="14"
+                           TextColor="#E5E7FE" />
+                    <Label x:Name="AvatarMonthlyLabel"
+                           FontSize="14"
+                           TextColor="#E5E7FE" />
+                    <Label x:Name="AvatarBreakLabel"
+                           FontSize="12"
+                           TextColor="#C7CFFC" />
+                    <Label x:Name="AvatarSupportiveCopy"
+                           FontSize="14"
+                           TextColor="White"
+                           LineBreakMode="WordWrap" />
+                    <Label x:Name="AvatarAnimationKeyLabel"
+                           FontSize="12"
+                           TextColor="#AEB6FF"
+                           HorizontalOptions="End" />
+                    <Frame x:Name="AvatarCelebrationBadge"
+                           IsVisible="False"
+                           Padding="6,2"
+                           CornerRadius="12"
+                           HasShadow="False"
+                           BackgroundColor="#FF8FAB"
+                           HorizontalOptions="Start"
+                           Margin="0,6,0,0">
+                        <Label Text="Monthly glow up"
+                               FontSize="12"
+                               TextColor="White" />
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+            <StackLayout Orientation="Horizontal"
+                         Spacing="8"
+                         HorizontalOptions="Center">
+                <Label Text="Show avatar feedback"
+                       FontSize="14"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Switch x:Name="AvatarFeedbackToggle"
+                        Toggled="OnAvatarToggleToggled" />
+            </StackLayout>
+        </VerticalStackLayout>
         <Label Text="Bingie"
                FontSize="36"
                FontAttributes="Bold"

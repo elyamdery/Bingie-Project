@@ -41,3 +41,7 @@ Summary: Anti-binge loop now captures every press, surfaces insights across tabs
 Summary: Experience now blends playful UI, richer self-compassion content, and consolidated history analytics—all backed by fresh unit coverage and updated documentation.
 [Log] Step 13: Drafted game-loop SRS
 - Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
+[Log] Step 14: Avatar feedback implementation
+- Added avatar scoring service with history persistence, weekly/monthly energy deltas, and compassionate copy tuned by user thresholds.
+- Wrapped MainPage with feature-flagged glow card, supportive toggle, and celebratory animations tied to score deltas.
+- Auth shell wiring now injects the feedback service; seeded unit specs validate scoring, state mapping, celebration flags, and hide preference flows.

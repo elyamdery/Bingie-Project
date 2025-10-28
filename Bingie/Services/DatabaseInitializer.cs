@@ -38,6 +38,8 @@ public class DatabaseInitializer
                     Duration TEXT NOT NULL
                 );";
         _ = command.ExecuteNonQuery();
+
+        EnsureAvatarFeedbackTables(connection);
     }
 
     private static void TryEnsureRememberTokenColumn(SqliteConnection connection)
@@ -53,5 +55,41 @@ public class DatabaseInitializer
         {
             // Column already exists; ignore.
         }
+    }
+
+    private static void EnsureAvatarFeedbackTables(SqliteConnection connection)
+    {
+        using var createCommand = connection.CreateCommand();
+        createCommand.CommandText = @"
+                CREATE TABLE IF NOT EXISTS AvatarFeedbackSettings (
+                    Username TEXT PRIMARY KEY,
+                    HideAvatar INTEGER NOT NULL DEFAULT 0,
+                    WeeklyGlowThreshold INTEGER NOT NULL,
+                    WeeklyConcernThreshold INTEGER NOT NULL,
+                    MonthlyGlowThreshold INTEGER NOT NULL,
+                    MonthlyConcernThreshold INTEGER NOT NULL,
+                    LastUpdatedUtc TEXT NOT NULL
+                );";
+        _ = createCommand.ExecuteNonQuery();
+
+        createCommand.CommandText = @"
+                CREATE TABLE IF NOT EXISTS AvatarStateHistory (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Username TEXT NOT NULL,
+                    PeriodStartUtc TEXT NOT NULL,
+                    PeriodType TEXT NOT NULL,
+                    Score REAL NOT NULL,
+                    EnergyState TEXT NOT NULL,
+                    DeltaFromPrevious REAL NOT NULL,
+                    SupportiveCopy TEXT NOT NULL,
+                    CreatedUtc TEXT NOT NULL,
+                    UNIQUE(Username, PeriodType, PeriodStartUtc)
+                );";
+        _ = createCommand.ExecuteNonQuery();
+
+        createCommand.CommandText = @"
+                CREATE INDEX IF NOT EXISTS IX_AvatarStateHistory_UserPeriod
+                ON AvatarStateHistory (Username, PeriodType, PeriodStartUtc);";
+        _ = createCommand.ExecuteNonQuery();
     }
 }

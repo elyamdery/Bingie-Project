@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Bingie.Config;
 using Bingie.Models;
 using Bingie.Services;
 using Serilog;
@@ -13,7 +14,10 @@ public partial class MainPage : ContentPage
 {
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
+    private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly string _username;
+    private bool _suppressAvatarToggle;
+    private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
 
     // Default constructor for XAML preview support
     public MainPage()
@@ -23,17 +27,24 @@ public partial class MainPage : ContentPage
         var previewService = new DatabaseService(connectionFactory);
         _dataStore = (IDataStore<BingeEntry>)previewService;
         _calendarService = new CalendarService(_dataStore);
+        var avatarRepository = new AvatarFeedbackRepository(connectionFactory);
+        _avatarFeedbackService = new AvatarFeedbackService(_dataStore, avatarRepository);
         _username = "PreviewUser";
 
         StartClock();
         _ = RefreshTodayDotsAsync();
+        if (FeatureFlags.AvatarFeedbackEnabled)
+        {
+            _ = RefreshAvatarFeedbackAsync();
+        }
     }
 
-    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
+    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, AvatarFeedbackService avatarFeedbackService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         // Initialize logging in the MainPage as well
@@ -46,6 +57,7 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await RefreshTodayDotsAsync();
+        await RefreshAvatarFeedbackAsync();
     }
 
     private void StartClock()
@@ -135,6 +147,7 @@ public partial class MainPage : ContentPage
             Log.Information("Binge entry saved for {Username} at {Timestamp}", _username, newEntry.Date);
 
             await RefreshTodayDotsAsync();
+            await RefreshAvatarFeedbackAsync();
 
             MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
 
@@ -158,5 +171,111 @@ public partial class MainPage : ContentPage
         _ = FeedbackLabel.FadeTo(1, 150);
         await Task.Delay(TimeSpan.FromSeconds(2.2));
         await FeedbackLabel.FadeTo(0, 400);
+    }
+
+    private async Task RefreshAvatarFeedbackAsync()
+    {
+        if (!FeatureFlags.AvatarFeedbackEnabled)
+        {
+            AvatarFeedbackSection.IsVisible = false;
+            return;
+        }
+
+        try
+        {
+            AvatarFeedbackSection.IsVisible = true;
+            var snapshot = await _avatarFeedbackService.GenerateSnapshotAsync(_username, DateTime.UtcNow);
+            _latestAvatarSnapshot = snapshot;
+
+            _suppressAvatarToggle = true;
+            AvatarFeedbackToggle.IsToggled = !snapshot.IsHidden;
+            _suppressAvatarToggle = false;
+
+            await UpdateAvatarFeedbackUi(snapshot);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to refresh avatar feedback for {Username}.", _username);
+            AvatarFeedbackSection.IsVisible = false;
+        }
+    }
+
+    private async Task UpdateAvatarFeedbackUi(AvatarFeedbackSnapshot snapshot)
+    {
+        if (snapshot.IsHidden)
+        {
+            AvatarEnergyTitle.Text = "Avatar resting";
+            AvatarScoreLabel.Text = "Feedback is paused";
+            AvatarMonthlyLabel.Text = string.Empty;
+            AvatarBreakLabel.Text = string.Empty;
+            AvatarSupportiveCopy.Text = snapshot.SupportiveCopy;
+            AvatarAnimationKeyLabel.Text = snapshot.AnimationKey;
+            AvatarCelebrationBadge.IsVisible = false;
+            AvatarBackgroundFrame.BackgroundColor = Color.FromArgb("#222845");
+            return;
+        }
+
+        AvatarEnergyTitle.Text = snapshot.EnergyState switch
+        {
+            AvatarEnergyState.Energized => "Glow surging",
+            AvatarEnergyState.Steady => "Glow steady",
+            AvatarEnergyState.Tired => "Glow resting",
+            _ => "Avatar energy"
+        };
+
+        AvatarScoreLabel.Text = $"Weekly score {snapshot.WeeklyScore:0}";
+        AvatarMonthlyLabel.Text = snapshot.MonthlyDelta switch
+        {
+            > 0 => $"Monthly +{snapshot.MonthlyDelta:0.#}",
+            < 0 => $"Monthly {snapshot.MonthlyDelta:0.#}",
+            _ => "Monthly steady"
+        };
+
+        AvatarBreakLabel.Text = snapshot.CurrentBreakDays is int breakDays and > 0
+            ? $"Calm streak: {breakDays} day{(breakDays == 1 ? string.Empty : "s")}"
+            : string.Empty;
+
+        AvatarSupportiveCopy.Text = snapshot.SupportiveCopy;
+        AvatarAnimationKeyLabel.Text = snapshot.AnimationKey;
+        AvatarCelebrationBadge.IsVisible = snapshot.CelebrateMonthlyWin;
+
+        var colors = snapshot.EnergyState switch
+        {
+            AvatarEnergyState.Energized => Color.FromArgb("#4CFFDF"),
+            AvatarEnergyState.Steady => Color.FromArgb("#4D7CFE"),
+            AvatarEnergyState.Tired => Color.FromArgb("#FF8F70"),
+            _ => Color.FromArgb("#222845")
+        };
+
+        AvatarBackgroundFrame.BackgroundColor = colors.WithAlpha(0.32f);
+
+        var targetScale = snapshot.EnergyState switch
+        {
+            AvatarEnergyState.Energized => 1.08,
+            AvatarEnergyState.Steady => 1.03,
+            AvatarEnergyState.Tired => 0.98,
+            _ => 1.0
+        };
+
+        await AvatarBackgroundFrame.ScaleTo(targetScale, 240, Easing.CubicOut);
+        await AvatarBackgroundFrame.ScaleTo(1.0, 320, Easing.CubicIn);
+    }
+
+    private async void OnAvatarToggleToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressAvatarToggle || _avatarFeedbackService == null) return;
+
+        try
+        {
+            await _avatarFeedbackService.UpdateHidePreferenceAsync(_username, hideAvatar: !e.Value);
+            await RefreshAvatarFeedbackAsync();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to update avatar feedback preference for {Username}.", _username);
+            _suppressAvatarToggle = true;
+            AvatarFeedbackToggle.IsToggled = e.Value;
+            _suppressAvatarToggle = false;
+        }
     }
 }
