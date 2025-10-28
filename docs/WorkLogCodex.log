@@ -39,3 +39,5 @@ Summary: Anti-binge loop now captures every press, surfaces insights across tabs
 - Introduced `BingeAnalytics` service specs, validated quote catalogue completeness, and linked new shared sources into the test harness.
 
 Summary: Experience now blends playful UI, richer self-compassion content, and consolidated history analytics—all backed by fresh unit coverage and updated documentation.
+[Log] Step 13: Drafted game-loop SRS
+- Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
