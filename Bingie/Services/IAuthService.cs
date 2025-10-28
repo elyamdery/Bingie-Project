@@ -1,8 +1,20 @@
-﻿public interface IAuthService
+﻿using Bingie.Models;
+
+namespace Bingie.Services;
+
+public interface IAuthService
 {
-    // Authenticates the user with the provided credentials (username & password).
-    // Returns true if authentication is successful, otherwise false.
-    Task<bool> LoginAsync(string username, string password);
+    // Authenticates a user with username & password, returning the matching user when successful.
+    Task<User?> LoginAsync(string username, string password);
+
+    // Authenticates via a persisted remember-me token.
+    Task<User?> LoginWithTokenAsync(string username, string token);
+
+    // Issues a fresh remember-me token for the user, returning the plaintext token to persist securely on device.
+    Task<string?> IssueRememberTokenAsync(User user);
+
+    // Clears any stored remember-me token for the user.
+    Task ClearRememberTokenAsync(User user);
 
     // Logs out the current user.
     // Clears any session or authentication token.

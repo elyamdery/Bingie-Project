@@ -5,7 +5,7 @@
              x:Class="Bingie.Views.DayStatisticsPage"
              Title="Day Statistics">
 
-    <StackLayout Padding="10">
+    <StackLayout Padding="16" Spacing="16">
 
         <!-- Date Label -->
         <Label x:Name="SelectedDateLabel"
@@ -21,6 +21,26 @@
                VerticalOptions="Start"
                TextColor="Red"
                Margin="0,20,0,0" />
+
+        <!-- Entry List -->
+        <CollectionView x:Name="EntriesCollectionView"
+                        HeightRequest="200">
+            <CollectionView.EmptyView>
+                <Label Text="No entries recorded for this day."
+                       HorizontalOptions="Center"
+                       TextColor="#555555" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="12" Margin="0,4" CornerRadius="10" HasShadow="False" BackgroundColor="#F2F6FF">
+                        <StackLayout>
+                            <Label Text="{Binding DisplayTime}" FontAttributes="Bold" TextColor="#1F3A93"/>
+                            <Label Text="{Binding FriendlyNote}" FontSize="13" TextColor="#555555"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <!-- Back Button -->
         <Button Text="Back to History"

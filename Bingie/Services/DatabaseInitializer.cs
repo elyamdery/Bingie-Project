@@ -1,4 +1,6 @@
-﻿namespace Bingie.Services;
+﻿using Microsoft.Data.Sqlite;
+
+namespace Bingie.Services;
 
 public class DatabaseInitializer
 {
@@ -14,28 +16,42 @@ public class DatabaseInitializer
         using var connection = _connectionFactory.CreateConnection();
         connection.Open();
 
-        // Create Users table
-        var createUserTableCmd = @"
+        // Create Users table (unique username)
+        using var command = connection.CreateCommand();
+
+        command.CommandText = @"
                 CREATE TABLE IF NOT EXISTS Users (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Username TEXT NOT NULL,
-                    Password TEXT NOT NULL
+                    Username TEXT NOT NULL UNIQUE,
+                    Password TEXT NOT NULL,
+                    RememberToken TEXT
                 );";
-
-        using var command = connection.CreateCommand();
-        command.CommandText = createUserTableCmd;
         _ = command.ExecuteNonQuery();
 
-        // Create Binges table
-        var createBingesTableCmd = @"
-                CREATE TABLE IF NOT EXISTS Binges (
+        TryEnsureRememberTokenColumn(connection);
+
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS BingeEntries (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT NOT NULL,
-                    DateTime TEXT NOT NULL,
+                    Date TEXT NOT NULL,
                     Duration TEXT NOT NULL
                 );";
-
-        command.CommandText = createBingesTableCmd;
         _ = command.ExecuteNonQuery();
+    }
+
+    private static void TryEnsureRememberTokenColumn(SqliteConnection connection)
+    {
+        using var ensureCommand = connection.CreateCommand();
+        ensureCommand.CommandText = "ALTER TABLE Users ADD COLUMN RememberToken TEXT;";
+
+        try
+        {
+            _ = ensureCommand.ExecuteNonQuery();
+        }
+        catch (SqliteException ex) when (ex.SqliteErrorCode == 1)
+        {
+            // Column already exists; ignore.
+        }
     }
 }

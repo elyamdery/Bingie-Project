@@ -4,12 +4,38 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.Auth.LoginPage">
-    <StackLayout Padding="20">
+    <StackLayout Padding="24" Spacing="16">
+        <Label Text="Welcome back"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <Label Text="Log what happened and keep moving gently forward."
+               FontSize="16"
+               TextColor="#666666"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center" />
+
         <Entry Placeholder="Username" x:Name="UsernameEntry" />
         <Entry Placeholder="Password" x:Name="PasswordEntry" IsPassword="True" />
-        <CheckBox x:Name="RememberMeCheckBox" />
-        <Label Text="Remember Me" />
-        <Button Text="Login" Clicked="OnLoginClicked" />
-        <Button Text="Register" Clicked="OnRegisterClicked" />
+
+        <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
+            <CheckBox x:Name="RememberMeCheckBox" VerticalOptions="Center" />
+            <Label Text="Stay signed in" Grid.Column="1" VerticalOptions="Center" />
+        </Grid>
+
+        <Button x:Name="LoginButton"
+                Text="Login"
+                Clicked="OnLoginClicked"
+                BackgroundColor="#1F3A93"
+                TextColor="White" />
+
+        <Button Text="Register"
+                Clicked="OnRegisterClicked"
+                BackgroundColor="Transparent"
+                TextColor="#1F3A93"
+                BorderColor="#1F3A93"
+                BorderWidth="1"
+                CornerRadius="8" />
     </StackLayout>
 </ContentPage>

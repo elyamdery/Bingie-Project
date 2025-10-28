@@ -1,0 +1,41 @@
+[Log] Step 1: Normalized persistence layer
+- Removed reflection-based DataStore, aligned SQL schema, and updated DatabaseService/date handling.
+
+[Log] Step 2: Hardened authentication flow
+- Introduced BCrypt hashing, switched login to shared SQLite-backed store, and wired DI throughout login/registration/App.
+
+[Log] Step 3: Stabilized builds
+- Pruned unused packages/targets (Android/sqlcipher/MySQL/Graph) and verified clean dotnet build for ios+maccatalyst.
+
+[Log] Step 4: Completed calendar experience
+- Implemented CalendarService & CalendarView, refactored HistoryPage to async month navigation, and enhanced day stats.
+
+[Log] Step 5: Shell/UI cleanup
+- Rebuilt AppShell tabs in code, removed legacy files, resolved nullability warnings, and modernized MainPage/ExplorePage helpers.
+
+Summary: All planned steps executed successfully; project now builds without warnings and features a functional calendar/history workflow backed by hashed-auth persistence.
+
+[Log] Step 6: Logged CTA + insights refresh
+- Persisted MainPage binge button into SQLite, added global refresh notifications, expanded history/records/statistics UIs, and introduced supportive daily detail views.
+
+[Log] Step 7: Remember-me hardening
+- Added hashed session tokens with auto-login restore, removed plaintext password storage, refreshed login UX, and extended database schema for token management.
+
+[Log] Step 8: Regression coverage
+- Created xUnit project with in-memory stores, authored AuthService and CalendarService specs, and wired tests into CI-friendly `dotnet test` run.
+
+Summary: Anti-binge loop now captures every press, surfaces insights across tabs, secures sessions with rolling tokens, and ships with automated coverage for core flows.
+
+[Log] Step 9: Gentle logging feedback
+- Replaced blocking alerts with inline toast animations on MainPage and wrapped the hero view in a neon gradient for a more uplifting mood.
+
+[Log] Step 10: Explore inspiration revamp
+- Seeded a 100+ quote library, added animated quote cards, and layered in daily micro-challenges with tactile tap feedback.
+
+[Log] Step 11: History analytics merge
+- Removed standalone statistics/records, embedded expandable trend insights, drew 7-day moving averages via `BingeTrendDrawable`, and refreshed monthly summaries.
+
+[Log] Step 12: Analytics + content tests
+- Introduced `BingeAnalytics` service specs, validated quote catalogue completeness, and linked new shared sources into the test harness.
+
+Summary: Experience now blends playful UI, richer self-compassion content, and consolidated history analytics—all backed by fresh unit coverage and updated documentation.

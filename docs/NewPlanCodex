@@ -1,0 +1,13 @@
+Codex Execution Plan
+====================
+
+1. Align data layer and persistence flows — completed
+   - Consolidated storage around DatabaseService and corrected schema/table naming.
+2. Rework authentication to use persistent storage with hashed passwords — completed
+   - Added BCrypt hashing/verification and removed in-memory stores from the login path.
+3. Resolve build configuration blockers — completed
+   - Trimmed unsupported targets/packages and achieved clean net8.0-ios/maccatalyst builds.
+4. Finish calendar/history implementation — completed
+   - Implemented CalendarService & CalendarView and refreshed the history UI/flow.
+5. Clean up Shell routing and remove unused scaffolding — completed
+   - Simplified AppShell, removed duplicate views, and cleared obsolete assets.

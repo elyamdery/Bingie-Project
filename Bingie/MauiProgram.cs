@@ -50,23 +50,18 @@ public static class MauiProgram
 
     private static void RegisterServices(MauiAppBuilder builder)
     {
-        // Register SqliteConnectionFactory
+        // Register database primitives
         _ = builder.Services.AddSingleton<SqliteConnectionFactory>();
-
-        // Register DatabaseService using SqliteConnectionFactory
-        _ = builder.Services.AddSingleton<IDataStore<BingeEntry>, DatabaseService>();
-
-        // Register DatabaseInitializer
+        _ = builder.Services.AddSingleton<DatabaseService>();
+        _ = builder.Services.AddSingleton<IDataStore<BingeEntry>>(sp => sp.GetRequiredService<DatabaseService>());
+        _ = builder.Services.AddSingleton<IDataStore<User>>(sp => sp.GetRequiredService<DatabaseService>());
+        _ = builder.Services.AddSingleton<IAuthService, AuthService>();
+        _ = builder.Services.AddSingleton<CalendarService>();
         _ = builder.Services.AddSingleton<DatabaseInitializer>();
 
-        // Register pages
-        _ = builder.Services.AddTransient<BingeRecordsPage>();
+        // Register pages that participate in navigation
         _ = builder.Services.AddTransient<LoginPage>();
         _ = builder.Services.AddTransient<RegistrationPage>();
-        _ = builder.Services.AddTransient<MainPage>();
-        _ = builder.Services.AddTransient<HistoryPage>();
-        _ = builder.Services.AddTransient<DayStatisticsPage>();
         _ = builder.Services.AddTransient<ExplorePage>();
-        _ = builder.Services.AddTransient<StatisticsPage>();
     }
 }

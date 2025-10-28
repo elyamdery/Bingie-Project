@@ -1,161 +1,207 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Bingie.Constants;
 using Bingie.Models;
 using Bingie.Services;
+using Bingie.Views.Components;
 
 namespace Bingie.Views;
 
 public partial class HistoryPage : ContentPage
 {
+    private readonly BingeTrendDrawable _trendDrawable = new();
     private readonly IDataStore<BingeEntry> _dataStore;
+    private readonly CalendarService _calendarService;
     private readonly string _username;
-    private DateTime _currentDate;
+    private DateTime _currentMonth;
+    private bool _isLoading;
+    private bool _analyticsExpanded;
 
-    // Parameterless constructor for XAML previewer
     public HistoryPage()
     {
         InitializeComponent();
-        _dataStore = new DataStore<BingeEntry>(new SqliteConnectionFactory()); // Use actual implementation
-        _username = "PreviewUser";
-        _currentDate = DateTime.Today;
 
-        try
-        {
-            Debug.WriteLine("HistoryPage: Initializing UpdateCalendar");
-            UpdateCalendar();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in HistoryPage constructor: {ex.Message}");
-            throw;
-        }
+        var connectionFactory = new SqliteConnectionFactory();
+        var previewService = new DatabaseService(connectionFactory);
+        _dataStore = (IDataStore<BingeEntry>)previewService;
+        _calendarService = new CalendarService(_dataStore);
+        _username = "PreviewUser";
+        _currentMonth = DateTime.Today;
+
+        BingeChartView.Drawable = _trendDrawable;
+        CalendarView.DayTapped += OnDayTapped;
     }
 
-    public HistoryPage(IDataStore<BingeEntry> dataStore, string username)
+    public HistoryPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
+        _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
-        _currentDate = DateTime.Today;
+        _currentMonth = DateTime.Today;
+
+        BingeChartView.Drawable = _trendDrawable;
+        CalendarView.DayTapped += OnDayTapped;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        MessagingCenter.Subscribe<MainPage, BingeEntry>(this, "BingeEntryAdded",
+            async (_, __) => await UpdateCalendarAsync());
+        await UpdateCalendarAsync();
+    }
+
+    protected override void OnDisappearing()
+    {
+        MessagingCenter.Unsubscribe<MainPage, BingeEntry>(this, "BingeEntryAdded");
+        base.OnDisappearing();
+    }
+
+    private async Task UpdateCalendarAsync()
+    {
+        if (_isLoading) return;
 
         try
         {
-            Debug.WriteLine("HistoryPage: Initializing UpdateCalendar");
-            UpdateCalendar();
+            _isLoading = true;
+            LoadingIndicator.IsVisible = LoadingIndicator.IsRunning = true;
+
+            CurrentDateLabel.Text = _currentMonth.ToString(CalendarConstants.MonthYearFormat);
+            CalendarView.Month = _currentMonth;
+
+            var bingeCounts = await _calendarService.GetMonthlyBingeCountsAsync(_username, _currentMonth);
+            CalendarView.BingeCounts = bingeCounts;
+
+            await UpdateAnalyticsAsync();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception in HistoryPage constructor: {ex.Message}");
-            throw;
+            Debug.WriteLine($"HistoryPage: failed to load calendar data - {ex.Message}");
+            await DisplayAlert("Error", "Unable to load calendar data.", "OK");
+        }
+        finally
+        {
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
+            _isLoading = false;
         }
     }
 
-    private async void UpdateCalendar()
+    private async void OnPreviousMonthClicked(object sender, EventArgs e)
     {
-        if (_dataStore == null)
+        _currentMonth = _currentMonth.AddMonths(-1);
+        await UpdateCalendarAsync();
+    }
+
+    private async void OnNextMonthClicked(object sender, EventArgs e)
+    {
+        _currentMonth = _currentMonth.AddMonths(1);
+        await UpdateCalendarAsync();
+    }
+
+    private async void OnDayTapped(object? sender, DateSelectedEventArgs e)
+    {
+        try
         {
-            Debug.WriteLine("HistoryPage: _dataStore is null");
+            await Navigation.PushAsync(new DayStatisticsPage(e.Date, _calendarService, _username));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"HistoryPage: navigation failed - {ex.Message}");
+        }
+    }
+
+    private async Task UpdateAnalyticsAsync()
+    {
+        try
+        {
+            IEnumerable<BingeEntry> entries = await _dataStore.GetItemsAsync();
+
+            List<BingeEntry> userEntries = entries
+                .Where(r => string.Equals(r.Username, _username, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.Date)
+                .ToList();
+
+            UpdateSummary(userEntries);
+            UpdateTrend(userEntries);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"HistoryPage: analytics update failed - {ex.Message}");
+        }
+    }
+
+    private void UpdateSummary(IReadOnlyCollection<BingeEntry> entries)
+    {
+        var today = DateTime.Today;
+        var monthlyCount = BingeAnalytics.CountThisMonth(entries, today);
+
+        SummaryCountLabel.Text = $"{monthlyCount} logged this month";
+
+        var breakDays = BingeAnalytics.CurrentBreakDays(entries, today);
+
+        if (breakDays is null)
+        {
+            SummaryStreakLabel.Text = "Current break: day one — keep going!";
             return;
         }
 
-        try
+        SummaryStreakLabel.Text = breakDays.Value switch
         {
-            Debug.WriteLine("HistoryPage: Updating calendar");
-            CurrentDateLabel.Text = _currentDate.ToString("MMMM yyyy");
+            < 0 => "Current break: today is a reset.",
+            0 => "Current break: today is a reset.",
+            1 => "Current break: 1 day strong 💫",
+            _ => $"Current break: {breakDays.Value} days strong"
+        };
+    }
 
-            // Clear existing grid content
-            CalendarGrid.Children.Clear();
+    private void UpdateTrend(IReadOnlyCollection<BingeEntry> entries)
+    {
+        if (entries.Count == 0)
+        {
+            _trendDrawable.UpdateData(Array.Empty<BingeDayStat>());
+            BingeChartView.Invalidate();
+            AnalyticsCollectionView.ItemsSource = Array.Empty<AnalyticsRow>();
+            AnalyticsContent.IsVisible = false;
+            return;
+        }
 
-            // Get the first day of the current month
-            DateTime firstDayOfMonth = new(_currentDate.Year, _currentDate.Month, 1);
-            var daysInMonth = DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month);
-            var startDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+        var stats = BingeAnalytics.BuildTrend(entries, DateTime.Today, 7, 42);
 
-            // Get binge counts for the current month
-            IEnumerable<BingeEntry> records = await _dataStore.GetItemsAsync();
-            var bingeCounts = records
-                .Where(r => r.Username == _username && r.Date.Year == _currentDate.Year &&
-                            r.Date.Month == _currentDate.Month)
-                .GroupBy(r => r.Date.Day)
-                .ToDictionary(g => g.Key, g => g.Count());
+        _trendDrawable.UpdateData(stats);
+        BingeChartView.Invalidate();
 
-            // Add the days of the month to the calendar grid
-            for (var day = 1; day <= daysInMonth; day++)
+        var recent = stats.TakeLast(7).Reverse()
+            .Select(stat =>
             {
-                Button dayButton = new()
-                {
-                    Text = day.ToString(),
-                    BackgroundColor = bingeCounts.ContainsKey(day) ? Colors.Red : Colors.Gray,
-                    TextColor = Colors.White,
-                    CornerRadius = 20,
-                    HeightRequest = 40,
-                    WidthRequest = 40
-                };
+                var headline = stat.Count == 0
+                    ? "Rest day — no binges logged."
+                    : $"{stat.Count} logged moment(s).";
 
-                var row = (startDayOfWeek + day - 1) / 7;
-                var column = (startDayOfWeek + day - 1) % 7;
+                var detail = $"7-day avg: {stat.MovingAverage:F1}";
 
-                dayButton.Clicked += (s, e) => OnDaySelected(day);
+                return new AnalyticsRow(
+                    stat.Date.ToString("ddd, MMM d"),
+                    $"{headline}\n{detail}",
+                    stat.Count.ToString(),
+                    stat.MovingAverage);
+            })
+            .ToList();
 
-                CalendarGrid.Add(dayButton, column, row);
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in UpdateCalendar: {ex.Message}");
-            throw;
-        }
+        AnalyticsCollectionView.ItemsSource = recent;
+        AnalyticsContent.IsVisible = _analyticsExpanded;
     }
 
-    private void OnDaySelected(int day)
-    {
-        try
-        {
-            Debug.WriteLine($"HistoryPage: Day selected: {day}");
-            var daysInMonth = DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month);
-            if (day < 1 || day > daysInMonth)
-            {
-                // Handle invalid day value
-                Console.WriteLine("Invalid day selected.");
-                return;
-            }
+    private sealed record AnalyticsRow(string DayDisplay, string Summary, string CountDisplay, double MovingAverage);
 
-            DateTime selectedDate = new(_currentDate.Year, _currentDate.Month, day);
-            _ = Navigation.PushAsync(new DayStatisticsPage(selectedDate, _dataStore, _username));
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in OnDaySelected: {ex.Message}");
-            throw;
-        }
-    }
-
-    private void OnPreviousWeekClicked(object sender, EventArgs e)
+    private void OnToggleAnalyticsClicked(object sender, EventArgs e)
     {
-        try
-        {
-            Debug.WriteLine("HistoryPage: Previous week clicked");
-            _currentDate = _currentDate.AddDays(-7);
-            UpdateCalendar();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in OnPreviousWeekClicked: {ex.Message}");
-            throw;
-        }
-    }
-
-    private void OnNextWeekClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            Debug.WriteLine("HistoryPage: Next week clicked");
-            _currentDate = _currentDate.AddDays(7);
-            UpdateCalendar();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception in OnNextWeekClicked: {ex.Message}");
-            throw;
-        }
+        _analyticsExpanded = !_analyticsExpanded;
+        AnalyticsContent.IsVisible = _analyticsExpanded;
+        ToggleAnalyticsButton.Text = _analyticsExpanded ? "Hide trend insights" : "Show trend insights";
     }
 }

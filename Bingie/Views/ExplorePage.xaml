@@ -4,18 +4,76 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bingie.Views.ExplorePage"
              Title="Explore">
-    <StackLayout Padding="10">
-        <Label Text="Explore"
-               FontSize="36"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Margin="0,20,0,0" />
+    <Grid Padding="0">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#172A74" Offset="0" />
+                <GradientStop Color="#21A9AF" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Label x:Name="RandomQuoteLabel"
-               FontSize="20"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Margin="0,10,0,20" />
-    </StackLayout>
+        <ScrollView>
+            <VerticalStackLayout Padding="24" Spacing="24">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Nourish your mind"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Tap into a library of loving reminders and mini challenges."
+                           FontSize="18"
+                           TextColor="#F2F8FF" />
+                </VerticalStackLayout>
+
+                <Border x:Name="QuoteCard"
+                        StrokeThickness="0"
+                        Padding="28"
+                        BackgroundColor="#F9FBFF"
+                        StrokeShape="RoundRectangle 28">
+                    <Border.Shadow>
+                        <Shadow Offset="10,10"
+                                Radius="20"
+                                Brush="#3B3B98"
+                                Opacity="0.25" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="16">
+                        <Label x:Name="QuoteTextLabel"
+                               Text="“Keep going.”"
+                               FontSize="22"
+                               TextColor="#142850"
+                               HorizontalTextAlignment="Center" />
+                        <Label x:Name="QuoteAuthorLabel"
+                               Text="- Anonymous"
+                               FontSize="16"
+                               TextColor="#527DA6"
+                               HorizontalTextAlignment="Center" />
+                        <Button Text="Shuffle Inspiration"
+                                Clicked="OnShuffleQuoteClicked"
+                                CornerRadius="22"
+                                BackgroundColor="#1B98E0"
+                                TextColor="White"
+                                HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Today’s playful challenges"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Pick one that feels doable and celebrate the attempt."
+                           FontSize="16"
+                           TextColor="#E6F4FF" />
+
+                    <FlexLayout x:Name="ChallengesLayout"
+                                Wrap="Wrap"
+                                JustifyContent="SpaceAround"
+                                AlignItems="Center"
+                                AlignContent="Start"
+                                Margin="0,8,0,0"
+                                BindableLayout.ItemsSource="{x:Null}">
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

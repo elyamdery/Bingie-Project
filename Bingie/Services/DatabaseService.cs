@@ -1,4 +1,6 @@
-﻿using Bingie.Models;
+﻿using System;
+using System.Globalization;
+using Bingie.Models;
 
 namespace Bingie.Services;
 
@@ -18,14 +20,14 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         await connection.OpenAsync();
 
         var insertCmd = @"
-                INSERT INTO BingeEntrys (Username, DateTime, Duration)
-                VALUES (@username, @dateTime, @duration);";
+                INSERT INTO BingeEntries (Username, Date, Duration)
+                VALUES (@username, @date, @duration);";
 
         using var command = connection.CreateCommand();
         command.CommandText = insertCmd;
         _ = command.Parameters.AddWithValue("@username", item.Username);
-        _ = command.Parameters.AddWithValue("@dateTime", item.Date.ToString("yyyy-MM-dd HH:mm:ss"));
-        _ = command.Parameters.AddWithValue("@duration", item.Duration.ToString());
+        _ = command.Parameters.AddWithValue("@date", item.Date.ToString("O"));
+        _ = command.Parameters.AddWithValue("@duration", item.Duration.ToString("c", CultureInfo.InvariantCulture));
 
         _ = await command.ExecuteNonQueryAsync();
         return true;
@@ -38,7 +40,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM BingeEntrys;";
+        var selectCmd = "SELECT * FROM BingeEntries;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
 
@@ -48,8 +50,8 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
             {
                 Id = reader.GetInt32(0),
                 Username = reader.GetString(1),
-                Date = DateTime.Parse(reader.GetString(2)),
-                Duration = TimeSpan.Parse(reader.GetString(3))
+                Date = DateTime.Parse(reader.GetString(2), CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind),
+                Duration = TimeSpan.Parse(reader.GetString(3), CultureInfo.InvariantCulture)
             });
 
         return entries;
@@ -61,7 +63,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM BingeEntrys WHERE Id = @id;";
+        var selectCmd = "SELECT * FROM BingeEntries WHERE Id = @id;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
         _ = command.Parameters.AddWithValue("@id", id);
@@ -72,8 +74,8 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
             {
                 Id = reader.GetInt32(0),
                 Username = reader.GetString(1),
-                Date = DateTime.Parse(reader.GetString(2)),
-                Duration = TimeSpan.Parse(reader.GetString(3))
+                Date = DateTime.Parse(reader.GetString(2), CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind),
+                Duration = TimeSpan.Parse(reader.GetString(3), CultureInfo.InvariantCulture)
             }
             : null;
     }
@@ -85,15 +87,15 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         await connection.OpenAsync();
 
         var updateCmd = @"
-                UPDATE BingeEntrys 
-                SET Username = @username, DateTime = @dateTime, Duration = @duration 
+                UPDATE BingeEntries 
+                SET Username = @username, Date = @date, Duration = @duration 
                 WHERE Id = @id;";
 
         using var command = connection.CreateCommand();
         command.CommandText = updateCmd;
         _ = command.Parameters.AddWithValue("@username", item.Username);
-        _ = command.Parameters.AddWithValue("@dateTime", item.Date.ToString("yyyy-MM-dd HH:mm:ss"));
-        _ = command.Parameters.AddWithValue("@duration", item.Duration.ToString());
+        _ = command.Parameters.AddWithValue("@date", item.Date.ToString("O"));
+        _ = command.Parameters.AddWithValue("@duration", item.Duration.ToString("c", CultureInfo.InvariantCulture));
         _ = command.Parameters.AddWithValue("@id", item.Id);
 
         _ = await command.ExecuteNonQueryAsync();
@@ -106,7 +108,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var deleteCmd = "DELETE FROM BingeEntrys WHERE Id = @id;";
+        var deleteCmd = "DELETE FROM BingeEntries WHERE Id = @id;";
         using var command = connection.CreateCommand();
         command.CommandText = deleteCmd;
         _ = command.Parameters.AddWithValue("@id", id);
@@ -122,13 +124,14 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         await connection.OpenAsync();
 
         var insertCmd = @"
-                INSERT INTO Users (Username, Password)
-                VALUES (@username, @password);";
+                INSERT INTO Users (Username, Password, RememberToken)
+                VALUES (@username, @password, @rememberToken);";
 
         using var command = connection.CreateCommand();
         command.CommandText = insertCmd;
         _ = command.Parameters.AddWithValue("@username", item.Username);
         _ = command.Parameters.AddWithValue("@password", item.Password);
+        _ = command.Parameters.AddWithValue("@rememberToken", (object?)item.RememberToken ?? DBNull.Value);
 
         _ = await command.ExecuteNonQueryAsync();
         return true;
@@ -141,7 +144,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM Users;";
+        var selectCmd = "SELECT Id, Username, Password, RememberToken FROM Users;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
 
@@ -151,7 +154,8 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
             {
                 Id = reader.GetInt32(0),
                 Username = reader.GetString(1),
-                Password = reader.GetString(2)
+                Password = reader.GetString(2),
+                RememberToken = reader.IsDBNull(3) ? null : reader.GetString(3)
             });
 
         return users;
@@ -163,7 +167,7 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();
 
-        var selectCmd = "SELECT * FROM Users WHERE Id = @id;";
+        var selectCmd = "SELECT Id, Username, Password, RememberToken FROM Users WHERE Id = @id;";
         using var command = connection.CreateCommand();
         command.CommandText = selectCmd;
         _ = command.Parameters.AddWithValue("@id", id);
@@ -174,7 +178,8 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
             {
                 Id = reader.GetInt32(0),
                 Username = reader.GetString(1),
-                Password = reader.GetString(2)
+                Password = reader.GetString(2),
+                RememberToken = reader.IsDBNull(3) ? null : reader.GetString(3)
             }
             : null;
     }
@@ -187,13 +192,14 @@ public class DatabaseService : IDataStore<BingeEntry>, IDataStore<User>
 
         var updateCmd = @"
                 UPDATE Users 
-                SET Username = @username, Password = @password 
+                SET Username = @username, Password = @password, RememberToken = @rememberToken 
                 WHERE Id = @id;";
 
         using var command = connection.CreateCommand();
         command.CommandText = updateCmd;
         _ = command.Parameters.AddWithValue("@username", item.Username);
         _ = command.Parameters.AddWithValue("@password", item.Password);
+        _ = command.Parameters.AddWithValue("@rememberToken", (object?)item.RememberToken ?? DBNull.Value);
         _ = command.Parameters.AddWithValue("@id", item.Id);
 
         _ = await command.ExecuteNonQueryAsync();

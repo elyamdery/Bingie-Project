@@ -1,25 +1,18 @@
 ﻿using Bingie.Loggin;
-using Bingie.Services;
 using Bingie.Views.Auth;
 using Serilog;
-
-// Add this using directive
 
 namespace Bingie;
 
 public partial class App : Application
 {
-    public App()
+    public App(LoginPage loginPage)
     {
         InitializeComponent();
 
-        // Configure logging
         LoggingConfiguration.ConfigureLogging();
         Log.Information("Application Started");
 
-        // Initialize the main page with AuthService
-        DatabaseService databaseService = new(new SqliteConnectionFactory());
-        AuthService authService = new(databaseService);
-        MainPage = new NavigationPage(new LoginPage(authService));
+        MainPage = loginPage;
     }
 }

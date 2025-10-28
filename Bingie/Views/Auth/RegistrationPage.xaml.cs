@@ -1,13 +1,16 @@
-﻿namespace Bingie.Views.Auth;
+﻿using System;
+using Bingie.Services;
+
+namespace Bingie.Views.Auth;
 
 public partial class RegistrationPage : ContentPage
 {
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
 
-    public RegistrationPage(AuthService authService)
+    public RegistrationPage(IAuthService authService)
     {
         InitializeComponent();
-        _authService = authService;
+        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
     }
 
     private async void OnRegisterClicked(object sender, EventArgs e)

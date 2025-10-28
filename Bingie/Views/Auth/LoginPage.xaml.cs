@@ -1,119 +1,181 @@
-﻿using Bingie.Models;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Bingie.Models;
 using Bingie.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bingie.Views.Auth;
 
 public partial class LoginPage : ContentPage
 {
-    private readonly AuthService _authService;
+    private const string RememberedUsernameKey = "RememberedUsername";
+    private const string RememberTokenKey = "RememberedToken";
+    private const string RememberMeFlagKey = "RememberMeEnabled";
 
-    public LoginPage(AuthService authService)
+    private readonly IAuthService _authService;
+    private readonly IDataStore<BingeEntry> _bingeEntryStore;
+    private readonly CalendarService _calendarService;
+    private readonly IServiceProvider _serviceProvider;
+
+    private bool _isAuthenticating;
+
+    public LoginPage(IAuthService authService,
+        IDataStore<BingeEntry> bingeEntryStore,
+        CalendarService calendarService,
+        IServiceProvider serviceProvider)
     {
         InitializeComponent();
-        _authService = authService;
+        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+        _bingeEntryStore = bingeEntryStore ?? throw new ArgumentNullException(nameof(bingeEntryStore));
+        _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await RestoreSessionAsync();
+    }
 
-        // Load saved username from Preferences
-        var rememberedUsername = Preferences.Get("RememberedUsername", string.Empty);
-        if (!string.IsNullOrEmpty(rememberedUsername))
+    private async Task RestoreSessionAsync()
+    {
+        try
         {
-            UsernameEntry.Text = rememberedUsername;
-
-            // Load saved password from SecureStorage
-            var rememberedPassword = await SecureStorage.GetAsync("RememberedPassword");
-            if (!string.IsNullOrEmpty(rememberedPassword))
+            var rememberedUsername = Preferences.Get(RememberedUsernameKey, string.Empty);
+            if (!string.IsNullOrEmpty(rememberedUsername))
             {
-                PasswordEntry.Text = rememberedPassword;
-                RememberMeCheckBox.IsChecked = true;
+                UsernameEntry.Text = rememberedUsername;
             }
+
+            var rememberMeEnabled = Preferences.Get(RememberMeFlagKey, false);
+            RememberMeCheckBox.IsChecked = rememberMeEnabled;
+            SecureStorage.Remove("RememberedPassword"); // Legacy cleanup
+
+            if (!rememberMeEnabled || string.IsNullOrEmpty(rememberedUsername)) return;
+
+            var token = await SecureStorage.GetAsync(RememberTokenKey);
+            if (string.IsNullOrEmpty(token))
+            {
+                RememberMeCheckBox.IsChecked = false;
+                Preferences.Set(RememberMeFlagKey, false);
+                return;
+            }
+
+            var user = await _authService.LoginWithTokenAsync(rememberedUsername, token);
+            if (user != null)
+            {
+                await NavigateToShellAsync(user, displaySuccessMessage: false);
+                return;
+            }
+
+            SecureStorage.Remove(RememberTokenKey);
+            RememberMeCheckBox.IsChecked = false;
+            Preferences.Set(RememberMeFlagKey, false);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Session restoration failed: {ex.Message}");
+            RememberMeCheckBox.IsChecked = false;
         }
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        var username = UsernameEntry.Text;
-        var password = PasswordEntry.Text;
+        if (_isAuthenticating) return;
 
-        var isLoggedIn = await _authService.LoginAsync(username, password);
+        var username = UsernameEntry.Text?.Trim() ?? string.Empty;
+        var password = PasswordEntry.Text ?? string.Empty;
 
-        if (isLoggedIn)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            if (RememberMeCheckBox.IsChecked)
+            await DisplayAlert("Error", "Username and password cannot be empty.", "OK");
+            return;
+        }
+
+        _isAuthenticating = true;
+        LoginButton.IsEnabled = false;
+
+        try
+        {
+            var user = await _authService.LoginAsync(username, password);
+            if (user == null)
             {
-                Preferences.Set("RememberedUsername", username);
-                await SecureStorage.SetAsync("RememberedPassword", password);
-            }
-            else
-            {
-                Preferences.Remove("RememberedUsername");
-                _ = SecureStorage.Remove("RememberedPassword");
+                await DisplayAlert("Error", "Invalid username or password.", "OK");
+                return;
             }
 
-            await DisplayAlert("Success", "Login successful!", "OK");
+            await HandleRememberMeAsync(user);
+            await NavigateToShellAsync(user, displaySuccessMessage: true);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Login failed: {ex.Message}");
+            await DisplayAlert("Error", "Something went wrong during login. Please try again.", "OK");
+        }
+        finally
+        {
+            _isAuthenticating = false;
+            LoginButton.IsEnabled = true;
+        }
+    }
 
-            // Create an in-memory implementation of IDataStore<BingeEntry> and pass it along with the username
-            IDataStore<BingeEntry> dataStore = new InMemoryBingeEntryDataStore();
-            Application.Current.MainPage = new AppShell(dataStore, username);
+    private async Task HandleRememberMeAsync(User user)
+    {
+        if (RememberMeCheckBox.IsChecked)
+        {
+            Preferences.Set(RememberedUsernameKey, user.Username);
+            Preferences.Set(RememberMeFlagKey, true);
+
+            try
+            {
+                var token = await _authService.IssueRememberTokenAsync(user);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    await SecureStorage.SetAsync(RememberTokenKey, token);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to persist remember-me token: {ex.Message}");
+            }
         }
         else
         {
-            await DisplayAlert("Error", "Invalid username or password.", "OK");
+            Preferences.Remove(RememberedUsernameKey);
+            Preferences.Set(RememberMeFlagKey, false);
+            SecureStorage.Remove(RememberTokenKey);
+
+            try
+            {
+                await _authService.ClearRememberTokenAsync(user);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to clear remember-me token: {ex.Message}");
+            }
         }
+    }
+
+    private async Task NavigateToShellAsync(User user, bool displaySuccessMessage)
+    {
+        if (Application.Current == null)
+        {
+            await DisplayAlert("Error", "Unable to load the application shell.", "OK");
+            return;
+        }
+
+        if (displaySuccessMessage)
+        {
+            await DisplayAlert("Welcome back", "Login successful!", "OK");
+        }
+
+        Application.Current.MainPage = new AppShell(_bingeEntryStore, _calendarService, user.Username);
     }
 
     private void OnRegisterClicked(object sender, EventArgs e)
     {
-        _ = Navigation.PushAsync(new RegistrationPage(_authService));
-    }
-
-    // In-memory implementation of IDataStore<BingeEntry>
-    private class InMemoryBingeEntryDataStore : IDataStore<BingeEntry>
-    {
-        private readonly List<BingeEntry> _items = new();
-
-        public Task<bool> AddItemAsync(BingeEntry item)
-        {
-            _items.Add(item);
-            return Task.FromResult(true);
-        }
-
-        public Task<bool> UpdateItemAsync(BingeEntry item)
-        {
-            var oldItem = _items.Find(x => x.Id == item.Id);
-            if (oldItem != null)
-            {
-                _items.Remove(oldItem);
-                _items.Add(item);
-                return Task.FromResult(true);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public Task<bool> DeleteItemAsync(string id)
-        {
-            var oldItem = _items.Find(x => x.Id.ToString() == id);
-            if (oldItem != null)
-            {
-                _items.Remove(oldItem);
-                return Task.FromResult(true);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public Task<BingeEntry> GetItemAsync(string id)
-        {
-            return Task.FromResult(_items.Find(x => x.Id.ToString() == id));
-        }
-
-        public Task<IEnumerable<BingeEntry>> GetItemsAsync()
-        {
-            return Task.FromResult<IEnumerable<BingeEntry>>(_items);
-        }
+        var registrationPage = _serviceProvider.GetRequiredService<RegistrationPage>();
+        _ = Navigation.PushAsync(registrationPage);
     }
 }

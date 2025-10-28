@@ -9,27 +9,28 @@ namespace Bingie;
 public partial class AppShell : Shell
 {
     private readonly IDataStore<BingeEntry> _dataStore;
+    private readonly CalendarService _calendarService;
     private readonly string _username;
 
-    public AppShell(IDataStore<BingeEntry> dataStore, string username)
+    public AppShell(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
+        _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
+
+        Items.Clear();
 
         // Register routes
         Routing.RegisterRoute("login", typeof(LoginPage));
         Routing.RegisterRoute("history", typeof(HistoryPage));
         Routing.RegisterRoute("daystatistics", typeof(DayStatisticsPage));
         Routing.RegisterRoute("register", typeof(RegistrationPage));
-        Routing.RegisterRoute("statistics", typeof(StatisticsPage));
-        Routing.RegisterRoute("bingeRecords", typeof(BingeRecordsPage));
 
         // Set the ContentTemplate for the History tab
         var historyTab = new ShellContent
         {
             Title = "History",
-            Icon = "history.png",
             Route = "history",
             ContentTemplate = new DataTemplate(() => CreateHistoryPage())
         };
@@ -41,15 +42,13 @@ public partial class AppShell : Shell
                 new ShellContent
                 {
                     Title = "Home",
-                    Icon = "home.png",
                     Route = "home",
-                    ContentTemplate = new DataTemplate(() => new MainPage(_dataStore, _username))
+                    ContentTemplate = new DataTemplate(() => new MainPage(_dataStore, _calendarService, _username))
                 },
                 historyTab,
                 new ShellContent
                 {
                     Title = "Explore",
-                    Icon = "explore.png",
                     Route = "explore",
                     ContentTemplate = new DataTemplate(() => new ExplorePage())
                 }
@@ -62,10 +61,10 @@ public partial class AppShell : Shell
 
     private HistoryPage CreateHistoryPage()
     {
-        return new HistoryPage(_dataStore, _username);
+        return new HistoryPage(_dataStore, _calendarService, _username);
     }
 
-    private void OnNavigated(object sender, ShellNavigatedEventArgs e)
+    private void OnNavigated(object? sender, ShellNavigatedEventArgs e)
     {
         Debug.WriteLine($"Navigated to: {e.Current.Location}");
     }

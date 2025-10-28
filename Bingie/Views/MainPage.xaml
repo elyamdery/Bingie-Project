@@ -2,10 +2,17 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bingie.Views.MainPage"
-             BackgroundColor="#0000FF">
+             x:Class="Bingie.Views.MainPage">
 
-    <StackLayout Padding="10">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#10002B" Offset="0" />
+                <GradientStop Color="#6A0DAD" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <StackLayout Padding="24" Spacing="18">
         <Label Text="Bingie"
                FontSize="36"
                FontAttributes="Bold"
@@ -21,7 +28,8 @@
                Margin="0,10,0,20"
                TextColor="White" />
 
-        <Button Text="I Binged"
+        <Button x:Name="BingeButton"
+                Text="I Binged"
                 FontSize="24"
                 BackgroundColor="Red"
                 TextColor="White"
@@ -37,6 +45,14 @@
             </Button.Shadow>
         </Button>
 
+        <Label x:Name="FeedbackLabel"
+               Opacity="0"
+               Text=""
+               FontSize="18"
+               HorizontalOptions="Center"
+               TextColor="White"
+               Margin="0,12,0,0" />
+
         <Frame Margin="0,20,0,20"
                BorderColor="Black"
                HorizontalOptions="Center"
@@ -47,5 +63,6 @@
                          VerticalOptions="Center"
                          Padding="5" />
         </Frame>
-    </StackLayout>
+        </StackLayout>
+    </Grid>
 </ContentPage>

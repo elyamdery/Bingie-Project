@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Bingie\Models\BingeEntry.cs" Link="Models\BingeEntry.cs" />
+    <Compile Include="..\..\Bingie\Models\BingeDayStat.cs" Link="Models\BingeDayStat.cs" />
+    <Compile Include="..\..\Bingie\Models\User.cs" Link="Models\User.cs" />
+    <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
+    <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
+    <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
+    <Compile Include="..\..\Bingie\Services\QuotesService.cs" Link="Services\QuotesService.cs" />
+    <Compile Include="..\..\Bingie\Services\IDataStore.cs" Link="Services\IDataStore.cs" />
+    <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
