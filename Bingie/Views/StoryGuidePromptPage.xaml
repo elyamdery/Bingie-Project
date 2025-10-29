@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Bingie.Models"
+             x:Class="Bingie.Views.StoryGuidePromptPage"
+             Title="Story Guide">
+    <Grid Padding="0">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1B1E4B" Offset="0" />
+                <GradientStop Color="#4B2B75" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <ScrollView>
+            <VerticalStackLayout Padding="24"
+                                 Spacing="20">
+                <Label Text="What pulled you toward a binge?"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="White" />
+
+                <CollectionView x:Name="TriggerCollection"
+                                SelectionMode="Single"
+                                SelectionChanged="OnTriggerSelectionChanged"
+                                HeightRequest="300">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="1"
+                                         VerticalItemSpacing="12" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:StoryTriggerDefinition">
+                            <Border StrokeThickness="0"
+                                    BackgroundColor="#FFFFFF0F"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="16">
+                                <Border.Stroke>
+                                    <SolidColorBrush Color="#7C5CFA" />
+                                </Border.Stroke>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="White" />
+                                    <Label Text="{Binding Description}"
+                                           FontSize="14"
+                                           TextColor="#E2E4FF" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <VerticalStackLayout x:Name="CustomReasonPanel"
+                                     Spacing="8"
+                                     IsVisible="False">
+                    <Label Text="Share what you noticed:"
+                           FontSize="16"
+                           TextColor="#F5F5FF" />
+                    <Editor x:Name="CustomReasonEditor"
+                            Placeholder="You can leave this blank if you're unsure."
+                            AutoSize="TextChanges"
+                            MaxLength="200" />
+                </VerticalStackLayout>
+
+                <Button x:Name="SaveButton"
+                        Text="Save story insight"
+                        BackgroundColor="#7C5CFA"
+                        TextColor="White"
+                        CornerRadius="24"
+                        IsEnabled="False"
+                        Clicked="OnSaveClicked" />
+
+                <Button Text="Skip story for now"
+                        Clicked="OnSkipClicked"
+                        BackgroundColor="#FFFFFF15"
+                        TextColor="#F5F5FF"
+                        CornerRadius="24"
+                        BorderColor="#FFFFFF40"
+                        BorderWidth="1" />
+
+                <Frame x:Name="ChapterCard"
+                       IsVisible="False"
+                       Padding="20"
+                       CornerRadius="20"
+                       BackgroundColor="#FFFFFF14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label x:Name="ChapterTitleLabel"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+        <Label x:Name="ChapterBodyLabel"
+               FontSize="14"
+               TextColor="#E2E4FF" />
+
+                        <Frame x:Name="ExperimentCard"
+                               IsVisible="False"
+                               Padding="14"
+                               CornerRadius="18"
+                               BackgroundColor="#1F2859">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Try this experiment"
+                                       FontSize="14"
+                                       TextColor="#A6B1FF" />
+                                <Label x:Name="ExperimentTitleLabel"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label x:Name="ExperimentPromptLabel"
+                                       FontSize="14"
+                                       TextColor="#E2E4FF" />
+                                <Label x:Name="ExperimentRewardLabel"
+                                       FontSize="12"
+                                       TextColor="#D5D9FF" />
+                                <Button x:Name="PlanExperimentButton"
+                                        Text="I'll try this"
+                                        Clicked="OnPlanExperimentClicked"
+                                        BackgroundColor="#7C5CFA"
+                                        TextColor="White"
+                                        CornerRadius="20" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Button x:Name="DoneButton"
+                                Text="Done"
+                                IsVisible="False"
+                                Clicked="OnDoneClicked"
+                                BackgroundColor="#5C68FF"
+                                TextColor="White"
+                                CornerRadius="24" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -14,6 +14,31 @@
 
         <ScrollView>
             <VerticalStackLayout Padding="24" Spacing="24">
+                <VerticalStackLayout x:Name="StoryGuideSection"
+                                      Spacing="12"
+                                      IsVisible="False">
+                    <Label Text="Your weekly story episode"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Border StrokeThickness="0"
+                            Padding="20"
+                            BackgroundColor="#FFFFFF14"
+                            StrokeShape="RoundRectangle 24">
+                        <VerticalStackLayout Spacing="12">
+                            <Label x:Name="StoryGuideWeekLabel"
+                                   FontSize="14"
+                                   TextColor="#E6F4FF" />
+
+                            <VerticalStackLayout x:Name="StoryGuideTriggersLayout"
+                                                 Spacing="8" />
+
+                            <VerticalStackLayout x:Name="StoryGuideExperimentsLayout"
+                                                 Spacing="12" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Nourish your mind"
                            FontSize="32"

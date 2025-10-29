@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Bingie.Config;
 using Bingie.Models;
 using Bingie.Services;
 using Serilog;
@@ -13,6 +14,7 @@ public partial class MainPage : ContentPage
 {
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
+    private readonly StoryGuideService? _storyGuideService;
     private readonly string _username;
 
     // Default constructor for XAML preview support
@@ -23,17 +25,22 @@ public partial class MainPage : ContentPage
         var previewService = new DatabaseService(connectionFactory);
         _dataStore = (IDataStore<BingeEntry>)previewService;
         _calendarService = new CalendarService(_dataStore);
+        var storyRepository = new StoryGuideRepository(connectionFactory);
+        _storyGuideService = new StoryGuideService(storyRepository, new NoopStoryGuideAnalytics());
         _username = "PreviewUser";
 
         StartClock();
         _ = RefreshTodayDotsAsync();
     }
 
-    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
+    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, StoryGuideService storyGuideService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _storyGuideService = FeatureFlags.StoryGuideEnabled
+            ? storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService))
+            : null;
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         // Initialize logging in the MainPage as well
@@ -139,6 +146,11 @@ public partial class MainPage : ContentPage
             MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
+
+            if (FeatureFlags.StoryGuideEnabled && _storyGuideService != null)
+            {
+                await ShowStoryGuidePromptAsync(newEntry);
+            }
         }
         catch (Exception ex)
         {
@@ -158,5 +170,18 @@ public partial class MainPage : ContentPage
         _ = FeedbackLabel.FadeTo(1, 150);
         await Task.Delay(TimeSpan.FromSeconds(2.2));
         await FeedbackLabel.FadeTo(0, 400);
+    }
+
+    private async Task ShowStoryGuidePromptAsync(BingeEntry entry)
+    {
+        try
+        {
+            var promptPage = new StoryGuidePromptPage(_storyGuideService!, _username, entry.Date);
+            await Navigation.PushModalAsync(promptPage);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to launch story guide prompt for {Username}.", _username);
+        }
     }
 }

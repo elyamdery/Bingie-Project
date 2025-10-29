@@ -41,3 +41,7 @@ Summary: Anti-binge loop now captures every press, surfaces insights across tabs
 Summary: Experience now blends playful UI, richer self-compassion content, and consolidated history analytics—all backed by fresh unit coverage and updated documentation.
 [Log] Step 13: Drafted game-loop SRS
 - Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
+[Log] Step 15: Story guide implementation
+- Introduced story trigger catalogue, sqlite tables, and analytics hooks; StoryGuideService now records triggers, rotates experiments, and summarizes weekly insights.
+- Added post-log modal with skip option and experiment planning, plus an ExplorePage weekly episode card gated by `storyGuideEnabled`.
+- Auth shell and home navigation inject the guide service, and unit coverage verifies trigger logging, experiment XP lifecycle, and weekly aggregation.
