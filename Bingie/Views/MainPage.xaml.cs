@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Bingie.Config;
 using Bingie.Models;
 using Bingie.Services;
 using Serilog;
@@ -13,6 +14,7 @@ public partial class MainPage : ContentPage
 {
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
+    private readonly PointsSystemService? _pointsSystemService;
     private readonly string _username;
 
     // Default constructor for XAML preview support
@@ -23,17 +25,20 @@ public partial class MainPage : ContentPage
         var previewService = new DatabaseService(connectionFactory);
         _dataStore = (IDataStore<BingeEntry>)previewService;
         _calendarService = new CalendarService(_dataStore);
+        var pointsRepository = new PointsSystemRepository(connectionFactory);
+        _pointsSystemService = FeatureFlags.PointsSystemEnabled ? new PointsSystemService(pointsRepository) : null;
         _username = "PreviewUser";
 
         StartClock();
         _ = RefreshTodayDotsAsync();
     }
 
-    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
+    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, PointsSystemService pointsSystemService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _pointsSystemService = FeatureFlags.PointsSystemEnabled ? pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService)) : null;
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         // Initialize logging in the MainPage as well
@@ -137,6 +142,18 @@ public partial class MainPage : ContentPage
             await RefreshTodayDotsAsync();
 
             MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
+
+            if (FeatureFlags.PointsSystemEnabled && _pointsSystemService != null)
+            {
+                try
+                {
+                    await _pointsSystemService.RecordActionAsync(_username, "log_entry", DateTime.UtcNow);
+                }
+                catch (Exception xpEx)
+                {
+                    Log.Warning(xpEx, "Failed to award XP for log entry.");
+                }
+            }
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
         }

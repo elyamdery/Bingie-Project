@@ -58,6 +58,8 @@ public static class MauiProgram
         _ = builder.Services.AddSingleton<IAuthService, AuthService>();
         _ = builder.Services.AddSingleton<CalendarService>();
         _ = builder.Services.AddSingleton<DatabaseInitializer>();
+        _ = builder.Services.AddSingleton<IPointsSystemRepository, PointsSystemRepository>();
+        _ = builder.Services.AddSingleton<PointsSystemService>();
 
         // Register pages that participate in navigation
         _ = builder.Services.AddTransient<LoginPage>();

@@ -16,6 +16,7 @@ public partial class LoginPage : ContentPage
     private readonly IAuthService _authService;
     private readonly IDataStore<BingeEntry> _bingeEntryStore;
     private readonly CalendarService _calendarService;
+    private readonly PointsSystemService _pointsSystemService;
     private readonly IServiceProvider _serviceProvider;
 
     private bool _isAuthenticating;
@@ -23,12 +24,14 @@ public partial class LoginPage : ContentPage
     public LoginPage(IAuthService authService,
         IDataStore<BingeEntry> bingeEntryStore,
         CalendarService calendarService,
+        PointsSystemService pointsSystemService,
         IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _bingeEntryStore = bingeEntryStore ?? throw new ArgumentNullException(nameof(bingeEntryStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
@@ -170,7 +173,7 @@ public partial class LoginPage : ContentPage
             await DisplayAlert("Welcome back", "Login successful!", "OK");
         }
 
-        Application.Current.MainPage = new AppShell(_bingeEntryStore, _calendarService, user.Username);
+        Application.Current.MainPage = new AppShell(_bingeEntryStore, _calendarService, _pointsSystemService, user.Username);
     }
 
     private void OnRegisterClicked(object sender, EventArgs e)
