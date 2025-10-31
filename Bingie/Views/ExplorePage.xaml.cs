@@ -178,7 +178,7 @@ public partial class ExplorePage : ContentPage
             StoryGuideWeekLabel.Text = $"Week of {episode.WeekStartUtc:MMM d}";
 
             StoryGuideTriggersLayout.Children.Clear();
-            foreach (var trigger in episode.TopTriggers)
+            foreach (var trigger in episode.TriggerCounts.Take(3))
             {
                 StoryGuideTriggersLayout.Children.Add(CreateTriggerChip(trigger));
             }
@@ -205,7 +205,7 @@ public partial class ExplorePage : ContentPage
             Padding = new Thickness(12, 6),
             Content = new Label
             {
-                Text = $"{trigger.Trigger.DisplayName} · {trigger.Count}",
+                Text = $"{trigger.Definition.Title} · {trigger.Count}",
                 TextColor = Colors.White,
                 FontSize = 14
             }
@@ -359,15 +359,15 @@ public partial class ExplorePage : ContentPage
     private void RenderPointsDashboard(PointsDashboard dashboard)
     {
         _suppressPointsToggle = true;
-        PointsPauseSwitch.IsToggled = dashboard.Settings.RewardsPaused;
+        PointsPauseSwitch.IsToggled = dashboard.RewardsPaused;
         _suppressPointsToggle = false;
 
-        PointsGlowProgress.Progress = Math.Clamp(dashboard.GlowMeterProgress, 0, 1);
-        PointsGlowLabel.Text = $"Level {dashboard.Level} · {dashboard.CurrentXp} XP";
+        PointsGlowProgress.Progress = Math.Clamp(dashboard.GlowFill, 0, 1);
+        PointsGlowLabel.Text = $"Level {dashboard.GlowLevel} · {dashboard.TotalXp} XP";
         PointsWeeklyLabel.Text = $"This week: {dashboard.WeeklyXp} XP";
 
         PointsQuestLayout.Children.Clear();
-        if (dashboard.DailyQuests.Count == 0)
+        if (dashboard.Quests.Count == 0)
         {
             PointsQuestEmptyLabel.IsVisible = true;
             PointsQuestEmptyLabel.Text = "New quests arrive each morning.";
@@ -375,7 +375,7 @@ public partial class ExplorePage : ContentPage
         else
         {
             PointsQuestEmptyLabel.IsVisible = false;
-            foreach (var quest in dashboard.DailyQuests)
+            foreach (var quest in dashboard.Quests)
             {
                 PointsQuestLayout.Children.Add(BuildQuestView(quest));
             }
@@ -388,7 +388,7 @@ public partial class ExplorePage : ContentPage
         }
     }
 
-    private View BuildQuestView(DailyQuestRecord quest)
+    private View BuildQuestView(QuestViewModel quest)
     {
         Frame frame = new()
         {
@@ -404,27 +404,27 @@ public partial class ExplorePage : ContentPage
             {
                 new Label
                 {
-                    Text = quest.Action.Title,
+                    Text = quest.Title,
                     FontSize = 18,
                     FontAttributes = FontAttributes.Bold,
                     TextColor = Colors.White
                 },
                 new Label
                 {
-                    Text = quest.Action.Description,
+                    Text = quest.Description,
                     FontSize = 14,
                     TextColor = Color.FromArgb("#D8E0FF")
                 },
                 new Label
                 {
-                    Text = $"+{quest.Action.XpValue} XP",
+                    Text = $"+{quest.Xp} XP",
                     FontSize = 12,
                     TextColor = Color.FromArgb("#B8C2FF")
                 }
             }
         };
 
-        if (!quest.CompletedUtc.HasValue)
+        if (!quest.Completed)
         {
             Button completeButton = new()
             {
@@ -432,7 +432,7 @@ public partial class ExplorePage : ContentPage
                 CornerRadius = 18,
                 BackgroundColor = Color.FromArgb("#7C5CFA"),
                 TextColor = Colors.White,
-                CommandParameter = quest.Id
+                CommandParameter = quest.QuestId
             };
             completeButton.Clicked += OnQuestCompleteClicked;
             layout.Children.Add(completeButton);
@@ -441,7 +441,7 @@ public partial class ExplorePage : ContentPage
         {
             layout.Children.Add(new Label
             {
-                Text = $"Completed · +{quest.XpAwarded} XP",
+                Text = "Completed",
                 FontSize = 12,
                 TextColor = Color.FromArgb("#9CF6FF")
             });
