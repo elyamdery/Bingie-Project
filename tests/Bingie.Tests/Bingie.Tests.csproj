@@ -21,9 +21,15 @@
     <Compile Include="..\..\Bingie\Models\BingeEntry.cs" Link="Models\BingeEntry.cs" />
     <Compile Include="..\..\Bingie\Models\BingeDayStat.cs" Link="Models\BingeDayStat.cs" />
     <Compile Include="..\..\Bingie\Models\User.cs" Link="Models\User.cs" />
+    <Compile Include="..\..\Bingie\Models\AvatarEnergyState.cs" Link="Models\AvatarEnergyState.cs" />
+    <Compile Include="..\..\Bingie\Models\AvatarFeedbackSettings.cs" Link="Models\AvatarFeedbackSettings.cs" />
+    <Compile Include="..\..\Bingie\Models\AvatarFeedbackSnapshot.cs" Link="Models\AvatarFeedbackSnapshot.cs" />
+    <Compile Include="..\..\Bingie\Models\AvatarStateRecord.cs" Link="Models\AvatarStateRecord.cs" />
     <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
     <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
+    <Compile Include="..\..\Bingie\Services\AvatarFeedbackService.cs" Link="Services\AvatarFeedbackService.cs" />
+    <Compile Include="..\..\Bingie\Services\IAvatarFeedbackRepository.cs" Link="Services\IAvatarFeedbackRepository.cs" />
     <Compile Include="..\..\Bingie\Services\QuotesService.cs" Link="Services\QuotesService.cs" />
     <Compile Include="..\..\Bingie\Services\IDataStore.cs" Link="Services\IDataStore.cs" />
     <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />

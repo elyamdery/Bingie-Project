@@ -10,13 +10,15 @@ public partial class AppShell : Shell
 {
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
+    private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly string _username;
 
-    public AppShell(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
+    public AppShell(IDataStore<BingeEntry> dataStore, CalendarService calendarService, AvatarFeedbackService avatarFeedbackService, string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         Items.Clear();
@@ -43,7 +45,7 @@ public partial class AppShell : Shell
                 {
                     Title = "Home",
                     Route = "home",
-                    ContentTemplate = new DataTemplate(() => new MainPage(_dataStore, _calendarService, _username))
+                    ContentTemplate = new DataTemplate(() => new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _username))
                 },
                 historyTab,
                 new ShellContent
