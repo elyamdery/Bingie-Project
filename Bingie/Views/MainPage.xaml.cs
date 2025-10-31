@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,6 +15,7 @@ public partial class MainPage : ContentPage
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
     private readonly AvatarFeedbackService _avatarFeedbackService;
+    private readonly StoryGuideService? _storyGuideService;
     private readonly string _username;
     private bool _suppressAvatarToggle;
     private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
@@ -29,6 +30,8 @@ public partial class MainPage : ContentPage
         _calendarService = new CalendarService(_dataStore);
         var avatarRepository = new AvatarFeedbackRepository(connectionFactory);
         _avatarFeedbackService = new AvatarFeedbackService(_dataStore, avatarRepository);
+        var storyRepository = new StoryGuideRepository(connectionFactory);
+        _storyGuideService = new StoryGuideService(storyRepository, new NoopStoryGuideAnalytics());
         _username = "PreviewUser";
 
         StartClock();
@@ -39,16 +42,23 @@ public partial class MainPage : ContentPage
         }
     }
 
-    public MainPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, AvatarFeedbackService avatarFeedbackService, string username)
+    public MainPage(
+        IDataStore<BingeEntry> dataStore,
+        CalendarService calendarService,
+        AvatarFeedbackService avatarFeedbackService,
+        StoryGuideService storyGuideService,
+        string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
+        _storyGuideService = FeatureFlags.StoryGuideEnabled
+            ? storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService))
+            : null;
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
-        // Initialize logging in the MainPage as well
-        Log.Information("MainPage initialized."); // <-- Log when the MainPage is initialized
+        Log.Information("MainPage initialized.");
 
         StartClock();
     }
@@ -57,7 +67,11 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await RefreshTodayDotsAsync();
-        await RefreshAvatarFeedbackAsync();
+
+        if (FeatureFlags.AvatarFeedbackEnabled)
+        {
+            await RefreshAvatarFeedbackAsync();
+        }
     }
 
     private void StartClock()
@@ -124,7 +138,6 @@ public partial class MainPage : ContentPage
 
     private async void OnBingeButtonClicked(object sender, EventArgs e)
     {
-        // Log when the binge button is clicked
         Log.Information("Binge button clicked at {Time}", DateTime.UtcNow.ToString("HH:mm:ss"));
 
         try
@@ -147,11 +160,20 @@ public partial class MainPage : ContentPage
             Log.Information("Binge entry saved for {Username} at {Timestamp}", _username, newEntry.Date);
 
             await RefreshTodayDotsAsync();
-            await RefreshAvatarFeedbackAsync();
+
+            if (FeatureFlags.AvatarFeedbackEnabled)
+            {
+                await RefreshAvatarFeedbackAsync();
+            }
 
             MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
+
+            if (FeatureFlags.StoryGuideEnabled && _storyGuideService != null)
+            {
+                await ShowStoryGuidePromptAsync(newEntry);
+            }
         }
         catch (Exception ex)
         {
@@ -175,7 +197,7 @@ public partial class MainPage : ContentPage
 
     private async Task RefreshAvatarFeedbackAsync()
     {
-        if (!FeatureFlags.AvatarFeedbackEnabled)
+        if (!FeatureFlags.AvatarFeedbackEnabled || _avatarFeedbackService == null)
         {
             AvatarFeedbackSection.IsVisible = false;
             return;
@@ -276,6 +298,21 @@ public partial class MainPage : ContentPage
             _suppressAvatarToggle = true;
             AvatarFeedbackToggle.IsToggled = e.Value;
             _suppressAvatarToggle = false;
+        }
+    }
+
+    private async Task ShowStoryGuidePromptAsync(BingeEntry entry)
+    {
+        if (_storyGuideService is null) return;
+
+        try
+        {
+            var promptPage = new StoryGuidePromptPage(_storyGuideService, _username, entry.Date);
+            await Navigation.PushModalAsync(promptPage);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to launch story guide prompt for {Username}.", _username);
         }
     }
 }

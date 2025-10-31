@@ -60,10 +60,12 @@ public static class MauiProgram
         _ = builder.Services.AddSingleton<DatabaseInitializer>();
         _ = builder.Services.AddSingleton<IAvatarFeedbackRepository, AvatarFeedbackRepository>();
         _ = builder.Services.AddSingleton<AvatarFeedbackService>();
+        _ = builder.Services.AddSingleton<IStoryGuideRepository, StoryGuideRepository>();
+        _ = builder.Services.AddSingleton<IStoryGuideAnalytics, NoopStoryGuideAnalytics>();
+        _ = builder.Services.AddSingleton<StoryGuideService>();
 
         // Register pages that participate in navigation
         _ = builder.Services.AddTransient<LoginPage>();
         _ = builder.Services.AddTransient<RegistrationPage>();
-        _ = builder.Services.AddTransient<ExplorePage>();
     }
 }

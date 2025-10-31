@@ -56,3 +56,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - Retested the refreshed login & registration pages to confirm the freeze no longer repros on registration submit.
 - Added `AuthFlowE2ETests` to cover register → login → remember-me happy path plus duplicate-username guardrails.
 - Verified suite with `dotnet test tests/Bingie.Tests/Bingie.Tests.csproj -v minimal` for quick local validation.
+[Log] Step 15: Story guide implementation
+- Introduced story trigger catalogue, sqlite tables, and analytics hooks; StoryGuideService now records triggers, rotates experiments, and summarizes weekly insights.
+- Added post-log modal with skip option and experiment planning, plus an ExplorePage weekly episode card gated by `storyGuideEnabled`.
+- Auth shell and home navigation inject the guide service, and unit coverage verifies trigger logging, experiment XP lifecycle, and weekly aggregation.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Bingie.Models;
@@ -17,14 +17,17 @@ public partial class LoginPage : ContentPage
     private readonly IDataStore<BingeEntry> _bingeEntryStore;
     private readonly CalendarService _calendarService;
     private readonly AvatarFeedbackService _avatarFeedbackService;
+    private readonly StoryGuideService _storyGuideService;
     private readonly IServiceProvider _serviceProvider;
 
     private bool _isAuthenticating;
 
-    public LoginPage(IAuthService authService,
+    public LoginPage(
+        IAuthService authService,
         IDataStore<BingeEntry> bingeEntryStore,
         CalendarService calendarService,
         AvatarFeedbackService avatarFeedbackService,
+        StoryGuideService storyGuideService,
         IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -32,6 +35,7 @@ public partial class LoginPage : ContentPage
         _bingeEntryStore = bingeEntryStore ?? throw new ArgumentNullException(nameof(bingeEntryStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
+        _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
@@ -173,7 +177,12 @@ public partial class LoginPage : ContentPage
             await DisplayAlert("Welcome back", "Login successful!", "OK");
         }
 
-        Application.Current.MainPage = new AppShell(_bingeEntryStore, _calendarService, _avatarFeedbackService, user.Username);
+        Application.Current.MainPage = new AppShell(
+            _bingeEntryStore,
+            _calendarService,
+            _avatarFeedbackService,
+            _storyGuideService,
+            user.Username);
     }
 
     private void OnRegisterClicked(object sender, EventArgs e)

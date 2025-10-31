@@ -25,14 +25,30 @@
     <Compile Include="..\..\Bingie\Models\AvatarFeedbackSettings.cs" Link="Models\AvatarFeedbackSettings.cs" />
     <Compile Include="..\..\Bingie\Models\AvatarFeedbackSnapshot.cs" Link="Models\AvatarFeedbackSnapshot.cs" />
     <Compile Include="..\..\Bingie\Models\AvatarStateRecord.cs" Link="Models\AvatarStateRecord.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryTriggerDefinition.cs" Link="Models\StoryTriggerDefinition.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryTriggerSelection.cs" Link="Models\StoryTriggerSelection.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentDefinition.cs" Link="Models\StoryExperimentDefinition.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentStatus.cs" Link="Models\StoryExperimentStatus.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentProgress.cs" Link="Models\StoryExperimentProgress.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryChapterResult.cs" Link="Models\StoryChapterResult.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentSuggestion.cs" Link="Models\StoryExperimentSuggestion.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryWeeklyEpisode.cs" Link="Models\StoryWeeklyEpisode.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryTriggerCount.cs" Link="Models\StoryTriggerCount.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentSummary.cs" Link="Models\StoryExperimentSummary.cs" />
+    <Compile Include="..\..\Bingie\Models\StoryExperimentCompletionResult.cs" Link="Models\StoryExperimentCompletionResult.cs" />
     <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
     <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
     <Compile Include="..\..\Bingie\Services\AvatarFeedbackService.cs" Link="Services\AvatarFeedbackService.cs" />
     <Compile Include="..\..\Bingie\Services\IAvatarFeedbackRepository.cs" Link="Services\IAvatarFeedbackRepository.cs" />
+    <Compile Include="..\..\Bingie\Services\StoryGuideCatalogue.cs" Link="Services\StoryGuideCatalogue.cs" />
+    <Compile Include="..\..\Bingie\Services\StoryGuideService.cs" Link="Services\StoryGuideService.cs" />
+    <Compile Include="..\..\Bingie\Services\IStoryGuideRepository.cs" Link="Services\IStoryGuideRepository.cs" />
+    <Compile Include="..\..\Bingie\Services\IStoryGuideAnalytics.cs" Link="Services\IStoryGuideAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\QuotesService.cs" Link="Services\QuotesService.cs" />
     <Compile Include="..\..\Bingie\Services\IDataStore.cs" Link="Services\IDataStore.cs" />
     <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />
+    <Compile Include="..\..\Bingie\Config\FeatureFlags.cs" Link="Config\FeatureFlags.cs" />
   </ItemGroup>
 
   <ItemGroup>
