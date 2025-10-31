@@ -53,3 +53,5 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - Built points ledger schema (actions, quests, transactions, cosmetics) with PointsSystemService handling quest boards, XP accrual, and cosmetic unlock flow behind `pointsSystemEnabled`.
 - ExplorePage now surfaces a glow meter, pause toggle, daily quests, weekly XP rollups, and cosmetic equip actions; MainPage auto-awards logging XP via the ledger.
 - Added unit specs for quest completion, daily limits, and pause behavior plus documentation markers for manual QA follow-up.
+
+[Log] 2025-10-31 18:30 UTC – Paused points_system feature work: troubleshooting login/register bugs and remembered users with new tests per user request.

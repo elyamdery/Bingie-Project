@@ -20,14 +20,9 @@ public class AuthService : IAuthService
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) return null;
 
-        var normalizedUsername = username.Trim();
         var normalizedPassword = password.Trim();
 
-        IEnumerable<User> users = await _databaseService.GetItemsAsync();
-
-        var user = users.FirstOrDefault(u =>
-            string.Equals(u.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase));
-
+        var user = await FindUserAsync(username);
         if (user == null) return null;
 
         return BCryptNet.Verify(normalizedPassword, user.Password) ? user : null;
@@ -37,13 +32,7 @@ public class AuthService : IAuthService
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token)) return null;
 
-        var normalizedUsername = username.Trim();
-
-        IEnumerable<User> users = await _databaseService.GetItemsAsync();
-
-        var user = users.FirstOrDefault(u =>
-            string.Equals(u.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase));
-
+        var user = await FindUserAsync(username);
         if (user?.RememberToken is null) return null;
 
         return BCryptNet.Verify(token, user.RememberToken) ? user : null;
@@ -53,10 +42,13 @@ public class AuthService : IAuthService
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
 
+        var persistedUser = await FindUserAsync(user.Username);
+        if (persistedUser == null) return null;
+
         byte[] tokenBytes = RandomNumberGenerator.GetBytes(32);
         var token = Convert.ToBase64String(tokenBytes);
-        user.RememberToken = BCryptNet.HashPassword(token);
-        _ = await _databaseService.UpdateItemAsync(user);
+        persistedUser.RememberToken = BCryptNet.HashPassword(token);
+        _ = await _databaseService.UpdateItemAsync(persistedUser);
         return token;
     }
 
@@ -64,10 +56,11 @@ public class AuthService : IAuthService
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        if (user.RememberToken == null) return;
+        var persistedUser = await FindUserAsync(user.Username);
+        if (persistedUser?.RememberToken == null) return;
 
-        user.RememberToken = null;
-        _ = await _databaseService.UpdateItemAsync(user);
+        persistedUser.RememberToken = null;
+        _ = await _databaseService.UpdateItemAsync(persistedUser);
     }
 
     public async Task<bool> RegisterAsync(string username, string password)
@@ -77,9 +70,8 @@ public class AuthService : IAuthService
         var normalizedUsername = username.Trim();
         var normalizedPassword = password.Trim();
 
-        IEnumerable<User> users = await _databaseService.GetItemsAsync();
-        if (users.Any(u =>
-                string.Equals(u.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase)))
+        var existingUser = await FindUserAsync(normalizedUsername);
+        if (existingUser != null)
             return false;
 
         User newUser = new()
@@ -97,5 +89,15 @@ public class AuthService : IAuthService
     {
         await Task.CompletedTask;
     }
-}
 
+    private async Task<User?> FindUserAsync(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username)) return null;
+        var normalizedUsername = username.Trim();
+
+        IEnumerable<User> users = await _databaseService.GetItemsAsync();
+
+        return users.FirstOrDefault(u =>
+            string.Equals(u.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase));
+    }
+}
