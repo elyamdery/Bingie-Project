@@ -1,3 +1,4 @@
+using System.Linq;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Tests.TestDoubles;
@@ -108,5 +109,63 @@ public class AuthServiceTests
         // Assert
         Assert.Null(result);
     }
-}
 
+    [Fact]
+    public async Task RegisterAsync_PersistsTrimmedCredentialsAndAllowsLogin()
+    {
+        var store = new InMemoryUserStore();
+        var authService = new AuthService(store);
+
+        var registered = await authService.RegisterAsync("  CalmUser  ", " breathe ");
+        Assert.True(registered);
+
+        var persisted = (await store.GetItemsAsync()).Single();
+        Assert.Equal("CalmUser", persisted.Username);
+        Assert.True(BCryptNet.Verify("breathe", persisted.Password));
+
+        var login = await authService.LoginAsync("calmuser", "breathe");
+        Assert.NotNull(login);
+        Assert.Equal(persisted.Username, login!.Username);
+    }
+
+    [Fact]
+    public async Task RegisterAsync_PreventsDuplicateUsernamesIgnoringCase()
+    {
+        var existing = new User
+        {
+            Id = 42,
+            Username = "Gentle",
+            Password = BCryptNet.HashPassword("pw")
+        };
+
+        var store = new InMemoryUserStore(new[] { existing });
+        var authService = new AuthService(store);
+
+        var result = await authService.RegisterAsync("gentle", "other");
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task LoginAsync_ReturnsNullForUnknownUser()
+    {
+        var store = new InMemoryUserStore();
+        var authService = new AuthService(store);
+
+        var result = await authService.LoginAsync("missing", "pw");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task LoginAsync_ReturnsNullWhenPasswordDoesNotMatch()
+    {
+        var store = new InMemoryUserStore(new[]
+        {
+            new User { Id = 3, Username = "Mismatch", Password = BCryptNet.HashPassword("aligned") }
+        });
+
+        var authService = new AuthService(store);
+
+        var result = await authService.LoginAsync("Mismatch", "different");
+        Assert.Null(result);
+    }
+}

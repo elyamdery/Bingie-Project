@@ -15,25 +15,55 @@ public partial class RegistrationPage : ContentPage
 
     private async void OnRegisterClicked(object sender, EventArgs e)
     {
-        var username = UsernameEntry.Text;
-        var password = PasswordEntry.Text;
+        ErrorLabel.IsVisible = false;
+        ErrorLabel.Text = string.Empty;
+
+        var username = UsernameEntry.Text?.Trim() ?? string.Empty;
+        var password = PasswordEntry.Text ?? string.Empty;
+        var confirm = ConfirmPasswordEntry.Text ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlert("Error", "Username and password cannot be empty.", "OK");
+            ShowError("Please choose a username and password.");
             return;
         }
 
-        var registrationSuccess = await _authService.RegisterAsync(username, password);
+        if (!string.Equals(password, confirm, StringComparison.Ordinal))
+        {
+            ShowError("Passwords need to match.");
+            return;
+        }
 
-        if (registrationSuccess)
+        var submitButton = sender as Button;
+        if (submitButton != null) submitButton.IsEnabled = false;
+
+        try
         {
-            await DisplayAlert("Success", "Registration successful!", "OK");
-            _ = await Navigation.PopAsync();
+            var registrationSuccess = await _authService.RegisterAsync(username, password);
+
+            if (!registrationSuccess)
+            {
+                ShowError("That username is already taken. Try another one.");
+                return;
+            }
+
+            await DisplayAlert("Welcome", "Account created! Sign in with your new details.", "Nice");
+            await Navigation.PopAsync();
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "User already exists or registration failed.", "OK");
+            ShowError("We couldn't finish registration. Please try again." );
+            System.Diagnostics.Debug.WriteLine(ex);
         }
+        finally
+        {
+            if (submitButton != null) submitButton.IsEnabled = true;
+        }
+    }
+
+    private void ShowError(string message)
+    {
+        ErrorLabel.Text = message;
+        ErrorLabel.IsVisible = true;
     }
 }

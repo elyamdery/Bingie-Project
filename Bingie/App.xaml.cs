@@ -13,6 +13,10 @@ public partial class App : Application
         LoggingConfiguration.ConfigureLogging();
         Log.Information("Application Started");
 
-        MainPage = loginPage;
+        MainPage = new NavigationPage(loginPage)
+        {
+            BarBackgroundColor = Color.FromArgb("#1F3A93"),
+            BarTextColor = Colors.White
+        };
     }
 }

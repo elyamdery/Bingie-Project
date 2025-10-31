@@ -41,3 +41,14 @@ Summary: Anti-binge loop now captures every press, surfaces insights across tabs
 Summary: Experience now blends playful UI, richer self-compassion content, and consolidated history analytics—all backed by fresh unit coverage and updated documentation.
 [Log] Step 13: Drafted game-loop SRS
 - Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
+
+[Log] 2025-10-31 20:40 UTC – Added initial troubleshooting guide under docs/DevTroubleshooting.md with build/run/test commands for Bingie.
+
+[Log] 2025-10-31 18:48 UTC – Refreshed login/registration UX, resolved navigation freeze, and expanded auth test coverage.
+- New gradient cards and navigation wrapper create a frictionless sign-in experience.
+- Registration now validates matching passwords and surfaces inline guidance; login remember-me persists reliably.
+- Added end-to-end AuthService specs covering register/login/token flows.
+[Log] 2025-10-31 21:20 UTC – Hardened auth flows against regressions and captured new end-to-end specs.
+- Retested the refreshed login & registration pages to confirm the freeze no longer repros on registration submit.
+- Added `AuthFlowE2ETests` to cover register → login → remember-me happy path plus duplicate-username guardrails.
+- Verified suite with `dotnet test tests/Bingie.Tests/Bingie.Tests.csproj -v minimal` for quick local validation.

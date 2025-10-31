@@ -3,10 +3,65 @@
 <!-- Views/Auth/RegistrationPage.xaml -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bingie.Views.Auth.RegistrationPage">
-    <StackLayout Padding="20">
-        <Entry Placeholder="Username" x:Name="UsernameEntry" />
-        <Entry Placeholder="Password" x:Name="PasswordEntry" IsPassword="True" />
-        <Button Text="Register" Clicked="OnRegisterClicked" />
-    </StackLayout>
+             x:Class="Bingie.Views.Auth.RegistrationPage"
+             BackgroundColor="#101431"
+             Title="Create account">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#101431" Offset="0" />
+                <GradientStop Color="#312E81" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <ScrollView>
+            <VerticalStackLayout Padding="28" Spacing="22" VerticalOptions="Center">
+                <Label Text="Let's set you up"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center" />
+
+                <Label Text="Choose a name and a calming password to log your reflections."
+                       FontSize="15"
+                       TextColor="#C7D0FF"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="Center" />
+
+                <Frame Padding="22" CornerRadius="20" BackgroundColor="#FFFFFF" HasShadow="True">
+                    <VerticalStackLayout Spacing="16">
+                        <Entry x:Name="UsernameEntry"
+                               Placeholder="Username"
+                               ClearButtonVisibility="WhileEditing" />
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Password"
+                               IsPassword="True"
+                               ClearButtonVisibility="WhileEditing" />
+                        <Entry x:Name="ConfirmPasswordEntry"
+                               Placeholder="Confirm password"
+                               IsPassword="True"
+                               ClearButtonVisibility="WhileEditing" />
+
+                        <Label x:Name="ErrorLabel"
+                               TextColor="#D14343"
+                               FontSize="13"
+                               IsVisible="False" />
+
+                        <Button Text="Create account"
+                                HeightRequest="48"
+                                CornerRadius="16"
+                                BackgroundColor="#312E81"
+                                TextColor="White"
+                                Clicked="OnRegisterClicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label Text="You can always return to sign in once you're ready."
+                       FontSize="14"
+                       TextColor="#AAB4E0"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
