@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -37,6 +37,65 @@
                                                  Spacing="12" />
                         </VerticalStackLayout>
                     </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="PointsSection"
+                                      Spacing="14"
+                                      IsVisible="False">
+                    <Label Text="Glow meter"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <ProgressBar x:Name="PointsGlowProgress"
+                                 HeightRequest="10"
+                                 Progress="0"
+                                 BackgroundColor="#FFFFFF1A"
+                                 ProgressColor="#FFB347" />
+                    <Label x:Name="PointsGlowLabel"
+                           FontSize="14"
+                           TextColor="#F2F8FF" />
+
+                    <HorizontalStackLayout Spacing="10"
+                                            VerticalOptions="Center">
+                        <Label Text="Pause rewards"
+                               FontSize="14"
+                               TextColor="#F2F8FF"
+                               VerticalOptions="Center" />
+                        <Switch x:Name="PointsPauseSwitch"
+                                Toggled="OnPointsPauseToggled" />
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Today’s quest board"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label x:Name="PointsQuestEmptyLabel"
+                               IsVisible="False"
+                               FontSize="14"
+                               TextColor="#E6F4FF" />
+                        <VerticalStackLayout x:Name="PointsQuestLayout"
+                                             Spacing="10" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Weekly XP"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label x:Name="PointsWeeklyLabel"
+                               FontSize="14"
+                               TextColor="#E6F4FF" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Cosmetic unlocks"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <VerticalStackLayout x:Name="PointsCosmeticsLayout"
+                                             Spacing="10" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="4">

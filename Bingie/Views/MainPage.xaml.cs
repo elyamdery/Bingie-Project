@@ -16,11 +16,11 @@ public partial class MainPage : ContentPage
     private readonly CalendarService _calendarService;
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService? _storyGuideService;
+    private readonly PointsSystemService? _pointsSystemService;
     private readonly string _username;
     private bool _suppressAvatarToggle;
     private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
 
-    // Default constructor for XAML preview support
     public MainPage()
     {
         InitializeComponent();
@@ -30,11 +30,19 @@ public partial class MainPage : ContentPage
         _calendarService = new CalendarService(_dataStore);
         var avatarRepository = new AvatarFeedbackRepository(connectionFactory);
         _avatarFeedbackService = new AvatarFeedbackService(_dataStore, avatarRepository);
-        var storyRepository = new StoryGuideRepository(connectionFactory);
-        _storyGuideService = new StoryGuideService(storyRepository, new NoopStoryGuideAnalytics());
+        if (FeatureFlags.StoryGuideEnabled)
+        {
+            var storyRepository = new StoryGuideRepository(connectionFactory);
+            _storyGuideService = new StoryGuideService(storyRepository, new NoopStoryGuideAnalytics());
+        }
+        if (FeatureFlags.PointsSystemEnabled)
+        {
+            var pointsRepository = new PointsSystemRepository(connectionFactory);
+            _pointsSystemService = new PointsSystemService(pointsRepository);
+        }
         _username = "PreviewUser";
 
-        StartClock();
+       StartClock();
         _ = RefreshTodayDotsAsync();
         if (FeatureFlags.AvatarFeedbackEnabled)
         {
@@ -47,15 +55,15 @@ public partial class MainPage : ContentPage
         CalendarService calendarService,
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
+        PointsSystemService pointsSystemService,
         string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
-        _storyGuideService = FeatureFlags.StoryGuideEnabled
-            ? storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService))
-            : null;
+        _storyGuideService = FeatureFlags.StoryGuideEnabled ? storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService)) : null;
+        _pointsSystemService = FeatureFlags.PointsSystemEnabled ? pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService)) : null;
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         Log.Information("MainPage initialized.");
@@ -67,7 +75,6 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await RefreshTodayDotsAsync();
-
         if (FeatureFlags.AvatarFeedbackEnabled)
         {
             await RefreshAvatarFeedbackAsync();
@@ -82,7 +89,7 @@ public partial class MainPage : ContentPage
             var timestamp = now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
             Log.Information("Current time: {Time}", timestamp);
 
-            CurrentTimeLabel.Text = timestamp; // Adjust to Israel Time (UTC+3)
+            CurrentTimeLabel.Text = timestamp;
             return true;
         });
     }
@@ -160,13 +167,24 @@ public partial class MainPage : ContentPage
             Log.Information("Binge entry saved for {Username} at {Timestamp}", _username, newEntry.Date);
 
             await RefreshTodayDotsAsync();
-
             if (FeatureFlags.AvatarFeedbackEnabled)
             {
                 await RefreshAvatarFeedbackAsync();
             }
 
             MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
+
+            if (FeatureFlags.PointsSystemEnabled && _pointsSystemService != null)
+            {
+                try
+                {
+                    await _pointsSystemService.RecordActionAsync(_username, "log_entry", DateTime.UtcNow);
+                }
+                catch (Exception xpEx)
+                {
+                    Log.Warning(xpEx, "Failed to award XP for log entry.");
+                }
+            }
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
 

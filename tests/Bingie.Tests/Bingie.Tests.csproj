@@ -36,6 +36,16 @@
     <Compile Include="..\..\Bingie\Models\StoryTriggerCount.cs" Link="Models\StoryTriggerCount.cs" />
     <Compile Include="..\..\Bingie\Models\StoryExperimentSummary.cs" Link="Models\StoryExperimentSummary.cs" />
     <Compile Include="..\..\Bingie\Models\StoryExperimentCompletionResult.cs" Link="Models\StoryExperimentCompletionResult.cs" />
+    <Compile Include="..\..\Bingie\Models\CosmeticReward.cs" Link="Models\CosmeticReward.cs" />
+    <Compile Include="..\..\Bingie\Models\CosmeticStatus.cs" Link="Models\CosmeticStatus.cs" />
+    <Compile Include="..\..\Bingie\Models\CosmeticUnlockState.cs" Link="Models\CosmeticUnlockState.cs" />
+    <Compile Include="..\..\Bingie\Models\DailyQuestRecord.cs" Link="Models\DailyQuestRecord.cs" />
+    <Compile Include="..\..\Bingie\Models\DailyXpStat.cs" Link="Models\DailyXpStat.cs" />
+    <Compile Include="..\..\Bingie\Models\PointActionDefinition.cs" Link="Models\PointActionDefinition.cs" />
+    <Compile Include="..\..\Bingie\Models\PointsDashboard.cs" Link="Models\PointsDashboard.cs" />
+    <Compile Include="..\..\Bingie\Models\PointsSettings.cs" Link="Models\PointsSettings.cs" />
+    <Compile Include="..\..\Bingie\Models\QuestViewModel.cs" Link="Models\QuestViewModel.cs" />
+    <Compile Include="..\..\Bingie\Models\XpTransaction.cs" Link="Models\XpTransaction.cs" />
     <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
     <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
@@ -45,6 +55,9 @@
     <Compile Include="..\..\Bingie\Services\StoryGuideService.cs" Link="Services\StoryGuideService.cs" />
     <Compile Include="..\..\Bingie\Services\IStoryGuideRepository.cs" Link="Services\IStoryGuideRepository.cs" />
     <Compile Include="..\..\Bingie\Services\IStoryGuideAnalytics.cs" Link="Services\IStoryGuideAnalytics.cs" />
+    <Compile Include="..\..\Bingie\Services\PointsSystemService.cs" Link="Services\PointsSystemService.cs" />
+    <Compile Include="..\..\Bingie\Services\IPointsSystemRepository.cs" Link="Services\IPointsSystemRepository.cs" />
+    <Compile Include="..\..\Bingie\Services\PointsSystemRepository.cs" Link="Services\PointsSystemRepository.cs" />
     <Compile Include="..\..\Bingie\Services\QuotesService.cs" Link="Services\QuotesService.cs" />
     <Compile Include="..\..\Bingie\Services\IDataStore.cs" Link="Services\IDataStore.cs" />
     <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />

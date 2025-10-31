@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views;
@@ -12,6 +12,7 @@ public partial class AppShell : Shell
     private readonly CalendarService _calendarService;
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService _storyGuideService;
+    private readonly PointsSystemService _pointsSystemService;
     private readonly string _username;
 
     public AppShell(
@@ -19,6 +20,7 @@ public partial class AppShell : Shell
         CalendarService calendarService,
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
+        PointsSystemService pointsSystemService,
         string username)
     {
         InitializeComponent();
@@ -26,22 +28,21 @@ public partial class AppShell : Shell
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
+        _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         Items.Clear();
 
-        // Register routes
         Routing.RegisterRoute("login", typeof(LoginPage));
         Routing.RegisterRoute("history", typeof(HistoryPage));
         Routing.RegisterRoute("daystatistics", typeof(DayStatisticsPage));
         Routing.RegisterRoute("register", typeof(RegistrationPage));
 
-        // Set the ContentTemplate for the History tab
         var historyTab = new ShellContent
         {
             Title = "History",
             Route = "history",
-            ContentTemplate = new DataTemplate(() => CreateHistoryPage())
+            ContentTemplate = new DataTemplate(CreateHistoryPage)
         };
 
         Items.Add(new TabBar
@@ -53,19 +54,19 @@ public partial class AppShell : Shell
                     Title = "Home",
                     Route = "home",
                     ContentTemplate = new DataTemplate(() =>
-                        new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _username))
+                        new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _pointsSystemService, _username))
                 },
                 historyTab,
                 new ShellContent
                 {
                     Title = "Explore",
                     Route = "explore",
-                    ContentTemplate = new DataTemplate(() => new ExplorePage(_storyGuideService, _username))
+                    ContentTemplate = new DataTemplate(() =>
+                        new ExplorePage(_storyGuideService, _pointsSystemService, _username))
                 }
             }
         });
 
-        // Handle navigation events
         Navigated += OnNavigated;
     }
 

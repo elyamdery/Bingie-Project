@@ -11,7 +11,6 @@ public class AuthServiceTests
     [Fact]
     public async Task LoginAsync_TrimsCredentialsBeforeVerification()
     {
-        // Arrange
         var store = new InMemoryUserStore(new[]
         {
             new User
@@ -25,10 +24,8 @@ public class AuthServiceTests
 
         var authService = new AuthService(store);
 
-        // Act
         var user = await authService.LoginAsync(" tester ", " secret ");
 
-        // Assert
         Assert.NotNull(user);
         Assert.Equal(1, user!.Id);
     }
@@ -36,7 +33,6 @@ public class AuthServiceTests
     [Fact]
     public async Task IssueRememberTokenAsync_PersistsHashedTokenAndReturnsPlaintext()
     {
-        // Arrange
         var user = new User
         {
             Id = 1,
@@ -48,10 +44,8 @@ public class AuthServiceTests
         var store = new InMemoryUserStore(new[] { user });
         var authService = new AuthService(store);
 
-        // Act
         var token = await authService.IssueRememberTokenAsync(user);
 
-        // Assert
         Assert.False(string.IsNullOrWhiteSpace(token));
 
         var storedUser = await store.GetItemAsync("1");
@@ -65,9 +59,37 @@ public class AuthServiceTests
     }
 
     [Fact]
+    public async Task IssueRememberTokenAsync_FetchesPersistedUserWhenIdMissing()
+    {
+        var persisted = new User
+        {
+            Id = 5,
+            Username = "remember",
+            Password = BCryptNet.HashPassword("pw"),
+            RememberToken = null
+        };
+        var store = new InMemoryUserStore(new[] { persisted });
+        var service = new AuthService(store);
+
+        User detached = new()
+        {
+            Id = 0,
+            Username = persisted.Username,
+            Password = persisted.Password,
+            RememberToken = null
+        };
+
+        var token = await service.IssueRememberTokenAsync(detached);
+        Assert.False(string.IsNullOrWhiteSpace(token));
+
+        var refreshed = await store.GetItemAsync(persisted.Id.ToString());
+        Assert.NotNull(refreshed?.RememberToken);
+        Assert.True(BCryptNet.Verify(token!, refreshed!.RememberToken));
+    }
+
+    [Fact]
     public async Task ClearRememberTokenAsync_RemovesPersistedToken()
     {
-        // Arrange
         var user = new User
         {
             Id = 2,
@@ -79,19 +101,43 @@ public class AuthServiceTests
         var store = new InMemoryUserStore(new[] { user });
         var authService = new AuthService(store);
 
-        // Act
         await authService.ClearRememberTokenAsync(user);
 
-        // Assert
         var storedUser = await store.GetItemAsync("2");
         Assert.NotNull(storedUser);
         Assert.Null(storedUser!.RememberToken);
     }
 
     [Fact]
+    public async Task ClearRememberTokenAsync_FetchesPersistedUserWhenIdMissing()
+    {
+        var persisted = new User
+        {
+            Id = 7,
+            Username = "clearme",
+            Password = BCryptNet.HashPassword("pw"),
+            RememberToken = BCryptNet.HashPassword("token")
+        };
+        var store = new InMemoryUserStore(new[] { persisted });
+        var service = new AuthService(store);
+
+        User detached = new()
+        {
+            Id = 0,
+            Username = persisted.Username,
+            Password = persisted.Password,
+            RememberToken = persisted.RememberToken
+        };
+
+        await service.ClearRememberTokenAsync(detached);
+        var refreshed = await store.GetItemAsync(persisted.Id.ToString());
+        Assert.NotNull(refreshed);
+        Assert.Null(refreshed!.RememberToken);
+    }
+
+    [Fact]
     public async Task LoginWithTokenAsync_ReturnsNullForInvalidToken()
     {
-        // Arrange
         var user = new User
         {
             Id = 3,
@@ -103,10 +149,8 @@ public class AuthServiceTests
         var store = new InMemoryUserStore(new[] { user });
         var authService = new AuthService(store);
 
-        // Act
         var result = await authService.LoginWithTokenAsync(user.Username, "wrong-token");
 
-        // Assert
         Assert.Null(result);
     }
 

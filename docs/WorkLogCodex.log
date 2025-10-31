@@ -42,6 +42,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 [Log] Step 13: Drafted game-loop SRS
 - Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
 [Log] Step 14: Avatar feedback implementation
+<<<<<<< HEAD
 - Added avatar scoring service with history persistence, weekly/monthly energy deltas, and compassionate copy tuned by user thresholds.
 - Wrapped MainPage with feature-flagged glow card, supportive toggle, and celebratory animations tied to score deltas.
 - Auth shell wiring now injects the feedback service; seeded unit specs validate scoring, state mapping, celebration flags, and hide preference flows.
@@ -60,3 +61,23 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - Introduced story trigger catalogue, sqlite tables, and analytics hooks; StoryGuideService now records triggers, rotates experiments, and summarizes weekly insights.
 - Added post-log modal with skip option and experiment planning, plus an ExplorePage weekly episode card gated by `storyGuideEnabled`.
 - Auth shell and home navigation inject the guide service, and unit coverage verifies trigger logging, experiment XP lifecycle, and weekly aggregation.
+[Log] Step 16: Points system implementation
+- Built points ledger schema (actions, quests, transactions, cosmetics) with PointsSystemService handling quest boards, XP accrual, and cosmetic unlock flow behind `pointsSystemEnabled`.
+- ExplorePage now surfaces glow meter, pause toggle, daily quests, weekly XP rollups, and cosmetic equip actions while MainPage auto-awards logging XP.
+- Added unit specs for quest completion, daily limits, and pause behavior alongside manual-check docs for QA follow-up.
+
+=======
+- Added avatar scoring service with weekly/monthly energy deltas, persisted history snapshots, and compassionate copy tuned by user thresholds.
+- MainPage picked up a feature-flagged glow card with hide toggle and celebratory animations when trends improve.
+- Unit tests validate scoring ranges, state transitions, and flag overrides.
+[Log] Step 15: Story guide implementation
+- Introduced story trigger catalogue, sqlite tables, and analytics hooks; StoryGuideService records triggers, rotates experiments, and summarizes weekly insights.
+- Added post-log trigger modal with skip option and experiment planning, plus an ExplorePage weekly episode card gated by `storyGuideEnabled`.
+- Auth shell and login flows inject the guide service, while targeted unit tests cover rotation and XP lifecycle.
+[Log] Step 16: Points system implementation
+- Built points ledger schema (actions, quests, transactions, cosmetics) with PointsSystemService handling quest boards, XP accrual, and cosmetic unlock flow behind `pointsSystemEnabled`.
+- ExplorePage now surfaces a glow meter, pause toggle, daily quests, weekly XP rollups, and cosmetic equip actions; MainPage auto-awards logging XP via the ledger.
+- Added unit specs for quest completion, daily limits, and pause behavior plus documentation markers for manual QA follow-up.
+
+[Log] 2025-10-31 18:30 UTC – Paused points_system feature work: troubleshooting login/register bugs and remembered users with new tests per user request.
+>>>>>>> feature/points-system-impl

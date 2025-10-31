@@ -63,6 +63,8 @@ public static class MauiProgram
         _ = builder.Services.AddSingleton<IStoryGuideRepository, StoryGuideRepository>();
         _ = builder.Services.AddSingleton<IStoryGuideAnalytics, NoopStoryGuideAnalytics>();
         _ = builder.Services.AddSingleton<StoryGuideService>();
+        _ = builder.Services.AddSingleton<IPointsSystemRepository, PointsSystemRepository>();
+        _ = builder.Services.AddSingleton<PointsSystemService>();
 
         // Register pages that participate in navigation
         _ = builder.Services.AddTransient<LoginPage>();
