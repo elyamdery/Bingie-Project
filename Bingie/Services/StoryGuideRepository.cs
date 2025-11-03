@@ -214,7 +214,8 @@ public sealed class StoryGuideRepository : IStoryGuideRepository
         _ = command.Parameters.AddWithValue("@username", selection.Username.Trim());
         _ = command.Parameters.AddWithValue("@entryDateUtc", selection.EntryDateUtc.ToString("O"));
         _ = command.Parameters.AddWithValue("@triggerCode", selection.TriggerCode);
-        _ = command.Parameters.AddWithValue("@customTrigger", (object?)selection.CustomTrigger ?? DBNull.Value);
+        var customParam = command.Parameters.Add("@customTrigger", SqliteType.Text);
+        customParam.Value = selection.CustomTrigger is null ? DBNull.Value : selection.CustomTrigger;
         _ = command.Parameters.AddWithValue("@createdUtc", selection.CreatedUtc.ToString("O"));
     }
 
@@ -223,9 +224,12 @@ public sealed class StoryGuideRepository : IStoryGuideRepository
         _ = command.Parameters.AddWithValue("@username", progress.Username.Trim());
         _ = command.Parameters.AddWithValue("@code", progress.ExperimentCode);
         _ = command.Parameters.AddWithValue("@status", (int)progress.Status);
-        _ = command.Parameters.AddWithValue("@lastSuggested", FormatNullable(progress.LastSuggestedUtc));
-        _ = command.Parameters.AddWithValue("@planned", FormatNullable(progress.PlannedUtc));
-        _ = command.Parameters.AddWithValue("@completed", FormatNullable(progress.CompletedUtc));
+        var lastSuggestedParam = command.Parameters.Add("@lastSuggested", SqliteType.Text);
+        lastSuggestedParam.Value = FormatNullable(progress.LastSuggestedUtc) ?? (object)DBNull.Value;
+        var plannedParam = command.Parameters.Add("@planned", SqliteType.Text);
+        plannedParam.Value = FormatNullable(progress.PlannedUtc) ?? (object)DBNull.Value;
+        var completedParam = command.Parameters.Add("@completed", SqliteType.Text);
+        completedParam.Value = FormatNullable(progress.CompletedUtc) ?? (object)DBNull.Value;
         _ = command.Parameters.AddWithValue("@xpGranted", progress.XpGranted ? 1 : 0);
     }
 

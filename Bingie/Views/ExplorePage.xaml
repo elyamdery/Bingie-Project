@@ -20,15 +20,15 @@
                     <Label Text="Your weekly story episode"
                            FontSize="26"
                            FontAttributes="Bold"
-                           TextColor="White" />
+                           TextColor="#E6EEFF" />
                     <Border StrokeThickness="0"
                             Padding="20"
-                            BackgroundColor="#FFFFFF14"
+                            BackgroundColor="#1E2A4A"
                             StrokeShape="RoundRectangle 24">
                         <VerticalStackLayout Spacing="12">
                             <Label x:Name="StoryGuideWeekLabel"
                                    FontSize="14"
-                                   TextColor="#E6F4FF" />
+                                   TextColor="#C9D7FF" />
 
                             <VerticalStackLayout x:Name="StoryGuideTriggersLayout"
                                                  Spacing="8" />
@@ -49,17 +49,17 @@
                     <ProgressBar x:Name="PointsGlowProgress"
                                  HeightRequest="10"
                                  Progress="0"
-                                 BackgroundColor="#FFFFFF1A"
-                                 ProgressColor="#FFB347" />
+                                 BackgroundColor="#FFFFFF12"
+                                 ProgressColor="#6E7BFF" />
                     <Label x:Name="PointsGlowLabel"
                            FontSize="14"
-                           TextColor="#F2F8FF" />
+                           TextColor="#DEE8FF" />
 
                     <HorizontalStackLayout Spacing="10"
                                             VerticalOptions="Center">
                         <Label Text="Pause rewards"
                                FontSize="14"
-                               TextColor="#F2F8FF"
+                               TextColor="#CEDBFF"
                                VerticalOptions="Center" />
                         <Switch x:Name="PointsPauseSwitch"
                                 Toggled="OnPointsPauseToggled" />
@@ -69,11 +69,11 @@
                         <Label Text="Today’s quest board"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="White" />
+                               TextColor="#E6EEFF" />
                         <Label x:Name="PointsQuestEmptyLabel"
                                IsVisible="False"
                                FontSize="14"
-                               TextColor="#E6F4FF" />
+                               TextColor="#C9D7FF" />
                         <VerticalStackLayout x:Name="PointsQuestLayout"
                                              Spacing="10" />
                     </VerticalStackLayout>
@@ -82,7 +82,7 @@
                         <Label Text="Weekly XP"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="White" />
+                               TextColor="#E6EEFF" />
                         <Label x:Name="PointsWeeklyLabel"
                                FontSize="14"
                                TextColor="#E6F4FF" />
@@ -92,7 +92,7 @@
                         <Label Text="Cosmetic unlocks"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="White" />
+                               TextColor="#E6EEFF" />
                         <VerticalStackLayout x:Name="PointsCosmeticsLayout"
                                              Spacing="10" />
                     </VerticalStackLayout>

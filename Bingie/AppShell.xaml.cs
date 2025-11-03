@@ -13,6 +13,7 @@ public partial class AppShell : Shell
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService _storyGuideService;
     private readonly PointsSystemService _pointsSystemService;
+    private readonly IAuthService _authService;
     private readonly string _username;
 
     public AppShell(
@@ -21,6 +22,7 @@ public partial class AppShell : Shell
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
+        IAuthService authService,
         string username)
     {
         InitializeComponent();
@@ -29,6 +31,7 @@ public partial class AppShell : Shell
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
+        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
         Items.Clear();
@@ -54,7 +57,7 @@ public partial class AppShell : Shell
                     Title = "Home",
                     Route = "home",
                     ContentTemplate = new DataTemplate(() =>
-                        new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _pointsSystemService, _username))
+                        new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _pointsSystemService, _username, _authService))
                 },
                 historyTab,
                 new ShellContent

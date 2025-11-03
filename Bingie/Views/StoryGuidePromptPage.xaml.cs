@@ -62,8 +62,8 @@ public partial class StoryGuidePromptPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Oops", $"We couldn't save that insight: {ex.Message}", "OK");
             SaveButton.IsEnabled = true;
+            await DisplayAlert("Oops", $"We couldn't save that insight: {ex.Message}", "OK");
         }
     }
 

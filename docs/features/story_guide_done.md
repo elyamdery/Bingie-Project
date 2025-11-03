@@ -7,4 +7,4 @@ Highlights:
 - StoryGuideService stores trigger selections, rotates experiments, and summarizes weekly insights.
 - ExplorePage now surfaces quest cards with plan/complete actions; MainPage trigger modal follows each binge log.
 
-See manual validation checklist in `docs/features/story_guide_manual_checkup.md`.
+See manual validation checklist in `docs/manual_check/story_guide_manual_checkup.md`.

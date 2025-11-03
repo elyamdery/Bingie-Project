@@ -7,4 +7,4 @@ Highlights:
 - PointsSystemService seeds default point actions/cosmetics, generates daily quests, and drives glow meter progress.
 - ExplorePage now exposes glow progress, pause toggle, quests, weekly XP trend, and cosmetic equip actions while MainPage awards logging XP automatically.
 
-See `docs/features/points_system_manual_checkup.md` for validation steps.
+See `docs/manual_check/points_system_manual_checkup.md` for validation steps.

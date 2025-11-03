@@ -31,21 +31,40 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:StoryTriggerDefinition">
-                            <Border StrokeThickness="0"
-                                    BackgroundColor="#FFFFFF0F"
-                                    StrokeShape="RoundRectangle 16"
-                                    Padding="16">
-                                <Border.Stroke>
-                                    <SolidColorBrush Color="#7C5CFA" />
-                                </Border.Stroke>
+                            <Border StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 18"
+                                    Padding="16"
+                                    Stroke="#3D4378"
+                                    BackgroundColor="#232750">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor"
+                                                        Value="#232750" />
+                                                <Setter Property="Stroke"
+                                                        Value="#3D4378" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor"
+                                                        Value="#3C468A" />
+                                                <Setter Property="Stroke"
+                                                        Value="#6E7BFF" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="{Binding Title}"
                                            FontSize="18"
                                            FontAttributes="Bold"
-                                           TextColor="White" />
+                                           TextColor="#F0F2FF" />
                                     <Label Text="{Binding Description}"
                                            FontSize="14"
-                                           TextColor="#E2E4FF" />
+                                           TextColor="#C7D3FF" />
                                 </VerticalStackLayout>
                             </Border>
                         </DataTemplate>
@@ -74,17 +93,17 @@
 
                 <Button Text="Skip story for now"
                         Clicked="OnSkipClicked"
-                        BackgroundColor="#FFFFFF15"
-                        TextColor="#F5F5FF"
+                        BackgroundColor="#232750"
+                        TextColor="#C9D7FF"
                         CornerRadius="24"
-                        BorderColor="#FFFFFF40"
+                        BorderColor="#3D4378"
                         BorderWidth="1" />
 
                 <Frame x:Name="ChapterCard"
                        IsVisible="False"
                        Padding="20"
                        CornerRadius="20"
-                       BackgroundColor="#FFFFFF14">
+                       BackgroundColor="#232750">
                     <VerticalStackLayout Spacing="10">
                         <Label x:Name="ChapterTitleLabel"
                                FontSize="20"
@@ -102,21 +121,21 @@
                             <VerticalStackLayout Spacing="6">
                                 <Label Text="Try this experiment"
                                        FontSize="14"
-                                       TextColor="#A6B1FF" />
+                                       TextColor="#AEBBFF" />
                                 <Label x:Name="ExperimentTitleLabel"
                                        FontSize="18"
                                        FontAttributes="Bold"
                                        TextColor="White" />
                                 <Label x:Name="ExperimentPromptLabel"
                                        FontSize="14"
-                                       TextColor="#E2E4FF" />
+                                       TextColor="#C7D3FF" />
                                 <Label x:Name="ExperimentRewardLabel"
                                        FontSize="12"
-                                       TextColor="#D5D9FF" />
+                                       TextColor="#AEBBFF" />
                                 <Button x:Name="PlanExperimentButton"
                                         Text="I'll try this"
                                         Clicked="OnPlanExperimentClicked"
-                                        BackgroundColor="#7C5CFA"
+                                        BackgroundColor="#6E7BFF"
                                         TextColor="White"
                                         CornerRadius="20" />
                             </VerticalStackLayout>
@@ -126,7 +145,7 @@
                                 Text="Done"
                                 IsVisible="False"
                                 Clicked="OnDoneClicked"
-                                BackgroundColor="#5C68FF"
+                                BackgroundColor="#6E7BFF"
                                 TextColor="White"
                                 CornerRadius="24" />
                     </VerticalStackLayout>

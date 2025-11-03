@@ -186,6 +186,7 @@ public partial class LoginPage : ContentPage
             _avatarFeedbackService,
             _storyGuideService,
             _pointsSystemService,
+            _authService,
             user.Username);
     }
 

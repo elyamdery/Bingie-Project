@@ -42,7 +42,6 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 [Log] Step 13: Drafted game-loop SRS
 - Added modular documentation under `docs/SRS_Bingie_GameLoop.md` with per-feature specs in `docs/features/` (avatar feedback, story guide, points system, leaderboard, trigger radar, phoenix streak) so any feature can be reviewed or removed independently before implementation.
 [Log] Step 14: Avatar feedback implementation
-<<<<<<< HEAD
 - Added avatar scoring service with history persistence, weekly/monthly energy deltas, and compassionate copy tuned by user thresholds.
 - Wrapped MainPage with feature-flagged glow card, supportive toggle, and celebratory animations tied to score deltas.
 - Auth shell wiring now injects the feedback service; seeded unit specs validate scoring, state mapping, celebration flags, and hide preference flows.
@@ -66,18 +65,21 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - ExplorePage now surfaces glow meter, pause toggle, daily quests, weekly XP rollups, and cosmetic equip actions while MainPage auto-awards logging XP.
 - Added unit specs for quest completion, daily limits, and pause behavior alongside manual-check docs for QA follow-up.
 
-=======
-- Added avatar scoring service with weekly/monthly energy deltas, persisted history snapshots, and compassionate copy tuned by user thresholds.
-- MainPage picked up a feature-flagged glow card with hide toggle and celebratory animations when trends improve.
-- Unit tests validate scoring ranges, state transitions, and flag overrides.
-[Log] Step 15: Story guide implementation
-- Introduced story trigger catalogue, sqlite tables, and analytics hooks; StoryGuideService records triggers, rotates experiments, and summarizes weekly insights.
-- Added post-log trigger modal with skip option and experiment planning, plus an ExplorePage weekly episode card gated by `storyGuideEnabled`.
-- Auth shell and login flows inject the guide service, while targeted unit tests cover rotation and XP lifecycle.
-[Log] Step 16: Points system implementation
-- Built points ledger schema (actions, quests, transactions, cosmetics) with PointsSystemService handling quest boards, XP accrual, and cosmetic unlock flow behind `pointsSystemEnabled`.
-- ExplorePage now surfaces a glow meter, pause toggle, daily quests, weekly XP rollups, and cosmetic equip actions; MainPage auto-awards logging XP via the ledger.
-- Added unit specs for quest completion, daily limits, and pause behavior plus documentation markers for manual QA follow-up.
-
 [Log] 2025-10-31 18:30 UTC – Paused points_system feature work: troubleshooting login/register bugs and remembered users with new tests per user request.
->>>>>>> feature/points-system-impl
+[Log] 2025-11-01 10:05 UTC – Added profile header and quick settings panel to MainPage.
+- Displays username, level, weekly XP, and provides sign-out plus feature toggles (avatar, story, points, legacy).
+- Settings panel writes through FeatureFlags overrides so QA can simulate legacy mode quickly during manual reviews.
+- Verified updates with `dotnet test` followed by `dotnet test --no-build`.
+[Log] 2025-11-01 10:20 UTC – Softened story insight & explore palettes for readability.
+- Replaced bright yellows with calm blue/purple accents across story guide and points dashboards.
+- Updated avatar celebration/energy colors to more comfortable tones; ExplorePage progress/labels now use eye-friendly hues.
+- Extended manual checklists and reran `dotnet test` + `dotnet test --no-build` after color sweep.
+[Log] 2025-11-01 10:32 UTC – Restyled story trigger prompt cards (replaced bright yellow with accessible selection states).
+- CollectionView items now use deep indigo backgrounds with soft highlight strokes when selected.
+- Verified build (`dotnet build`) and confirmed simulator reflects the new palette.
+[Log] 2025-11-01 10:45 UTC – Ensured points dashboard refreshes after logging.
+- MainPage now broadcasts a points-update signal; ExplorePage listens and refreshes XP/quests immediately.
+- Validated with `dotnet build` and Catalyst run; XP increments show instantly without app restart.
+[Log] 2025-11-01 10:50 UTC – Fixed Story Guide save dialog crash.
+- Passing null custom triggers now binds Sqlite parameters correctly; no more "Value must be set" pop-up.
+- Added manual checklist reminder to cover the insight save path; verified via `dotnet build` + `dotnet test --no-build`.

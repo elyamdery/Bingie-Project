@@ -7,4 +7,4 @@ Key notes:
 - AvatarFeedbackService computes weekly/monthly energy, persists history, and supports hide toggle.
 - UI changes live on `MainPage` with glow card and manual toggle.
 
-See also: `docs/features/avatar_feedback_manual_checkup.md` for validation tasks.
+See also: `docs/manual_check/avatar_feedback_manual_checkup.md` for validation tasks.

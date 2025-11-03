@@ -32,6 +32,7 @@ public partial class ExplorePage : ContentPage
     };
 
     private bool _suppressPointsToggle;
+    private bool _pointsSubscriptionActive;
 
     public ExplorePage()
     {
@@ -83,8 +84,30 @@ public partial class ExplorePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        EnsurePointsSubscription();
         await RefreshStoryGuideAsync();
         await RefreshPointsAsync();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (_pointsSubscriptionActive)
+        {
+            MessagingCenter.Unsubscribe<MainPage, PointsDashboard?>(this, "PointsDashboardUpdated");
+            _pointsSubscriptionActive = false;
+        }
+    }
+
+    private void EnsurePointsSubscription()
+    {
+        if (_pointsSubscriptionActive) return;
+        MessagingCenter.Subscribe<MainPage, PointsDashboard?>(this, "PointsDashboardUpdated", (_, _) =>
+        {
+            if (!FeatureFlags.PointsSystemEnabled || !_pointsEnabled) return;
+            MainThread.BeginInvokeOnMainThread(async () => await RefreshPointsAsync());
+        });
+        _pointsSubscriptionActive = true;
     }
 
     private void PopulateChallenges()
@@ -236,7 +259,7 @@ public partial class ExplorePage : ContentPage
                     {
                         Text = summary.Definition.Prompt,
                         FontSize = 14,
-                        TextColor = Color.FromArgb("#D8E0FF")
+                        TextColor = Color.FromArgb("#CAD6FF")
                     },
                     new Label
                     {
@@ -282,7 +305,7 @@ public partial class ExplorePage : ContentPage
         {
             Text = text,
             CornerRadius = 20,
-            BackgroundColor = Color.FromArgb("#7C5CFA"),
+            BackgroundColor = Color.FromArgb("#6E7BFF"),
             TextColor = Colors.White,
             CommandParameter = experimentCode
         };
@@ -413,13 +436,13 @@ public partial class ExplorePage : ContentPage
                 {
                     Text = quest.Description,
                     FontSize = 14,
-                    TextColor = Color.FromArgb("#D8E0FF")
+                    TextColor = Color.FromArgb("#CAD6FF")
                 },
                 new Label
                 {
                     Text = $"+{quest.Xp} XP",
                     FontSize = 12,
-                    TextColor = Color.FromArgb("#B8C2FF")
+                    TextColor = Color.FromArgb("#AEBBFF")
                 }
             }
         };
@@ -430,7 +453,7 @@ public partial class ExplorePage : ContentPage
             {
                 Text = "Complete",
                 CornerRadius = 18,
-                BackgroundColor = Color.FromArgb("#7C5CFA"),
+                BackgroundColor = Color.FromArgb("#6E7BFF"),
                 TextColor = Colors.White,
                 CommandParameter = quest.QuestId
             };
@@ -443,7 +466,7 @@ public partial class ExplorePage : ContentPage
             {
                 Text = "Completed",
                 FontSize = 12,
-                TextColor = Color.FromArgb("#9CF6FF")
+                TextColor = Color.FromArgb("#8EE2F2")
             });
         }
 
@@ -476,7 +499,7 @@ public partial class ExplorePage : ContentPage
                 {
                     Text = status.Reward.Description,
                     FontSize = 14,
-                    TextColor = Color.FromArgb("#D8E0FF")
+                    TextColor = Color.FromArgb("#CAD6FF")
                 }
             }
         };
@@ -487,7 +510,7 @@ public partial class ExplorePage : ContentPage
             {
                 Text = $"Unlock at {status.Reward.RequiredXp} XP",
                 FontSize = 12,
-                TextColor = Color.FromArgb("#B8C2FF")
+                TextColor = Color.FromArgb("#AEBBFF")
             });
         }
         else if (status.IsEquipped)
@@ -496,7 +519,7 @@ public partial class ExplorePage : ContentPage
             {
                 Text = "Equipped",
                 FontSize = 12,
-                TextColor = Color.FromArgb("#9CF6FF")
+                TextColor = Color.FromArgb("#8EE2F2")
             });
         }
         else if (status.CanEquip)
@@ -505,7 +528,7 @@ public partial class ExplorePage : ContentPage
             {
                 Text = "Equip",
                 CornerRadius = 18,
-                BackgroundColor = Color.FromArgb("#7C5CFA"),
+                BackgroundColor = Color.FromArgb("#6E7BFF"),
                 TextColor = Colors.White,
                 CommandParameter = status.Reward.CosmeticCode
             };

@@ -29,3 +29,6 @@ Use this playbook for every feature we ship on Bingie so branches stay tidy and 
 
 7. **Promotion**  
    - Once all features in scope are green on `ver5_dev`, fast-forward `version5` and open a PR to `main` if release-ready.
+
+8. **Bug tracking**  
+   - Log regressions or investigations in `docs/BugDiscoveryCodex.md` so fixes stay traceable alongside feature work.

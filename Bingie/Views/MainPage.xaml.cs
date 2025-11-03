@@ -6,19 +6,31 @@ using System.Threading.Tasks;
 using Bingie.Config;
 using Bingie.Models;
 using Bingie.Services;
+using Bingie.Views.Auth;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Storage;
 using Serilog;
 
 namespace Bingie.Views;
 
 public partial class MainPage : ContentPage
 {
+    private const string RememberedUsernameKey = "RememberedUsername";
+    private const string RememberTokenKey = "RememberedToken";
+    private const string RememberMeFlagKey = "RememberMeEnabled";
+
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService? _storyGuideService;
     private readonly PointsSystemService? _pointsSystemService;
+    private readonly IAuthService _authService;
     private readonly string _username;
+
     private bool _suppressAvatarToggle;
+    private bool _settingsPanelVisible;
+    private bool _suppressSettingsEvents;
+    private PointsDashboard? _currentPointsSnapshot;
     private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
 
     public MainPage()
@@ -30,24 +42,31 @@ public partial class MainPage : ContentPage
         _calendarService = new CalendarService(_dataStore);
         var avatarRepository = new AvatarFeedbackRepository(connectionFactory);
         _avatarFeedbackService = new AvatarFeedbackService(_dataStore, avatarRepository);
+        _authService = new AuthService(previewService);
+
         if (FeatureFlags.StoryGuideEnabled)
         {
             var storyRepository = new StoryGuideRepository(connectionFactory);
             _storyGuideService = new StoryGuideService(storyRepository, new NoopStoryGuideAnalytics());
         }
+
         if (FeatureFlags.PointsSystemEnabled)
         {
             var pointsRepository = new PointsSystemRepository(connectionFactory);
             _pointsSystemService = new PointsSystemService(pointsRepository);
         }
+
         _username = "PreviewUser";
 
-       StartClock();
+        StartClock();
         _ = RefreshTodayDotsAsync();
         if (FeatureFlags.AvatarFeedbackEnabled)
         {
             _ = RefreshAvatarFeedbackAsync();
         }
+        _ = RefreshPointsSummaryAsync();
+        UpdateUserStatusUi();
+        SyncSettingsPanel();
     }
 
     public MainPage(
@@ -56,18 +75,19 @@ public partial class MainPage : ContentPage
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
-        string username)
+        string username,
+        IAuthService authService)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
-        _storyGuideService = FeatureFlags.StoryGuideEnabled ? storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService)) : null;
-        _pointsSystemService = FeatureFlags.PointsSystemEnabled ? pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService)) : null;
+        _storyGuideService = storyGuideService;
+        _pointsSystemService = pointsSystemService;
         _username = username ?? throw new ArgumentNullException(nameof(username));
+        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
 
         Log.Information("MainPage initialized.");
-
         StartClock();
     }
 
@@ -79,6 +99,15 @@ public partial class MainPage : ContentPage
         {
             await RefreshAvatarFeedbackAsync();
         }
+        else
+        {
+            AvatarFeedbackSection.IsVisible = false;
+        }
+
+        await RefreshPointsSummaryAsync();
+        UpdateUserStatusUi();
+        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        SyncSettingsPanel();
     }
 
     private void StartClock()
@@ -186,6 +215,9 @@ public partial class MainPage : ContentPage
                 }
             }
 
+            await RefreshPointsSummaryAsync();
+            UpdateUserStatusUi();
+
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
 
             if (FeatureFlags.StoryGuideEnabled && _storyGuideService != null)
@@ -240,6 +272,26 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private async Task RefreshPointsSummaryAsync()
+    {
+        if (FeatureFlags.PointsSystemEnabled && _pointsSystemService != null)
+        {
+            try
+            {
+                _currentPointsSnapshot = await _pointsSystemService.GetDashboardAsync(_username, DateTime.UtcNow);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Unable to refresh points dashboard for {Username}.", _username);
+                _currentPointsSnapshot = null;
+            }
+        }
+        else
+        {
+            _currentPointsSnapshot = null;
+        }
+    }
+
     private async Task UpdateAvatarFeedbackUi(AvatarFeedbackSnapshot snapshot)
     {
         if (snapshot.IsHidden)
@@ -251,7 +303,7 @@ public partial class MainPage : ContentPage
             AvatarSupportiveCopy.Text = snapshot.SupportiveCopy;
             AvatarAnimationKeyLabel.Text = snapshot.AnimationKey;
             AvatarCelebrationBadge.IsVisible = false;
-            AvatarBackgroundFrame.BackgroundColor = Color.FromArgb("#222845");
+            AvatarBackgroundFrame.BackgroundColor = Color.FromArgb("#1F2445");
             return;
         }
 
@@ -281,13 +333,13 @@ public partial class MainPage : ContentPage
 
         var colors = snapshot.EnergyState switch
         {
-            AvatarEnergyState.Energized => Color.FromArgb("#4CFFDF"),
-            AvatarEnergyState.Steady => Color.FromArgb("#4D7CFE"),
-            AvatarEnergyState.Tired => Color.FromArgb("#FF8F70"),
-            _ => Color.FromArgb("#222845")
+            AvatarEnergyState.Energized => Color.FromArgb("#3BC8C8"),
+            AvatarEnergyState.Steady => Color.FromArgb("#6E7BFF"),
+            AvatarEnergyState.Tired => Color.FromArgb("#F28C8C"),
+            _ => Color.FromArgb("#1F2445")
         };
 
-        AvatarBackgroundFrame.BackgroundColor = colors.WithAlpha(0.32f);
+        AvatarBackgroundFrame.BackgroundColor = colors.WithAlpha(0.28f);
 
         var targetScale = snapshot.EnergyState switch
         {
@@ -331,6 +383,145 @@ public partial class MainPage : ContentPage
         catch (Exception ex)
         {
             Log.Error(ex, "Failed to launch story guide prompt for {Username}.", _username);
+        }
+    }
+
+    private void OnSettingsButtonClicked(object sender, EventArgs e)
+    {
+        _settingsPanelVisible = !_settingsPanelVisible;
+        SettingsContainer.IsVisible = _settingsPanelVisible;
+        if (_settingsPanelVisible)
+        {
+            SyncSettingsPanel();
+        }
+    }
+
+    private async void OnSignOutClicked(object sender, EventArgs e)
+    {
+        var confirm = await DisplayAlert("Sign out", "Sign out of Bingie?", "Sign out", "Cancel");
+        if (!confirm) return;
+
+        try
+        {
+            await _authService.ClearRememberTokenAsync(new User { Username = _username, Password = string.Empty });
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "Failed to clear remember-me token during sign out for {Username}.", _username);
+        }
+
+        Preferences.Remove(RememberedUsernameKey);
+        Preferences.Set(RememberMeFlagKey, false);
+        SecureStorage.Remove(RememberTokenKey);
+
+        var services = App.Current?.Handler?.MauiContext?.Services;
+        var loginPage = services?.GetService<LoginPage>();
+        if (loginPage != null)
+        {
+            Application.Current!.MainPage = new NavigationPage(loginPage)
+            {
+                BarBackgroundColor = Color.FromArgb("#1F3A93"),
+                BarTextColor = Colors.White
+            };
+        }
+    }
+
+    private async void OnAvatarFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverrideAvatarFeedback(e.Value ? (bool?)null : false);
+
+        if (FeatureFlags.AvatarFeedbackEnabled)
+        {
+            await RefreshAvatarFeedbackAsync();
+        }
+        else
+        {
+            AvatarFeedbackSection.IsVisible = false;
+        }
+
+        UpdateUserStatusUi();
+        SyncSettingsPanel();
+    }
+
+    private async void OnStoryFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverrideStoryGuide(e.Value ? (bool?)null : false);
+        SyncSettingsPanel();
+        await RefreshPointsSummaryAsync();
+        UpdateUserStatusUi();
+        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+    }
+
+    private async void OnPointsFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverridePointsSystem(e.Value ? (bool?)null : false);
+        await RefreshPointsSummaryAsync();
+        UpdateUserStatusUi();
+        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        SyncSettingsPanel();
+    }
+
+    private async void OnLegacyModeSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+
+        if (e.Value)
+        {
+            FeatureFlags.OverrideAvatarFeedback(false);
+            FeatureFlags.OverrideStoryGuide(false);
+            FeatureFlags.OverridePointsSystem(false);
+        }
+        else
+        {
+            FeatureFlags.OverrideAvatarFeedback(null);
+            FeatureFlags.OverrideStoryGuide(null);
+            FeatureFlags.OverridePointsSystem(null);
+        }
+
+        SyncSettingsPanel();
+
+        if (FeatureFlags.AvatarFeedbackEnabled)
+        {
+            await RefreshAvatarFeedbackAsync();
+        }
+        else
+        {
+            AvatarFeedbackSection.IsVisible = false;
+        }
+
+        await RefreshPointsSummaryAsync();
+        UpdateUserStatusUi();
+        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+    }
+
+    private void SyncSettingsPanel()
+    {
+        _suppressSettingsEvents = true;
+        AvatarFeatureSwitch.IsToggled = FeatureFlags.AvatarFeedbackEnabled;
+        StoryFeatureSwitch.IsToggled = FeatureFlags.StoryGuideEnabled;
+        PointsFeatureSwitch.IsToggled = FeatureFlags.PointsSystemEnabled;
+        LegacyModeSwitch.IsToggled = !FeatureFlags.AvatarFeedbackEnabled &&
+                                     !FeatureFlags.StoryGuideEnabled &&
+                                     !FeatureFlags.PointsSystemEnabled;
+        _suppressSettingsEvents = false;
+    }
+
+    private void UpdateUserStatusUi()
+    {
+        UserNameLabel.Text = _username;
+
+        if (FeatureFlags.PointsSystemEnabled && _currentPointsSnapshot != null)
+        {
+            UserLevelLabel.Text = $"Level {_currentPointsSnapshot.GlowLevel}";
+            UserXpLabel.Text = $"{_currentPointsSnapshot.TotalXp} XP · This week {_currentPointsSnapshot.WeeklyXp} XP";
+        }
+        else
+        {
+            UserLevelLabel.Text = "Legacy mode";
+            UserXpLabel.Text = "Advanced features are paused";
         }
     }
 }
