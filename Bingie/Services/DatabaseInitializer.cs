@@ -21,6 +21,7 @@ public class DatabaseInitializer
         EnsureAvatarFeedbackTables(connection);
         EnsureStoryGuideTables(connection);
         EnsurePointsSystemTables(connection);
+        EnsureFriendsLeaderboardTables(connection);
     }
 
     private static void EnsureUsersTable(SqliteConnection connection)
@@ -249,5 +250,79 @@ public class DatabaseInitializer
                     ('starlight_canvas', 'Starlight Canvas', 'Starry background for nightly reflections.', 500);
             ";
         _ = insert.ExecuteNonQuery();
+    }
+
+    private static void EnsureFriendsLeaderboardTables(SqliteConnection connection)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS FriendCircles (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT NOT NULL,
+                    InviteCode TEXT NOT NULL UNIQUE,
+                    CreatedUtc TEXT NOT NULL
+                );";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS CircleMemberships (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    CircleId INTEGER NOT NULL,
+                    Username TEXT NOT NULL UNIQUE,
+                    Nickname TEXT NOT NULL,
+                    ShareXp INTEGER NOT NULL DEFAULT 1,
+                    ShareStreak INTEGER NOT NULL DEFAULT 1,
+                    ShareCopingCount INTEGER NOT NULL DEFAULT 1,
+                    Muted INTEGER NOT NULL DEFAULT 0,
+                    JoinedUtc TEXT NOT NULL,
+                    LastActiveUtc TEXT,
+                    FOREIGN KEY (CircleId) REFERENCES FriendCircles(Id) ON DELETE CASCADE
+                );";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE INDEX IF NOT EXISTS IX_CircleMemberships_Circle
+                ON CircleMemberships (CircleId);";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS CircleWeeklySnapshots (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    CircleId INTEGER NOT NULL,
+                    Username TEXT NOT NULL,
+                    WeekStartUtc TEXT NOT NULL,
+                    SharedXp INTEGER NOT NULL,
+                    SharedStreakDays INTEGER NOT NULL,
+                    SharedCopingCount INTEGER NOT NULL,
+                    CreatedUtc TEXT NOT NULL,
+                    RefreshedUtc TEXT,
+                    UNIQUE (CircleId, Username, WeekStartUtc),
+                    FOREIGN KEY (CircleId) REFERENCES FriendCircles(Id) ON DELETE CASCADE
+                );";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE INDEX IF NOT EXISTS IX_CircleWeeklySnapshots_Week
+                ON CircleWeeklySnapshots (CircleId, WeekStartUtc);";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS CircleSupportTokens (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    CircleId INTEGER NOT NULL,
+                    FromUsername TEXT NOT NULL,
+                    ToUsername TEXT NOT NULL,
+                    TemplateCode TEXT NOT NULL,
+                    Message TEXT NOT NULL,
+                    WeekStartUtc TEXT NOT NULL,
+                    CreatedUtc TEXT NOT NULL,
+                    FOREIGN KEY (CircleId) REFERENCES FriendCircles(Id) ON DELETE CASCADE
+                );";
+        _ = command.ExecuteNonQuery();
+
+        command.CommandText = @"
+                CREATE INDEX IF NOT EXISTS IX_CircleSupportTokens_CircleWeek
+                ON CircleSupportTokens (CircleId, WeekStartUtc);";
+        _ = command.ExecuteNonQuery();
     }
 }

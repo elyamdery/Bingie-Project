@@ -46,6 +46,12 @@
     <Compile Include="..\..\Bingie\Models\PointsSettings.cs" Link="Models\PointsSettings.cs" />
     <Compile Include="..\..\Bingie\Models\QuestViewModel.cs" Link="Models\QuestViewModel.cs" />
     <Compile Include="..\..\Bingie\Models\XpTransaction.cs" Link="Models\XpTransaction.cs" />
+    <Compile Include="..\..\Bingie\Models\FriendCircle.cs" Link="Models\FriendCircle.cs" />
+    <Compile Include="..\..\Bingie\Models\CircleMembership.cs" Link="Models\CircleMembership.cs" />
+    <Compile Include="..\..\Bingie\Models\CircleWeeklySnapshot.cs" Link="Models\CircleWeeklySnapshot.cs" />
+    <Compile Include="..\..\Bingie\Models\SupportToken.cs" Link="Models\SupportToken.cs" />
+    <Compile Include="..\..\Bingie\Models\SupportTokenTemplate.cs" Link="Models\SupportTokenTemplate.cs" />
+    <Compile Include="..\..\Bingie\Models\FriendsLeaderboardState.cs" Link="Models\FriendsLeaderboardState.cs" />
     <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
     <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
@@ -57,10 +63,11 @@
     <Compile Include="..\..\Bingie\Services\IStoryGuideAnalytics.cs" Link="Services\IStoryGuideAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\PointsSystemService.cs" Link="Services\PointsSystemService.cs" />
     <Compile Include="..\..\Bingie\Services\IPointsSystemRepository.cs" Link="Services\IPointsSystemRepository.cs" />
-    <Compile Include="..\..\Bingie\Services\PointsSystemRepository.cs" Link="Services\PointsSystemRepository.cs" />
     <Compile Include="..\..\Bingie\Services\QuotesService.cs" Link="Services\QuotesService.cs" />
     <Compile Include="..\..\Bingie\Services\IDataStore.cs" Link="Services\IDataStore.cs" />
     <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />
+    <Compile Include="..\..\Bingie\Services\IFriendsLeaderboardRepository.cs" Link="Services\IFriendsLeaderboardRepository.cs" />
+    <Compile Include="..\..\Bingie\Services\FriendsLeaderboardService.cs" Link="Services\FriendsLeaderboardService.cs" />
     <Compile Include="..\..\Bingie\Config\FeatureFlags.cs" Link="Config\FeatureFlags.cs" />
   </ItemGroup>
 

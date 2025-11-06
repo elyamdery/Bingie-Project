@@ -1,0 +1,24 @@
+# Build artifacts
+bin/
+obj/
+
+# IDE caches
+.vs/
+.idea/
+*.user
+*.userprefs
+
+# macOS clutter
+.DS_Store
+
+# Logs
+*.log
+Logs/
+
+# Maui generated signing files
+*.p12
+*.mobileprovision
+
+# Test result caches
+TestResults/
+*.trx

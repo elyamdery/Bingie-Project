@@ -11,6 +11,7 @@ public static class FeatureFlags
     private static bool? _avatarFeedbackOverride;
     private static bool? _storyGuideOverride;
     private static bool? _pointsSystemOverride;
+    private static bool? _leaderboardOverride;
 
     /// <summary>
     /// Feature flag gating the avatar feedback experience.
@@ -48,6 +49,18 @@ public static class FeatureFlags
         }
     }
 
+    /// <summary>
+    /// Feature flag that enables the friends leaderboard experience.
+    /// </summary>
+    public static bool LeaderboardEnabled
+    {
+        get
+        {
+            if (_leaderboardOverride.HasValue) return _leaderboardOverride.Value;
+            return ResolveFlag("BINGIE_LEADERBOARD_ENABLED", defaultValue: true);
+        }
+    }
+
     private static bool ResolveFlag(string environmentVariable, bool defaultValue)
     {
         var raw = Environment.GetEnvironmentVariable(environmentVariable);
@@ -74,4 +87,9 @@ public static class FeatureFlags
     /// Allows tests or diagnostics to override the points system flag; passing null clears the override.
     /// </summary>
     public static void OverridePointsSystem(bool? enabled) => _pointsSystemOverride = enabled;
+
+    /// <summary>
+    /// Allows tests or diagnostics to override the friends leaderboard flag; passing null clears the override.
+    /// </summary>
+    public static void OverrideLeaderboard(bool? enabled) => _leaderboardOverride = enabled;
 }

@@ -83,3 +83,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 [Log] 2025-11-01 10:50 UTC – Fixed Story Guide save dialog crash.
 - Passing null custom triggers now binds Sqlite parameters correctly; no more "Value must be set" pop-up.
 - Added manual checklist reminder to cover the insight save path; verified via `dotnet build` + `dotnet test --no-build`.
+[Log] 2025-11-01 12:40 UTC – Shipped friends leaderboard with opt-in privacy and support tokens.
+- Added friends leaderboard models/service, SQLite schema, and DI wiring behind `FeatureFlags.LeaderboardEnabled`.
+- Introduced Friends tab UI with circle onboarding, ranking view, support token feed, and settings toggle; documented verification steps.
+- Expanded test suite with `FriendsLeaderboardServiceTests` covering ranking, privacy masking, capacity caps, and token sending; ran `dotnet test` followed by `dotnet test --no-build`.

@@ -19,6 +19,7 @@ public partial class LoginPage : ContentPage
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService _storyGuideService;
     private readonly PointsSystemService _pointsSystemService;
+    private readonly FriendsLeaderboardService _friendsLeaderboardService;
     private readonly IServiceProvider _serviceProvider;
 
     private bool _isAuthenticating;
@@ -30,6 +31,7 @@ public partial class LoginPage : ContentPage
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
+        FriendsLeaderboardService friendsLeaderboardService,
         IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -39,6 +41,7 @@ public partial class LoginPage : ContentPage
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
+        _friendsLeaderboardService = friendsLeaderboardService ?? throw new ArgumentNullException(nameof(friendsLeaderboardService));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
@@ -186,6 +189,7 @@ public partial class LoginPage : ContentPage
             _avatarFeedbackService,
             _storyGuideService,
             _pointsSystemService,
+            _friendsLeaderboardService,
             _authService,
             user.Username);
     }

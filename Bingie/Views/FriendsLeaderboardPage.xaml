@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.FriendsLeaderboardPage"
+             Title="Friends">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#101A3C" Offset="0" />
+                <GradientStop Color="#2C3D85" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <ScrollView>
+            <VerticalStackLayout Padding="24" Spacing="18">
+                <Frame x:Name="FeatureDisabledCard"
+                       IsVisible="False"
+                       BackgroundColor="#1E2A4A"
+                       Padding="20"
+                       CornerRadius="22">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Friends leaderboard paused"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#F8FBFF" />
+                        <Label Text="Enable the feature from Home → Settings to rejoin your circle."
+                               FontSize="14"
+                               TextColor="#C9D7FF" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <VerticalStackLayout x:Name="OptInForm"
+                                      Spacing="14">
+                    <Label Text="Start a caring circle"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="#FFFFFF" />
+                    <Label Text="Choose a nickname, set the metrics you want to share, then join with a code or create a fresh circle."
+                           FontSize="14"
+                           TextColor="#E5EBFF" />
+
+                    <Entry x:Name="OptInNicknameEntry"
+                           Placeholder="Display nickname"
+                           BackgroundColor="#FFFFFFF0"
+                           TextColor="#1A1A2E" />
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="6">
+                            <Label Text="Circle name"
+                                   FontSize="12"
+                                   TextColor="#C9D7FF" />
+                            <Entry x:Name="OptInCircleNameEntry"
+                                   Placeholder="New circle name"
+                                   BackgroundColor="#FFFFFFF0"
+                                   TextColor="#1A1A2E" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="6">
+                            <Label Text="Invite code"
+                                   FontSize="12"
+                                   TextColor="#C9D7FF" />
+                            <Entry x:Name="OptInInviteCodeEntry"
+                                   Placeholder="Join with a code"
+                                   BackgroundColor="#FFFFFFF0"
+                                   TextColor="#1A1A2E" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Label Text="Metrics to share"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#E6EEFF" />
+
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="12">
+                            <Label Text="Weekly XP"
+                                   FontSize="14"
+                                   TextColor="#D9E4FF"
+                                   VerticalOptions="Center" />
+                            <Switch x:Name="OptInShareXpSwitch"
+                                    IsToggled="True"
+                                    HorizontalOptions="EndAndExpand" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="12">
+                            <Label Text="Current streak"
+                                   FontSize="14"
+                                   TextColor="#D9E4FF"
+                                   VerticalOptions="Center" />
+                            <Switch x:Name="OptInShareStreakSwitch"
+                                    IsToggled="True"
+                                    HorizontalOptions="EndAndExpand" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="12">
+                            <Label Text="Coping actions"
+                                   FontSize="14"
+                                   TextColor="#D9E4FF"
+                                   VerticalOptions="Center" />
+                            <Switch x:Name="OptInShareCopingSwitch"
+                                    IsToggled="True"
+                                    HorizontalOptions="EndAndExpand" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Button Text="Join or create circle"
+                            Clicked="OnOptInClicked"
+                            BackgroundColor="#6E7BFF"
+                            TextColor="White"
+                            CornerRadius="18"
+                            HeightRequest="48" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="CircleSection"
+                                      IsVisible="False"
+                                      Spacing="18">
+                    <Label Text="Weekly support circle"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="#FFFFFF" />
+
+                    <Frame BackgroundColor="#1E2A4A"
+                           Padding="18"
+                           CornerRadius="24">
+                        <VerticalStackLayout Spacing="6">
+                            <Label x:Name="CircleNameLabel"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#EAF0FF" />
+                            <Label x:Name="CircleInviteLabel"
+                                   FontSize="14"
+                                   TextColor="#C9D7FF" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Label x:Name="CircleMembersLabel"
+                           FontSize="14"
+                           TextColor="#C9D7FF" />
+
+                    <Frame BackgroundColor="#182142"
+                           Padding="18"
+                           CornerRadius="24">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Privacy &amp; reminders"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#EAF0FF" />
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                  ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="12"
+                                  RowSpacing="12">
+                                <Label Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="Share weekly XP"
+                                       TextColor="#D9E4FF"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="ShareXpSwitch"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Toggled="OnSharePreferenceToggled" />
+
+                                <Label Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="Share streak days"
+                                       TextColor="#D9E4FF"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="ShareStreakSwitch"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Toggled="OnSharePreferenceToggled" />
+
+                                <Label Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Share coping actions"
+                                       TextColor="#D9E4FF"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="ShareCopingSwitch"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Toggled="OnSharePreferenceToggled" />
+
+                                <Label Grid.Row="3"
+                                       Grid.Column="0"
+                                       Text="Mute circle alerts"
+                                       TextColor="#D9E4FF"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="MuteCircleSwitch"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Toggled="OnMuteToggled" />
+                            </Grid>
+
+                            <Button Text="Refresh leaderboard"
+                                    Clicked="OnRefreshClicked"
+                                    BackgroundColor="#3144A5"
+                                    TextColor="White"
+                                    CornerRadius="16"
+                                    HeightRequest="44" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame BackgroundColor="#1C2752"
+                           Padding="18"
+                           CornerRadius="24">
+                        <VerticalStackLayout Spacing="14">
+                            <Grid ColumnDefinitions="*,Auto"
+                                  VerticalOptions="Center">
+                                <Label Text="This week's leaderboard"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#F7FAFF" />
+                                <Label x:Name="WeekRangeLabel"
+                                       Grid.Column="1"
+                                       FontSize="12"
+                                       TextColor="#C9D7FF"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <CollectionView x:Name="LeaderboardList"
+                                            SelectionMode="None"
+                                            HeightRequest="280">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="14"
+                                                BackgroundColor="#243466"
+                                                StrokeShape="RoundRectangle 18"
+                                                Margin="0,0,0,12">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                                  ColumnSpacing="14">
+                                                <Label Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Text="{Binding Rank, StringFormat='#{0}'}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#B8C6FF" />
+                                                <HorizontalStackLayout Grid.Row="0"
+                                                                        Grid.Column="1"
+                                                                        Spacing="8">
+                                                    <Label Text="{Binding Nickname}"
+                                                           FontSize="18"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#FFFFFF" />
+                                                    <Label Text="YOU"
+                                                           FontSize="12"
+                                                           TextColor="#FFD166"
+                                                           VerticalOptions="Center"
+                                                           IsVisible="{Binding IsSelf}" />
+                                                </HorizontalStackLayout>
+
+                                                <Label Grid.Row="1"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding SharedXp, StringFormat='XP • {0} pts', TargetNullValue='XP • Opted out'}"
+                                                       FontSize="13"
+                                                       TextColor="#E0E7FF" />
+                                                <Label Grid.Row="2"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding SharedStreakDays, StringFormat='Streak • {0} days', TargetNullValue='Streak • Opted out'}"
+                                                       FontSize="13"
+                                                       TextColor="#E0E7FF" />
+                                                <Label Grid.Row="3"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding SharedCopingCount, StringFormat='Coping actions • {0}', TargetNullValue='Coping actions • Opted out'}"
+                                                       FontSize="13"
+                                                       TextColor="#E0E7FF" />
+                                                <Label Grid.Row="4"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding SupportTokensReceived, StringFormat='Support tokens • {0}'}"
+                                                       FontSize="12"
+                                                       TextColor="#B8C6FF" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            <Label x:Name="EmptyLeaderboardLabel"
+                                   Text="No shared metrics yet. Invite friends or refresh after your next check-in."
+                                   FontSize="13"
+                                   TextColor="#C9D7FF"
+                                   IsVisible="False" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame BackgroundColor="#16203B"
+                           Padding="18"
+                           CornerRadius="24">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Send a support token"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#EAF0FF" />
+                            <Label Text="Celebrate someone’s progress or gently check in with a positive preset message."
+                                   FontSize="13"
+                                   TextColor="#C9D7FF" />
+                            <Picker x:Name="MemberPicker"
+                                    Title="Select a teammate" />
+                            <Picker x:Name="SupportTemplatePicker"
+                                    Title="Choose a token" />
+                            <Button Text="Send support"
+                                    Clicked="OnSendSupportClicked"
+                                    BackgroundColor="#6E7BFF"
+                                    TextColor="White"
+                                    CornerRadius="16"
+                                    HeightRequest="44" />
+
+                            <CollectionView x:Name="SupportFeedList"
+                                            SelectionMode="None">
+                                <CollectionView.Header>
+                                    <Label Text="This week's notes"
+                                           FontSize="14"
+                                           TextColor="#C9D7FF"
+                                           Margin="0,6,0,10" />
+                                </CollectionView.Header>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="12"
+                                                BackgroundColor="#223059"
+                                                StrokeShape="RoundRectangle 16"
+                                                Margin="0,0,0,10">
+                                            <VerticalStackLayout Spacing="4">
+                                                <Label Text="{Binding Message}"
+                                                       FontSize="13"
+                                                       TextColor="#F1F5FF" />
+                                                <Label Text="{Binding Metadata}"
+                                                       FontSize="11"
+                                                       TextColor="#B1C2FF" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Button Text="Leave circle"
+                            Clicked="OnLeaveCircleClicked"
+                            BackgroundColor="#E84545"
+                            TextColor="White"
+                            CornerRadius="16"
+                            HeightRequest="44" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

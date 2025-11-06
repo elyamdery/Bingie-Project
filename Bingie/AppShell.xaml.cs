@@ -1,8 +1,10 @@
 using System.Diagnostics;
+using Bingie.Config;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views;
 using Bingie.Views.Auth;
+using Microsoft.Maui.Controls;
 
 namespace Bingie;
 
@@ -13,6 +15,8 @@ public partial class AppShell : Shell
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService _storyGuideService;
     private readonly PointsSystemService _pointsSystemService;
+    private readonly FriendsLeaderboardService _friendsLeaderboardService;
+    private ShellContent? _friendsShellContent;
     private readonly IAuthService _authService;
     private readonly string _username;
 
@@ -22,6 +26,7 @@ public partial class AppShell : Shell
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
+        FriendsLeaderboardService friendsLeaderboardService,
         IAuthService authService,
         string username)
     {
@@ -31,6 +36,7 @@ public partial class AppShell : Shell
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
+        _friendsLeaderboardService = friendsLeaderboardService ?? throw new ArgumentNullException(nameof(friendsLeaderboardService));
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
@@ -48,29 +54,53 @@ public partial class AppShell : Shell
             ContentTemplate = new DataTemplate(CreateHistoryPage)
         };
 
-        Items.Add(new TabBar
+        TabBar tabBar = new();
+        tabBar.Items.Add(new ShellContent
         {
-            Items =
-            {
-                new ShellContent
-                {
-                    Title = "Home",
-                    Route = "home",
-                    ContentTemplate = new DataTemplate(() =>
-                        new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _pointsSystemService, _username, _authService))
-                },
-                historyTab,
-                new ShellContent
-                {
-                    Title = "Explore",
-                    Route = "explore",
-                    ContentTemplate = new DataTemplate(() =>
-                        new ExplorePage(_storyGuideService, _pointsSystemService, _username))
-                }
-            }
+            Title = "Home",
+            Route = "home",
+            ContentTemplate = new DataTemplate(() =>
+                new MainPage(_dataStore, _calendarService, _avatarFeedbackService, _storyGuideService, _pointsSystemService, _username, _authService))
+        });
+        tabBar.Items.Add(historyTab);
+        tabBar.Items.Add(new ShellContent
+        {
+            Title = "Explore",
+            Route = "explore",
+            ContentTemplate = new DataTemplate(() =>
+                new ExplorePage(_storyGuideService, _pointsSystemService, _username))
         });
 
+        _friendsShellContent = new ShellContent
+        {
+            Title = "Friends",
+            Route = "friends",
+            IsVisible = FeatureFlags.LeaderboardEnabled,
+            ContentTemplate = new DataTemplate(() =>
+                new FriendsLeaderboardPage(_friendsLeaderboardService, _username))
+        };
+        tabBar.Items.Add(_friendsShellContent);
+
+        Items.Add(tabBar);
+        MessagingCenter.Subscribe<MainPage, bool>(this, "FriendsLeaderboardVisibilityChanged",
+            (_, visible) =>
+            {
+                if (_friendsShellContent != null)
+                {
+                    _friendsShellContent.IsVisible = visible;
+                }
+            });
+
         Navigated += OnNavigated;
+    }
+
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        if (Handler == null)
+        {
+            MessagingCenter.Unsubscribe<MainPage, bool>(this, "FriendsLeaderboardVisibilityChanged");
+        }
     }
 
     private HistoryPage CreateHistoryPage()

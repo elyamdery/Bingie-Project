@@ -107,6 +107,16 @@
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="12"
                                                    HorizontalOptions="Fill">
+                                <Label Text="Friends leaderboard"
+                                       TextColor="#C7D3FF"
+                                       FontSize="13"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="LeaderboardFeatureSwitch"
+                                        HorizontalOptions="End"
+                                        Toggled="OnLeaderboardFeatureSwitchToggled" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="12"
+                                                   HorizontalOptions="Fill">
                                 <Label Text="Legacy mode"
                                        TextColor="#C7D3FF"
                                        FontSize="13"

@@ -217,6 +217,7 @@ public partial class MainPage : ContentPage
 
             await RefreshPointsSummaryAsync();
             UpdateUserStatusUi();
+            MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
 
@@ -464,6 +465,18 @@ public partial class MainPage : ContentPage
         SyncSettingsPanel();
     }
 
+    private async void OnLeaderboardFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverrideLeaderboard(e.Value);
+        MessagingCenter.Send(this, "FriendsLeaderboardVisibilityChanged", FeatureFlags.LeaderboardEnabled);
+        if (e.Value)
+        {
+            await DisplayAlert("Friends leaderboard", "Friends leaderboard re-enabled. Open the Friends tab to check in with your circle.", "OK");
+        }
+        SyncSettingsPanel();
+    }
+
     private async void OnLegacyModeSwitchToggled(object sender, ToggledEventArgs e)
     {
         if (_suppressSettingsEvents) return;
@@ -473,12 +486,14 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideAvatarFeedback(false);
             FeatureFlags.OverrideStoryGuide(false);
             FeatureFlags.OverridePointsSystem(false);
+            FeatureFlags.OverrideLeaderboard(false);
         }
         else
         {
             FeatureFlags.OverrideAvatarFeedback(null);
             FeatureFlags.OverrideStoryGuide(null);
             FeatureFlags.OverridePointsSystem(null);
+            FeatureFlags.OverrideLeaderboard(null);
         }
 
         SyncSettingsPanel();
@@ -503,9 +518,11 @@ public partial class MainPage : ContentPage
         AvatarFeatureSwitch.IsToggled = FeatureFlags.AvatarFeedbackEnabled;
         StoryFeatureSwitch.IsToggled = FeatureFlags.StoryGuideEnabled;
         PointsFeatureSwitch.IsToggled = FeatureFlags.PointsSystemEnabled;
+        LeaderboardFeatureSwitch.IsToggled = FeatureFlags.LeaderboardEnabled;
         LegacyModeSwitch.IsToggled = !FeatureFlags.AvatarFeedbackEnabled &&
                                      !FeatureFlags.StoryGuideEnabled &&
-                                     !FeatureFlags.PointsSystemEnabled;
+                                     !FeatureFlags.PointsSystemEnabled &&
+                                     !FeatureFlags.LeaderboardEnabled;
         _suppressSettingsEvents = false;
     }
 
