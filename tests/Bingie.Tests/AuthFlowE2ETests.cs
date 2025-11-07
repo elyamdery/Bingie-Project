@@ -47,4 +47,34 @@ public class AuthFlowE2ETests
         var login = await authService.LoginAsync("steady", "breath");
         Assert.NotNull(login);
     }
+
+    [Fact]
+    public async Task RememberToken_ReissuesAfterClear_AndAllowsAutoLogin()
+    {
+        var store = new InMemoryUserStore();
+        var authService = new AuthService(store);
+
+        var registered = await authService.RegisterAsync("refresh", "calm");
+        Assert.True(registered);
+
+        var login = await authService.LoginAsync("refresh", "calm");
+        Assert.NotNull(login);
+
+        var firstToken = await authService.IssueRememberTokenAsync(login!);
+        Assert.False(string.IsNullOrWhiteSpace(firstToken));
+
+        await authService.ClearRememberTokenAsync(login);
+        var autoLoginShouldFail = await authService.LoginWithTokenAsync(login!.Username, firstToken!);
+        Assert.Null(autoLoginShouldFail);
+
+        var relogin = await authService.LoginAsync("REFRESH", "calm");
+        Assert.NotNull(relogin);
+
+        var newToken = await authService.IssueRememberTokenAsync(relogin!);
+        Assert.False(string.IsNullOrWhiteSpace(newToken));
+        Assert.NotEqual(firstToken, newToken);
+
+        var autoLogin = await authService.LoginWithTokenAsync(relogin!.Username, newToken!);
+        Assert.NotNull(autoLogin);
+    }
 }

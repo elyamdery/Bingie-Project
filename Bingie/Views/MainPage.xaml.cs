@@ -4,9 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Bingie.Config;
+using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views.Auth;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Storage;
 using Serilog;
@@ -26,6 +28,7 @@ public partial class MainPage : ContentPage
     private readonly PointsSystemService? _pointsSystemService;
     private readonly IAuthService _authService;
     private readonly string _username;
+    private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
 
     private bool _suppressAvatarToggle;
     private bool _settingsPanelVisible;
@@ -106,7 +109,7 @@ public partial class MainPage : ContentPage
 
         await RefreshPointsSummaryAsync();
         UpdateUserStatusUi();
-        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
         SyncSettingsPanel();
     }
 
@@ -201,7 +204,7 @@ public partial class MainPage : ContentPage
                 await RefreshAvatarFeedbackAsync();
             }
 
-            MessagingCenter.Send(this, "BingeEntryAdded", newEntry);
+            _messenger.Send(new BingeEntryAddedMessage(newEntry));
 
             if (FeatureFlags.PointsSystemEnabled && _pointsSystemService != null)
             {
@@ -217,7 +220,7 @@ public partial class MainPage : ContentPage
 
             await RefreshPointsSummaryAsync();
             UpdateUserStatusUi();
-            MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+            _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
 
             await ShowFeedbackAsync("Logged! Thanks for checking in 💪");
 
@@ -452,7 +455,7 @@ public partial class MainPage : ContentPage
         SyncSettingsPanel();
         await RefreshPointsSummaryAsync();
         UpdateUserStatusUi();
-        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
     }
 
     private async void OnPointsFeatureSwitchToggled(object sender, ToggledEventArgs e)
@@ -461,7 +464,7 @@ public partial class MainPage : ContentPage
         FeatureFlags.OverridePointsSystem(e.Value ? (bool?)null : false);
         await RefreshPointsSummaryAsync();
         UpdateUserStatusUi();
-        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
         SyncSettingsPanel();
     }
 
@@ -469,7 +472,7 @@ public partial class MainPage : ContentPage
     {
         if (_suppressSettingsEvents) return;
         FeatureFlags.OverrideLeaderboard(e.Value);
-        MessagingCenter.Send(this, "FriendsLeaderboardVisibilityChanged", FeatureFlags.LeaderboardEnabled);
+        _messenger.Send(new FriendsLeaderboardVisibilityChangedMessage(FeatureFlags.LeaderboardEnabled));
         if (e.Value)
         {
             await DisplayAlert("Friends leaderboard", "Friends leaderboard re-enabled. Open the Friends tab to check in with your circle.", "OK");
@@ -509,7 +512,7 @@ public partial class MainPage : ContentPage
 
         await RefreshPointsSummaryAsync();
         UpdateUserStatusUi();
-        MessagingCenter.Send(this, "PointsDashboardUpdated", _currentPointsSnapshot);
+        _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
     }
 
     private void SyncSettingsPanel()

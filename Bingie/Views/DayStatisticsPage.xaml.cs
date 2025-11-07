@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Bingie.Views;
 
@@ -12,6 +14,8 @@ public partial class DayStatisticsPage : ContentPage
     private readonly DateTime _selectedDate;
     private readonly string _username;
     private readonly CalendarService _calendarService;
+    private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
+    private bool _isSubscribed;
 
     public DayStatisticsPage()
     {
@@ -36,22 +40,24 @@ public partial class DayStatisticsPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        MessagingCenter.Subscribe<MainPage, BingeEntry>(this, "BingeEntryAdded",
-            async (_, entry) =>
-            {
-                if (!string.Equals(entry.Username, _username, StringComparison.OrdinalIgnoreCase))
-                    return;
-
-                if (entry.Date.ToLocalTime().Date != _selectedDate.Date)
-                    return;
-
-                await DisplayStatisticsAsync();
-            });
+        if (_isSubscribed) return;
+        _messenger.Register<BingeEntryAddedMessage>(this, async (_, message) =>
+        {
+            var entry = message.Value;
+            if (!string.Equals(entry.Username, _username, StringComparison.OrdinalIgnoreCase)) return;
+            if (entry.Date.ToLocalTime().Date != _selectedDate.Date) return;
+            await DisplayStatisticsAsync();
+        });
+        _isSubscribed = true;
     }
 
     protected override void OnDisappearing()
     {
-        MessagingCenter.Unsubscribe<MainPage, BingeEntry>(this, "BingeEntryAdded");
+        if (_isSubscribed)
+        {
+            _messenger.Unregister<BingeEntryAddedMessage>(this);
+            _isSubscribed = false;
+        }
         base.OnDisappearing();
     }
 

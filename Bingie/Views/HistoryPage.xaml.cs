@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bingie.Constants;
+using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views.Components;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Bingie.Views;
 
@@ -19,6 +21,8 @@ public partial class HistoryPage : ContentPage
     private DateTime _currentMonth;
     private bool _isLoading;
     private bool _analyticsExpanded;
+    private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
+    private bool _isSubscribed;
 
     public HistoryPage()
     {
@@ -50,14 +54,21 @@ public partial class HistoryPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        MessagingCenter.Subscribe<MainPage, BingeEntry>(this, "BingeEntryAdded",
-            async (_, __) => await UpdateCalendarAsync());
+        if (!_isSubscribed)
+        {
+            _messenger.Register<BingeEntryAddedMessage>(this, async (_, __) => await UpdateCalendarAsync());
+            _isSubscribed = true;
+        }
         await UpdateCalendarAsync();
     }
 
     protected override void OnDisappearing()
     {
-        MessagingCenter.Unsubscribe<MainPage, BingeEntry>(this, "BingeEntryAdded");
+        if (_isSubscribed)
+        {
+            _messenger.Unregister<BingeEntryAddedMessage>(this);
+            _isSubscribed = false;
+        }
         base.OnDisappearing();
     }
 

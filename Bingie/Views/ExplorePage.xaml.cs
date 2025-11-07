@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bingie.Config;
+using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace Bingie.Views;
@@ -33,6 +35,7 @@ public partial class ExplorePage : ContentPage
 
     private bool _suppressPointsToggle;
     private bool _pointsSubscriptionActive;
+    private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
 
     public ExplorePage()
     {
@@ -84,9 +87,9 @@ public partial class ExplorePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        EnsurePointsSubscription();
         await RefreshStoryGuideAsync();
         await RefreshPointsAsync();
+        EnsurePointsSubscription();
     }
 
     protected override void OnDisappearing()
@@ -94,18 +97,29 @@ public partial class ExplorePage : ContentPage
         base.OnDisappearing();
         if (_pointsSubscriptionActive)
         {
-            MessagingCenter.Unsubscribe<MainPage, PointsDashboard?>(this, "PointsDashboardUpdated");
+            _messenger.Unregister<PointsDashboardUpdatedMessage>(this);
             _pointsSubscriptionActive = false;
         }
     }
 
     private void EnsurePointsSubscription()
     {
-        if (_pointsSubscriptionActive) return;
-        MessagingCenter.Subscribe<MainPage, PointsDashboard?>(this, "PointsDashboardUpdated", (_, _) =>
+        if (_pointsSubscriptionActive || !_pointsEnabled) return;
+        _messenger.Register<PointsDashboardUpdatedMessage>(this, (_, message) =>
         {
-            if (!FeatureFlags.PointsSystemEnabled || !_pointsEnabled) return;
-            MainThread.BeginInvokeOnMainThread(async () => await RefreshPointsAsync());
+            if (!FeatureFlags.PointsSystemEnabled) return;
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                if (message.Value != null)
+                {
+                    PointsSection.IsVisible = true;
+                    RenderPointsDashboard(message.Value);
+                }
+                else
+                {
+                    await RefreshPointsAsync();
+                }
+            });
         });
         _pointsSubscriptionActive = true;
     }

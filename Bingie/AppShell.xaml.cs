@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using Bingie.Config;
+using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views;
 using Bingie.Views.Auth;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Maui.Controls;
 
 namespace Bingie;
@@ -19,6 +21,8 @@ public partial class AppShell : Shell
     private ShellContent? _friendsShellContent;
     private readonly IAuthService _authService;
     private readonly string _username;
+    private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
+    private bool _messengerRegistered;
 
     public AppShell(
         IDataStore<BingeEntry> dataStore,
@@ -82,14 +86,14 @@ public partial class AppShell : Shell
         tabBar.Items.Add(_friendsShellContent);
 
         Items.Add(tabBar);
-        MessagingCenter.Subscribe<MainPage, bool>(this, "FriendsLeaderboardVisibilityChanged",
-            (_, visible) =>
+        _messenger.Register<FriendsLeaderboardVisibilityChangedMessage>(this, (_, message) =>
+        {
+            if (_friendsShellContent != null)
             {
-                if (_friendsShellContent != null)
-                {
-                    _friendsShellContent.IsVisible = visible;
-                }
-            });
+                _friendsShellContent.IsVisible = message.Value;
+            }
+        });
+        _messengerRegistered = true;
 
         Navigated += OnNavigated;
     }
@@ -97,9 +101,10 @@ public partial class AppShell : Shell
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
-        if (Handler == null)
+        if (Handler == null && _messengerRegistered)
         {
-            MessagingCenter.Unsubscribe<MainPage, bool>(this, "FriendsLeaderboardVisibilityChanged");
+            _messenger.Unregister<FriendsLeaderboardVisibilityChangedMessage>(this);
+            _messengerRegistered = false;
         }
     }
 

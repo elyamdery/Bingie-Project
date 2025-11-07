@@ -87,3 +87,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - Added friends leaderboard models/service, SQLite schema, and DI wiring behind `FeatureFlags.LeaderboardEnabled`.
 - Introduced Friends tab UI with circle onboarding, ranking view, support token feed, and settings toggle; documented verification steps.
 - Expanded test suite with `FriendsLeaderboardServiceTests` covering ranking, privacy masking, capacity caps, and token sending; ran `dotnet test` followed by `dotnet test --no-build`.
+[Log] 2025-11-01 13:55 UTC – Migrated cross-page refresh to CommunityToolkit messenger and enlarged E2E auth coverage.
+- Replaced legacy `MessagingCenter` usage in MainPage/AppShell/Explore/History/DayStats with strongly typed `WeakReferenceMessenger` events under `Bingie.Messaging`.
+- Explore and History screens now update instantly after logging, and manual checklist now captures the zero-navigation validation.
+- Added a new `AuthFlowE2ETests` scenario verifying remember-me tokens reissue cleanly after being cleared; validated with `dotnet test` and a Catalyst run.
