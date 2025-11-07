@@ -13,6 +13,7 @@ public static class FeatureFlags
     private static bool? _pointsSystemOverride;
     private static bool? _leaderboardOverride;
     private static bool? _triggerRadarOverride;
+    private static bool? _avatarBodyOverride;
 
     /// <summary>
     /// Feature flag gating the avatar feedback experience.
@@ -74,6 +75,18 @@ public static class FeatureFlags
         }
     }
 
+    /// <summary>
+    /// Feature flag for the avatar body visualization.
+    /// </summary>
+    public static bool AvatarBodyEnabled
+    {
+        get
+        {
+            if (_avatarBodyOverride.HasValue) return _avatarBodyOverride.Value;
+            return ResolveFlag("BINGIE_AVATAR_BODY_ENABLED", defaultValue: true);
+        }
+    }
+
     private static bool ResolveFlag(string environmentVariable, bool defaultValue)
     {
         var raw = Environment.GetEnvironmentVariable(environmentVariable);
@@ -110,4 +123,9 @@ public static class FeatureFlags
     /// Allows tests or diagnostics to override the trigger radar flag; passing null clears the override.
     /// </summary>
     public static void OverrideTriggerRadar(bool? enabled) => _triggerRadarOverride = enabled;
+
+    /// <summary>
+    /// Allows tests or diagnostics to override the avatar body flag; passing null clears the override.
+    /// </summary>
+    public static void OverrideAvatarBody(bool? enabled) => _avatarBodyOverride = enabled;
 }

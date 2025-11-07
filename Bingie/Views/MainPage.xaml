@@ -2,6 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:Bingie.Views.Components"
              x:Class="Bingie.Views.MainPage">
 
     <Grid>
@@ -84,6 +85,16 @@
                                 <Switch x:Name="AvatarFeatureSwitch"
                                         HorizontalOptions="End"
                                         Toggled="OnAvatarFeatureSwitchToggled" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="12"
+                                                   HorizontalOptions="Fill">
+                                <Label Text="Avatar body arc"
+                                       TextColor="#C7D3FF"
+                                       FontSize="13"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="AvatarBodyFeatureSwitch"
+                                        HorizontalOptions="End"
+                                        Toggled="OnAvatarBodyFeatureSwitchToggled" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="12"
                                                    HorizontalOptions="Fill">
@@ -196,6 +207,56 @@
                 <Switch x:Name="AvatarFeedbackToggle"
                         Toggled="OnAvatarToggleToggled" />
             </StackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout x:Name="AvatarBodySection"
+                              Spacing="10"
+                              Margin="0,0,0,12"
+                              IsVisible="False">
+            <Label Text="Avatar energy arc"
+                   FontSize="20"
+                   TextColor="White"
+                   FontAttributes="Bold" />
+            <Border StrokeThickness="0"
+                    BackgroundColor="#1C1F3E"
+                    StrokeShape="RoundRectangle 24"
+                    Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <components:AvatarBodyView x:Name="AvatarBodyView" />
+                    <Label x:Name="AvatarBodyDateLabel"
+                           Text="Today"
+                           FontSize="14"
+                           TextColor="#D8DFFF"
+                           HorizontalTextAlignment="Center" />
+                    <Slider x:Name="AvatarBodySlider"
+                            Minimum="0"
+                            Maximum="0"
+                            ValueChanged="OnAvatarBodySliderChanged" />
+                </VerticalStackLayout>
+            </Border>
+            <CollectionView x:Name="AvatarBodyHistoryView"
+                            ItemsLayout="HorizontalList"
+                            SelectionMode="None"
+                            HeightRequest="70">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeThickness="0"
+                                BackgroundColor="#FFFFFF10"
+                                Margin="4,0"
+                                Padding="8"
+                                StrokeShape="RoundRectangle 12">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding DateLabel}"
+                                       FontSize="12"
+                                       TextColor="#D6DCFF"
+                                       HorizontalTextAlignment="Center" />
+                                <ProgressBar Progress="{Binding ScoreNormalized}"
+                                             HeightRequest="4"
+                                             ProgressColor="#6E7BFF" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
         <Button x:Name="BingeButton"
                 Text="I Binged"

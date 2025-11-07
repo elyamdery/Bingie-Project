@@ -91,3 +91,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - Replaced legacy `MessagingCenter` usage in MainPage/AppShell/Explore/History/DayStats with strongly typed `WeakReferenceMessenger` events under `Bingie.Messaging`.
 - Explore and History screens now update instantly after logging, and manual checklist now captures the zero-navigation validation.
 - Added a new `AuthFlowE2ETests` scenario verifying remember-me tokens reissue cleanly after being cleared; validated with `dotnet test` and a Catalyst run.
+[Log] 2025-11-01 15:10 UTC – Delivered Trigger Radar + Avatar Body arc experiences.
+- HistoryPage now features radar risk zones, accessible summaries, share-to-clipboard export, and gentle suggestions behind `triggerRadarEnabled`.
+- Added Avatar Body arc card on Home showing a stylised body that grows/relaxes per-day, with slider history, manual checklist, and blueprint docs; tied into new `avatarBodyEnabled` flag.
+- Registered `TriggerRadarService`, added drawable components, and created unit tests covering radar aggregation plus manual docs; verified with `dotnet build`, `dotnet test`, and Catalyst run.

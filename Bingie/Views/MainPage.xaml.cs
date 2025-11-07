@@ -33,8 +33,10 @@ public partial class MainPage : ContentPage
     private bool _suppressAvatarToggle;
     private bool _settingsPanelVisible;
     private bool _suppressSettingsEvents;
+    private bool _suppressAvatarBodySlider;
     private PointsDashboard? _currentPointsSnapshot;
     private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
+    private readonly List<AvatarBodyHistoryItem> _avatarBodyHistory = new();
 
     public MainPage()
     {
@@ -108,6 +110,7 @@ public partial class MainPage : ContentPage
         }
 
         await RefreshPointsSummaryAsync();
+        await LoadAvatarBodyHistoryAsync();
         UpdateUserStatusUi();
         _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
         SyncSettingsPanel();
@@ -219,6 +222,7 @@ public partial class MainPage : ContentPage
             }
 
             await RefreshPointsSummaryAsync();
+            await LoadAvatarBodyHistoryAsync();
             UpdateUserStatusUi();
             _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
 
@@ -479,6 +483,14 @@ public partial class MainPage : ContentPage
         SyncSettingsPanel();
     }
 
+    private async void OnAvatarBodyFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverrideAvatarBody(e.Value ? (bool?)null : false);
+        await LoadAvatarBodyHistoryAsync();
+        SyncSettingsPanel();
+    }
+
     private async void OnLeaderboardFeatureSwitchToggled(object sender, ToggledEventArgs e)
     {
         if (_suppressSettingsEvents) return;
@@ -501,6 +513,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideStoryGuide(false);
             FeatureFlags.OverridePointsSystem(false);
             FeatureFlags.OverrideTriggerRadar(false);
+            FeatureFlags.OverrideAvatarBody(false);
             FeatureFlags.OverrideLeaderboard(false);
         }
         else
@@ -509,6 +522,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideStoryGuide(null);
             FeatureFlags.OverridePointsSystem(null);
             FeatureFlags.OverrideTriggerRadar(null);
+            FeatureFlags.OverrideAvatarBody(null);
             FeatureFlags.OverrideLeaderboard(null);
         }
 
@@ -535,13 +549,92 @@ public partial class MainPage : ContentPage
         StoryFeatureSwitch.IsToggled = FeatureFlags.StoryGuideEnabled;
         PointsFeatureSwitch.IsToggled = FeatureFlags.PointsSystemEnabled;
         TriggerRadarFeatureSwitch.IsToggled = FeatureFlags.TriggerRadarEnabled;
+        AvatarBodyFeatureSwitch.IsToggled = FeatureFlags.AvatarBodyEnabled;
         LeaderboardFeatureSwitch.IsToggled = FeatureFlags.LeaderboardEnabled;
         LegacyModeSwitch.IsToggled = !FeatureFlags.AvatarFeedbackEnabled &&
                                      !FeatureFlags.StoryGuideEnabled &&
                                      !FeatureFlags.PointsSystemEnabled &&
                                      !FeatureFlags.TriggerRadarEnabled &&
+                                     !FeatureFlags.AvatarBodyEnabled &&
                                      !FeatureFlags.LeaderboardEnabled;
         _suppressSettingsEvents = false;
+    }
+
+    private async Task LoadAvatarBodyHistoryAsync()
+    {
+        if (!FeatureFlags.AvatarBodyEnabled)
+        {
+            AvatarBodySection.IsVisible = false;
+            return;
+        }
+
+        List<AvatarBodyHistoryItem> items = new();
+        var today = DateTime.Today;
+        var tasks = Enumerable.Range(0, 7)
+            .Select(offset => _calendarService.GetEntriesForDateAsync(_username, today.AddDays(-offset)))
+            .ToList();
+
+        var results = await Task.WhenAll(tasks);
+        for (var i = 0; i < results.Length; i++)
+        {
+            var date = today.AddDays(-i);
+            var entryCount = results[i].Count;
+            var score = Math.Clamp(1 - (entryCount / 4d), 0.2, 1.2);
+            var copy = ComposeAvatarBodyCopy(entryCount);
+            items.Add(new AvatarBodyHistoryItem(date, score, copy));
+        }
+
+        items = items.OrderBy(item => item.Date).ToList();
+        _avatarBodyHistory.Clear();
+        _avatarBodyHistory.AddRange(items);
+
+        if (_avatarBodyHistory.Count == 0)
+        {
+            AvatarBodySection.IsVisible = false;
+            return;
+        }
+
+        AvatarBodySection.IsVisible = true;
+        AvatarBodyHistoryView.ItemsSource = _avatarBodyHistory
+            .Select(item => new AvatarBodyHistoryListItem(item))
+            .ToList();
+
+        _suppressAvatarBodySlider = true;
+        AvatarBodySlider.Maximum = _avatarBodyHistory.Count - 1;
+        AvatarBodySlider.Minimum = 0;
+        AvatarBodySlider.Value = _avatarBodyHistory.Count - 1;
+        _suppressAvatarBodySlider = false;
+
+        ApplyAvatarBodySelection(_avatarBodyHistory.Count - 1);
+    }
+
+    private void OnAvatarBodySliderChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (_suppressAvatarBodySlider) return;
+        ApplyAvatarBodySelection((int)Math.Round(e.NewValue));
+    }
+
+    private void ApplyAvatarBodySelection(int index)
+    {
+        if (_avatarBodyHistory.Count == 0) return;
+        index = Math.Clamp(index, 0, _avatarBodyHistory.Count - 1);
+        var selected = _avatarBodyHistory[index];
+        AvatarBodyView.BodyScore = selected.Score;
+        AvatarBodyView.MoodCopy = selected.Copy;
+        AvatarBodyDateLabel.Text = selected.Date.Date == DateTime.Today
+            ? "Today"
+            : selected.Date.ToString("ddd, MMM d", CultureInfo.InvariantCulture);
+    }
+
+    private static string ComposeAvatarBodyCopy(int entryCount)
+    {
+        return entryCount switch
+        {
+            0 => "Glow strong|Keep stacking gentle habits.",
+            1 => "Steady arc|Notice urges and name them.",
+            2 => "Avatar wobbly|Prep a snack or text support tonight.",
+            _ => "Avatar tired|Plan a cozy ritual ASAP."
+        };
     }
 
     private void UpdateUserStatusUi()
@@ -558,5 +651,16 @@ public partial class MainPage : ContentPage
             UserLevelLabel.Text = "Legacy mode";
             UserXpLabel.Text = "Advanced features are paused";
         }
+    }
+
+    private sealed record AvatarBodyHistoryItem(DateTime Date, double Score, string Copy)
+    {
+        public string DateLabel => Date.ToString("ddd", CultureInfo.InvariantCulture);
+    }
+
+    private sealed record AvatarBodyHistoryListItem(AvatarBodyHistoryItem Source)
+    {
+        public string DateLabel => Source.DateLabel;
+        public double ScoreNormalized => Math.Clamp(Source.Score, 0, 1);
     }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bingie.Views.Components.AvatarBodyView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0"
+              HeightRequest="180"
+              HorizontalOptions="Center"
+              VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Ellipse Grid.Row="0"
+                     WidthRequest="80"
+                     HeightRequest="80"
+                     Fill="#FEE4FF"
+                     Stroke="#DBA6FF"
+                     StrokeThickness="3"
+                     HorizontalOptions="Center" />
+
+            <Ellipse Grid.Row="1"
+                     x:Name="BodyEllipse"
+                     WidthRequest="120"
+                     HeightRequest="120"
+                     Fill="#A0CFFF"
+                     Stroke="#87A7FF"
+                     StrokeThickness="3"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Start" />
+
+            <Ellipse Grid.Row="2"
+                     x:Name="GlowEllipse"
+                     WidthRequest="140"
+                     HeightRequest="24"
+                     Fill="#FFFFFF33"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Start"
+                     Margin="0,-12,0,0" />
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="4"
+                             HorizontalOptions="Center">
+            <Label x:Name="MoodLabel"
+                   Text="Glow steady"
+                   FontSize="16"
+                   TextColor="#F6F8FF"
+                   HorizontalTextAlignment="Center" />
+            <Label x:Name="DetailLabel"
+                   Text="Keep stacking gentle wins."
+                   FontSize="13"
+                   TextColor="#C5CEFF"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>
