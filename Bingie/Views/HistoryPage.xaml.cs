@@ -3,24 +3,29 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Bingie.Config;
 using Bingie.Constants;
 using Bingie.Messaging;
 using Bingie.Models;
 using Bingie.Services;
 using Bingie.Views.Components;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 
 namespace Bingie.Views;
 
 public partial class HistoryPage : ContentPage
 {
     private readonly BingeTrendDrawable _trendDrawable = new();
+    private readonly TriggerRadarDrawable _radarDrawable = new();
     private readonly IDataStore<BingeEntry> _dataStore;
     private readonly CalendarService _calendarService;
+    private readonly TriggerRadarService? _triggerRadarService;
     private readonly string _username;
     private DateTime _currentMonth;
     private bool _isLoading;
     private bool _analyticsExpanded;
+    private TriggerRadarResult? _latestTriggerRadar;
     private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
     private bool _isSubscribed;
 
@@ -34,21 +39,29 @@ public partial class HistoryPage : ContentPage
         _calendarService = new CalendarService(_dataStore);
         _username = "PreviewUser";
         _currentMonth = DateTime.Today;
+        _triggerRadarService = new TriggerRadarService((IDataStore<BingeEntry>)previewService);
 
         BingeChartView.Drawable = _trendDrawable;
         CalendarView.DayTapped += OnDayTapped;
+        TriggerRadarView.Drawable = _radarDrawable;
     }
 
-    public HistoryPage(IDataStore<BingeEntry> dataStore, CalendarService calendarService, string username)
+    public HistoryPage(
+        IDataStore<BingeEntry> dataStore,
+        CalendarService calendarService,
+        TriggerRadarService triggerRadarService,
+        string username)
     {
         InitializeComponent();
         _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+        _triggerRadarService = triggerRadarService;
         _username = username ?? throw new ArgumentNullException(nameof(username));
         _currentMonth = DateTime.Today;
 
         BingeChartView.Drawable = _trendDrawable;
         CalendarView.DayTapped += OnDayTapped;
+        TriggerRadarView.Drawable = _radarDrawable;
     }
 
     protected override async void OnAppearing()
@@ -88,6 +101,7 @@ public partial class HistoryPage : ContentPage
             CalendarView.BingeCounts = bingeCounts;
 
             await UpdateAnalyticsAsync();
+            await RefreshTriggerRadarAsync();
         }
         catch (Exception ex)
         {
@@ -214,5 +228,60 @@ public partial class HistoryPage : ContentPage
         _analyticsExpanded = !_analyticsExpanded;
         AnalyticsContent.IsVisible = _analyticsExpanded;
         ToggleAnalyticsButton.Text = _analyticsExpanded ? "Hide trend insights" : "Show trend insights";
+    }
+
+    private async Task RefreshTriggerRadarAsync()
+    {
+        if (!FeatureFlags.TriggerRadarEnabled || _triggerRadarService == null)
+        {
+            TriggerRadarContainer.IsVisible = false;
+            return;
+        }
+
+        try
+        {
+            var result = await _triggerRadarService.GetAsync(_username, DateTime.UtcNow);
+            _latestTriggerRadar = result;
+
+            if (result == null)
+            {
+                TriggerRadarContainer.IsVisible = false;
+                return;
+            }
+
+            TriggerRadarContainer.IsVisible = true;
+            TriggerRadarSummaryLabel.Text = result.Summary;
+            TriggerRadarSuggestionsView.ItemsSource = result.Suggestions;
+            TriggerRadarEmptyLabel.IsVisible = result.TotalEvents < 3;
+
+            if (result.TimeOfDayBuckets.Count > 0)
+            {
+                _radarDrawable.Buckets = result.TimeOfDayBuckets;
+                TriggerRadarView.Invalidate();
+                TriggerRadarView.IsVisible = true;
+            }
+            else
+            {
+                TriggerRadarView.IsVisible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"HistoryPage: trigger radar failed - {ex.Message}");
+            TriggerRadarContainer.IsVisible = false;
+        }
+    }
+
+    private async void OnShareTriggerRadarClicked(object sender, EventArgs e)
+    {
+        if (_latestTriggerRadar == null)
+        {
+            await DisplayAlert("Trigger radar", "No radar insights yet. Keep logging to build a snapshot.", "OK");
+            return;
+        }
+
+        var export = $"Trigger radar summary:\n{_latestTriggerRadar.Summary}\n\nSuggestions:\n- {string.Join("\n- ", _latestTriggerRadar.Suggestions)}";
+        await Clipboard.SetTextAsync(export);
+        await DisplayAlert("Trigger radar", "Snapshot copied to clipboard. Share it with your support person whenever you're ready.", "Great");
     }
 }

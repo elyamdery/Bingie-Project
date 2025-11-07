@@ -107,6 +107,16 @@
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="12"
                                                    HorizontalOptions="Fill">
+                                <Label Text="Trigger radar"
+                                       TextColor="#C7D3FF"
+                                       FontSize="13"
+                                       VerticalOptions="Center" />
+                                <Switch x:Name="TriggerRadarFeatureSwitch"
+                                        HorizontalOptions="End"
+                                        Toggled="OnTriggerRadarFeatureSwitchToggled" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="12"
+                                                   HorizontalOptions="Fill">
                                 <Label Text="Friends leaderboard"
                                        TextColor="#C7D3FF"
                                        FontSize="13"

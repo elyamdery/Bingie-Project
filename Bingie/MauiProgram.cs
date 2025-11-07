@@ -65,6 +65,7 @@ public static class MauiProgram
         _ = builder.Services.AddSingleton<StoryGuideService>();
         _ = builder.Services.AddSingleton<IPointsSystemRepository, PointsSystemRepository>();
         _ = builder.Services.AddSingleton<PointsSystemService>();
+        _ = builder.Services.AddSingleton<TriggerRadarService>();
         _ = builder.Services.AddSingleton<IFriendsLeaderboardRepository, FriendsLeaderboardRepository>();
         _ = builder.Services.AddSingleton<FriendsLeaderboardService>();
 

@@ -52,6 +52,8 @@
     <Compile Include="..\..\Bingie\Models\SupportToken.cs" Link="Models\SupportToken.cs" />
     <Compile Include="..\..\Bingie\Models\SupportTokenTemplate.cs" Link="Models\SupportTokenTemplate.cs" />
     <Compile Include="..\..\Bingie\Models\FriendsLeaderboardState.cs" Link="Models\FriendsLeaderboardState.cs" />
+    <Compile Include="..\..\Bingie\Models\TriggerRadarBucket.cs" Link="Models\TriggerRadarBucket.cs" />
+    <Compile Include="..\..\Bingie\Models\TriggerRadarResult.cs" Link="Models\TriggerRadarResult.cs" />
     <Compile Include="..\..\Bingie\Services\AuthService.cs" Link="Services\AuthService.cs" />
     <Compile Include="..\..\Bingie\Services\BingeAnalytics.cs" Link="Services\BingeAnalytics.cs" />
     <Compile Include="..\..\Bingie\Services\CalendarService.cs" Link="Services\CalendarService.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="..\..\Bingie\Services\IAuthService.cs" Link="Services\IAuthService.cs" />
     <Compile Include="..\..\Bingie\Services\IFriendsLeaderboardRepository.cs" Link="Services\IFriendsLeaderboardRepository.cs" />
     <Compile Include="..\..\Bingie\Services\FriendsLeaderboardService.cs" Link="Services\FriendsLeaderboardService.cs" />
+    <Compile Include="..\..\Bingie\Services\TriggerRadarService.cs" Link="Services\TriggerRadarService.cs" />
     <Compile Include="..\..\Bingie\Config\FeatureFlags.cs" Link="Config\FeatureFlags.cs" />
   </ItemGroup>
 

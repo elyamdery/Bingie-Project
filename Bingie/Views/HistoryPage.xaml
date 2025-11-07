@@ -132,6 +132,53 @@
                         </VerticalStackLayout>
                     </ContentView>
                 </VerticalStackLayout>
+
+                <ContentView x:Name="TriggerRadarContainer"
+                             IsVisible="False">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Trigger radar"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#F4F6FF" />
+                            <Button Text="Share"
+                                    Grid.Column="1"
+                                    Clicked="OnShareTriggerRadarClicked"
+                                    CornerRadius="16"
+                                    HeightRequest="36"
+                                    BackgroundColor="#FFFFFF22"
+                                    TextColor="White" />
+                        </Grid>
+                        <GraphicsView x:Name="TriggerRadarView"
+                                      HeightRequest="260" />
+                        <Label x:Name="TriggerRadarSummaryLabel"
+                               TextColor="#E4E8FF"
+                               FontSize="16" />
+                        <CollectionView x:Name="TriggerRadarSuggestionsView"
+                                        SelectionMode="None"
+                                        ItemsLayout="VerticalList">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeThickness="0"
+                                            Margin="0,6"
+                                            Padding="12"
+                                            StrokeShape="RoundRectangle 18"
+                                            BackgroundColor="#FFFFFF11">
+                                        <Label Text="{Binding .}"
+                                               FontSize="14"
+                                               TextColor="#F5F7FF" />
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Label x:Name="TriggerRadarEmptyLabel"
+                               Text="Not enough data yet. Keep logging to see radar insights."
+                               IsVisible="False"
+                               TextColor="#F5F7FF"
+                               FontSize="14"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </ContentView>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

@@ -468,6 +468,17 @@ public partial class MainPage : ContentPage
         SyncSettingsPanel();
     }
 
+    private async void OnTriggerRadarFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverrideTriggerRadar(e.Value ? (bool?)null : false);
+        if (e.Value)
+        {
+            await DisplayAlert("Trigger radar", "History insights will now show radar-style risk windows based on your logs.", "Nice");
+        }
+        SyncSettingsPanel();
+    }
+
     private async void OnLeaderboardFeatureSwitchToggled(object sender, ToggledEventArgs e)
     {
         if (_suppressSettingsEvents) return;
@@ -489,6 +500,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideAvatarFeedback(false);
             FeatureFlags.OverrideStoryGuide(false);
             FeatureFlags.OverridePointsSystem(false);
+            FeatureFlags.OverrideTriggerRadar(false);
             FeatureFlags.OverrideLeaderboard(false);
         }
         else
@@ -496,6 +508,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideAvatarFeedback(null);
             FeatureFlags.OverrideStoryGuide(null);
             FeatureFlags.OverridePointsSystem(null);
+            FeatureFlags.OverrideTriggerRadar(null);
             FeatureFlags.OverrideLeaderboard(null);
         }
 
@@ -521,10 +534,12 @@ public partial class MainPage : ContentPage
         AvatarFeatureSwitch.IsToggled = FeatureFlags.AvatarFeedbackEnabled;
         StoryFeatureSwitch.IsToggled = FeatureFlags.StoryGuideEnabled;
         PointsFeatureSwitch.IsToggled = FeatureFlags.PointsSystemEnabled;
+        TriggerRadarFeatureSwitch.IsToggled = FeatureFlags.TriggerRadarEnabled;
         LeaderboardFeatureSwitch.IsToggled = FeatureFlags.LeaderboardEnabled;
         LegacyModeSwitch.IsToggled = !FeatureFlags.AvatarFeedbackEnabled &&
                                      !FeatureFlags.StoryGuideEnabled &&
                                      !FeatureFlags.PointsSystemEnabled &&
+                                     !FeatureFlags.TriggerRadarEnabled &&
                                      !FeatureFlags.LeaderboardEnabled;
         _suppressSettingsEvents = false;
     }

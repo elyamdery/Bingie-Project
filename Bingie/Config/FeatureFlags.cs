@@ -12,6 +12,7 @@ public static class FeatureFlags
     private static bool? _storyGuideOverride;
     private static bool? _pointsSystemOverride;
     private static bool? _leaderboardOverride;
+    private static bool? _triggerRadarOverride;
 
     /// <summary>
     /// Feature flag gating the avatar feedback experience.
@@ -61,6 +62,18 @@ public static class FeatureFlags
         }
     }
 
+    /// <summary>
+    /// Feature flag controlling the trigger radar insights.
+    /// </summary>
+    public static bool TriggerRadarEnabled
+    {
+        get
+        {
+            if (_triggerRadarOverride.HasValue) return _triggerRadarOverride.Value;
+            return ResolveFlag("BINGIE_TRIGGER_RADAR_ENABLED", defaultValue: true);
+        }
+    }
+
     private static bool ResolveFlag(string environmentVariable, bool defaultValue)
     {
         var raw = Environment.GetEnvironmentVariable(environmentVariable);
@@ -92,4 +105,9 @@ public static class FeatureFlags
     /// Allows tests or diagnostics to override the friends leaderboard flag; passing null clears the override.
     /// </summary>
     public static void OverrideLeaderboard(bool? enabled) => _leaderboardOverride = enabled;
+
+    /// <summary>
+    /// Allows tests or diagnostics to override the trigger radar flag; passing null clears the override.
+    /// </summary>
+    public static void OverrideTriggerRadar(bool? enabled) => _triggerRadarOverride = enabled;
 }

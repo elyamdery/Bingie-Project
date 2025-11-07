@@ -18,6 +18,7 @@ public partial class AppShell : Shell
     private readonly StoryGuideService _storyGuideService;
     private readonly PointsSystemService _pointsSystemService;
     private readonly FriendsLeaderboardService _friendsLeaderboardService;
+    private readonly TriggerRadarService _triggerRadarService;
     private ShellContent? _friendsShellContent;
     private readonly IAuthService _authService;
     private readonly string _username;
@@ -31,6 +32,7 @@ public partial class AppShell : Shell
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
         FriendsLeaderboardService friendsLeaderboardService,
+        TriggerRadarService triggerRadarService,
         IAuthService authService,
         string username)
     {
@@ -41,6 +43,7 @@ public partial class AppShell : Shell
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
         _friendsLeaderboardService = friendsLeaderboardService ?? throw new ArgumentNullException(nameof(friendsLeaderboardService));
+        _triggerRadarService = triggerRadarService ?? throw new ArgumentNullException(nameof(triggerRadarService));
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
 
@@ -110,7 +113,7 @@ public partial class AppShell : Shell
 
     private HistoryPage CreateHistoryPage()
     {
-        return new HistoryPage(_dataStore, _calendarService, _username);
+        return new HistoryPage(_dataStore, _calendarService, _triggerRadarService, _username);
     }
 
     private void OnNavigated(object? sender, ShellNavigatedEventArgs e)
