@@ -6,3 +6,4 @@
 - [ ] Verify the mood copy stays supportive (no shaming) when the avatar is “tired”.
 - [ ] Enable VoiceOver/Screen Reader and confirm the avatar section announces the date + mood summary.
 - [ ] Share feedback: ensure the body view reacts instantly after logging from another page (no restart).
+- [ ] Tap “Avatar Studio” (header link) and ensure the dedicated page loads the same data with export-ready copy.

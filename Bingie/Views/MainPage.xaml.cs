@@ -542,6 +542,18 @@ public partial class MainPage : ContentPage
         _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
     }
 
+    private async void OnAvatarStudioClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AvatarStudioPage(_calendarService, _username));
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to open Avatar Studio.");
+        }
+    }
+
     private void SyncSettingsPanel()
     {
         _suppressSettingsEvents = true;

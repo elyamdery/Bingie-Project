@@ -53,6 +53,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("history", typeof(HistoryPage));
         Routing.RegisterRoute("daystatistics", typeof(DayStatisticsPage));
         Routing.RegisterRoute("register", typeof(RegistrationPage));
+        Routing.RegisterRoute("avatarStudio", typeof(AvatarStudioPage));
 
         var historyTab = new ShellContent
         {

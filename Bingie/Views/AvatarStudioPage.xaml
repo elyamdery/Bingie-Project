@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:Bingie.Views.Components"
+             x:Class="Bingie.Views.AvatarStudioPage"
+             Title="Avatar Studio">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="18">
+            <Label Text="Avatar energy arc"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#1F214E" />
+            <Label Text="Replay the last week to see how your avatar responds to each caring action. No shame—just gentle guidance."
+                   FontSize="15"
+                   TextColor="#4A4D7A" />
+            <Border StrokeThickness="0"
+                    BackgroundColor="#131733"
+                    StrokeShape="RoundRectangle 28"
+                    Padding="24">
+                <VerticalStackLayout Spacing="12">
+                    <components:AvatarBodyView x:Name="StudioAvatarBody" />
+                    <Slider x:Name="StudioAvatarSlider"
+                            Minimum="0"
+                            Maximum="0"
+                            ValueChanged="OnSliderChanged" />
+                    <Label x:Name="StudioAvatarDateLabel"
+                           TextColor="#E1E6FF"
+                           FontSize="14"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+            <CollectionView x:Name="StudioAvatarHistory"
+                            ItemsLayout="HorizontalList"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeThickness="0"
+                                BackgroundColor="#FFFFFF14"
+                                Margin="4,0"
+                                Padding="10"
+                                StrokeShape="RoundRectangle 14">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding DateLabel}"
+                                       FontSize="12"
+                                       TextColor="#EEF0FF"
+                                       HorizontalTextAlignment="Center" />
+                                <ProgressBar Progress="{Binding ScoreNormalized}"
+                                             HeightRequest="4"
+                                             ProgressColor="#93B4FF" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Frame BackgroundColor="#F4F6FF"
+                   CornerRadius="22"
+                   Padding="18"
+                   HasShadow="False">
+                <StackLayout>
+                    <Label Text="Need ideas?"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#2B3060" />
+                    <Label Text="Pair your avatar check-in with a tiny ritual: sip water, stretch, or send yourself a kind text."
+                           FontSize="14"
+                           TextColor="#4A4D7A" />
+                </StackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

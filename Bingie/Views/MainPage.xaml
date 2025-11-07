@@ -16,10 +16,25 @@
         <StackLayout Padding="24" Spacing="18">
         <Grid ColumnDefinitions="*,Auto">
             <VerticalStackLayout Spacing="4">
-                <Label Text="Bingie"
-                       FontSize="36"
-                       FontAttributes="Bold"
-                       TextColor="White" />
+                <HorizontalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="Bingie"
+                               FontSize="36"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Track + care"
+                               FontSize="14"
+                               TextColor="#C5C9FF" />
+                    </VerticalStackLayout>
+                    <Button Text="Avatar Studio"
+                            Clicked="OnAvatarStudioClicked"
+                            FontSize="13"
+                            BackgroundColor="#FFFFFF22"
+                            TextColor="White"
+                            CornerRadius="18"
+                            Padding="12,6"
+                            VerticalOptions="Center" />
+                </HorizontalStackLayout>
                 <Label x:Name="CurrentTimeLabel"
                        FontSize="18"
                        TextColor="#E4E7FF" />
