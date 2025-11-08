@@ -95,3 +95,7 @@ Summary: Experience now blends playful UI, richer self-compassion content, and c
 - HistoryPage now features radar risk zones, accessible summaries, share-to-clipboard export, and gentle suggestions behind `triggerRadarEnabled`.
 - Added Avatar Body arc card on Home plus a dedicated Avatar Studio page showing a stylised body that grows/relaxes per-day, with slider history, manual checklist, and blueprint docs; tied into new `avatarBodyEnabled` flag.
 - Registered `TriggerRadarService`, added drawable components, and created unit tests covering radar aggregation plus manual docs; verified with `dotnet build`, `dotnet test`, and Catalyst run.
+[Log] 2025-11-01 16:20 UTC – Introduced Phoenix Streak resilience mechanic.
+- Added `phoenixStreakEnabled` flag, new PhoenixStreakService (thresholds, grace tokens) and SQLite table.
+- Home screen streak card shows streak length, compassionate copy, threshold control, and grace recovery button; manual docs + feature flag wiring included.
+- Added `PhoenixStreakServiceTests` and reran `dotnet build`, `dotnet test`, and Catalyst run.

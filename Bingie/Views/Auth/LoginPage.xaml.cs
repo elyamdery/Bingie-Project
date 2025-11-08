@@ -20,6 +20,7 @@ public partial class LoginPage : ContentPage
     private readonly StoryGuideService _storyGuideService;
     private readonly PointsSystemService _pointsSystemService;
     private readonly TriggerRadarService _triggerRadarService;
+    private readonly PhoenixStreakService _phoenixStreakService;
     private readonly FriendsLeaderboardService _friendsLeaderboardService;
     private readonly IServiceProvider _serviceProvider;
 
@@ -33,6 +34,7 @@ public partial class LoginPage : ContentPage
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
         TriggerRadarService triggerRadarService,
+        PhoenixStreakService phoenixStreakService,
         FriendsLeaderboardService friendsLeaderboardService,
         IServiceProvider serviceProvider)
     {
@@ -44,6 +46,7 @@ public partial class LoginPage : ContentPage
         _storyGuideService = storyGuideService ?? throw new ArgumentNullException(nameof(storyGuideService));
         _pointsSystemService = pointsSystemService ?? throw new ArgumentNullException(nameof(pointsSystemService));
         _triggerRadarService = triggerRadarService ?? throw new ArgumentNullException(nameof(triggerRadarService));
+        _phoenixStreakService = phoenixStreakService ?? throw new ArgumentNullException(nameof(phoenixStreakService));
         _friendsLeaderboardService = friendsLeaderboardService ?? throw new ArgumentNullException(nameof(friendsLeaderboardService));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
@@ -193,6 +196,7 @@ public partial class LoginPage : ContentPage
             _storyGuideService,
             _pointsSystemService,
             _friendsLeaderboardService,
+            _phoenixStreakService,
             _triggerRadarService,
             _authService,
             user.Username);

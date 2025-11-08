@@ -21,6 +21,7 @@ public class DatabaseInitializer
         EnsureAvatarFeedbackTables(connection);
         EnsureStoryGuideTables(connection);
         EnsurePointsSystemTables(connection);
+        EnsurePhoenixStreakTable(connection);
         EnsureFriendsLeaderboardTables(connection);
     }
 
@@ -220,6 +221,21 @@ public class DatabaseInitializer
 
         SeedDefaultPointActions(connection);
         SeedDefaultCosmetics(connection);
+    }
+
+    private static void EnsurePhoenixStreakTable(SqliteConnection connection)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS PhoenixStreakSettings (
+                    Username TEXT PRIMARY KEY,
+                    Threshold INTEGER NOT NULL DEFAULT 0,
+                    HideStreak INTEGER NOT NULL DEFAULT 0,
+                    LastUpdatedUtc TEXT NOT NULL,
+                    LastGraceResetUtc TEXT NOT NULL,
+                    GraceTokens INTEGER NOT NULL DEFAULT 1
+                );";
+        _ = command.ExecuteNonQuery();
     }
 
     private static void SeedDefaultPointActions(SqliteConnection connection)

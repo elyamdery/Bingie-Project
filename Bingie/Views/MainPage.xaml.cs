@@ -26,6 +26,7 @@ public partial class MainPage : ContentPage
     private readonly AvatarFeedbackService _avatarFeedbackService;
     private readonly StoryGuideService? _storyGuideService;
     private readonly PointsSystemService? _pointsSystemService;
+    private readonly PhoenixStreakService? _phoenixStreakService;
     private readonly IAuthService _authService;
     private readonly string _username;
     private readonly IMessenger _messenger = WeakReferenceMessenger.Default;
@@ -34,8 +35,10 @@ public partial class MainPage : ContentPage
     private bool _settingsPanelVisible;
     private bool _suppressSettingsEvents;
     private bool _suppressAvatarBodySlider;
+    private bool _suppressPhoenixThreshold;
     private PointsDashboard? _currentPointsSnapshot;
     private AvatarFeedbackSnapshot? _latestAvatarSnapshot;
+    private PhoenixStreakState? _latestPhoenixState;
     private readonly List<AvatarBodyHistoryItem> _avatarBodyHistory = new();
 
     public MainPage()
@@ -48,6 +51,7 @@ public partial class MainPage : ContentPage
         var avatarRepository = new AvatarFeedbackRepository(connectionFactory);
         _avatarFeedbackService = new AvatarFeedbackService(_dataStore, avatarRepository);
         _authService = new AuthService(previewService);
+        _phoenixStreakService = new PhoenixStreakService(previewService, connectionFactory);
 
         if (FeatureFlags.StoryGuideEnabled)
         {
@@ -80,6 +84,7 @@ public partial class MainPage : ContentPage
         AvatarFeedbackService avatarFeedbackService,
         StoryGuideService storyGuideService,
         PointsSystemService pointsSystemService,
+        PhoenixStreakService phoenixStreakService,
         string username,
         IAuthService authService)
     {
@@ -89,6 +94,7 @@ public partial class MainPage : ContentPage
         _avatarFeedbackService = avatarFeedbackService ?? throw new ArgumentNullException(nameof(avatarFeedbackService));
         _storyGuideService = storyGuideService;
         _pointsSystemService = pointsSystemService;
+        _phoenixStreakService = phoenixStreakService ?? throw new ArgumentNullException(nameof(phoenixStreakService));
         _username = username ?? throw new ArgumentNullException(nameof(username));
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
 
@@ -458,6 +464,7 @@ public partial class MainPage : ContentPage
         FeatureFlags.OverrideStoryGuide(e.Value ? (bool?)null : false);
         SyncSettingsPanel();
         await RefreshPointsSummaryAsync();
+        await RefreshPhoenixStreakAsync();
         UpdateUserStatusUi();
         _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
     }
@@ -466,8 +473,9 @@ public partial class MainPage : ContentPage
     {
         if (_suppressSettingsEvents) return;
         FeatureFlags.OverridePointsSystem(e.Value ? (bool?)null : false);
-        await RefreshPointsSummaryAsync();
-        UpdateUserStatusUi();
+            await RefreshPointsSummaryAsync();
+            await RefreshPhoenixStreakAsync();
+            UpdateUserStatusUi();
         _messenger.Send(new PointsDashboardUpdatedMessage(_currentPointsSnapshot));
         SyncSettingsPanel();
     }
@@ -480,6 +488,17 @@ public partial class MainPage : ContentPage
         {
             await DisplayAlert("Trigger radar", "History insights will now show radar-style risk windows based on your logs.", "Nice");
         }
+        SyncSettingsPanel();
+    }
+
+    private async void OnPhoenixStreakFeatureSwitchToggled(object sender, ToggledEventArgs e)
+    {
+        if (_suppressSettingsEvents) return;
+        FeatureFlags.OverridePhoenixStreak(e.Value ? (bool?)null : false);
+        await DisplayAlert("Phoenix streak", e.Value
+                ? "Phoenix streak enabled. We'll celebrate resilient streaks with gentle recoveries."
+                : "Phoenix streak hidden for now.", "OK");
+        await RefreshPhoenixStreakAsync();
         SyncSettingsPanel();
     }
 
@@ -515,6 +534,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideTriggerRadar(false);
             FeatureFlags.OverrideAvatarBody(false);
             FeatureFlags.OverrideLeaderboard(false);
+            FeatureFlags.OverridePhoenixStreak(false);
         }
         else
         {
@@ -524,6 +544,7 @@ public partial class MainPage : ContentPage
             FeatureFlags.OverrideTriggerRadar(null);
             FeatureFlags.OverrideAvatarBody(null);
             FeatureFlags.OverrideLeaderboard(null);
+            FeatureFlags.OverridePhoenixStreak(null);
         }
 
         SyncSettingsPanel();
@@ -620,6 +641,58 @@ public partial class MainPage : ContentPage
         ApplyAvatarBodySelection(_avatarBodyHistory.Count - 1);
     }
 
+    private async Task RefreshPhoenixStreakAsync()
+    {
+        if (!FeatureFlags.PhoenixStreakEnabled || _phoenixStreakService == null)
+        {
+            PhoenixStreakSection.IsVisible = false;
+            return;
+        }
+
+        try
+        {
+            var state = await _phoenixStreakService.GetStateAsync(_username, DateTime.UtcNow);
+            _latestPhoenixState = state;
+            PhoenixStreakSection.IsVisible = !state.RecoveryNeeded || state.GraceAvailable || state.CurrentStreakDays > 0;
+
+            PhoenixStreakLabel.Text = state.CurrentStreakDays switch
+            {
+                0 => "Phoenix streak: ready to rise",
+                1 => "Phoenix streak: 1 resilient day",
+                _ => $"Phoenix streak: {state.CurrentStreakDays} days strong"
+            };
+
+            var latestDay = state.History.LastOrDefault();
+            var todayStatus = latestDay != null && latestDay.UnderThreshold
+                ? "Today is within your compassionate boundary."
+                : "Today exceeded your boundary—offer reflection or a grace token.";
+            PhoenixStreakStatusLabel.Text = todayStatus;
+
+            _suppressPhoenixThreshold = true;
+            PhoenixThresholdStepper.Value = state.Threshold;
+            _suppressPhoenixThreshold = false;
+            PhoenixThresholdValueLabel.Text = $"≤ {state.Threshold} per day";
+
+            PhoenixGraceLabel.Text = $"{state.GraceTokens} grace token(s) · resets {state.GraceResetUtc:MMM d}";
+
+            if (state.RecoveryNeeded)
+            {
+                PhoenixRecoverButton.IsVisible = true;
+                PhoenixRecoverButton.IsEnabled = state.GraceAvailable;
+                PhoenixRecoverButton.Text = state.GraceAvailable ? "Use grace token" : "Reflection needed";
+            }
+            else
+            {
+                PhoenixRecoverButton.IsVisible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to refresh Phoenix streak.");
+            PhoenixStreakSection.IsVisible = false;
+        }
+    }
+
     private void OnAvatarBodySliderChanged(object sender, ValueChangedEventArgs e)
     {
         if (_suppressAvatarBodySlider) return;
@@ -674,5 +747,29 @@ public partial class MainPage : ContentPage
     {
         public string DateLabel => Source.DateLabel;
         public double ScoreNormalized => Math.Clamp(Source.Score, 0, 1);
+    }
+
+    private async void OnPhoenixThresholdChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (_suppressPhoenixThreshold) return;
+        if (_phoenixStreakService == null) return;
+
+        var value = (int)Math.Round(e.NewValue);
+        PhoenixThresholdValueLabel.Text = $"≤ {value} per day";
+        await _phoenixStreakService.UpdateThresholdAsync(_username, value, DateTime.UtcNow);
+        await RefreshPhoenixStreakAsync();
+    }
+
+    private async void OnPhoenixRecoverClicked(object sender, EventArgs e)
+    {
+        if (_phoenixStreakService == null || _latestPhoenixState == null) return;
+        if (!_latestPhoenixState.GraceAvailable)
+        {
+            await DisplayAlert("Phoenix streak", "No grace tokens left. Try a reflection to recover.", "OK");
+            return;
+        }
+
+        await _phoenixStreakService.UseGraceTokenAsync(_username, DateTime.UtcNow);
+        await RefreshPhoenixStreakAsync();
     }
 }

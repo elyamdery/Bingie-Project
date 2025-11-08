@@ -14,6 +14,7 @@ public static class FeatureFlags
     private static bool? _leaderboardOverride;
     private static bool? _triggerRadarOverride;
     private static bool? _avatarBodyOverride;
+    private static bool? _phoenixStreakOverride;
 
     /// <summary>
     /// Feature flag gating the avatar feedback experience.
@@ -87,6 +88,18 @@ public static class FeatureFlags
         }
     }
 
+    /// <summary>
+    /// Feature flag for the Phoenix streak mechanic.
+    /// </summary>
+    public static bool PhoenixStreakEnabled
+    {
+        get
+        {
+            if (_phoenixStreakOverride.HasValue) return _phoenixStreakOverride.Value;
+            return ResolveFlag("BINGIE_PHOENIX_STREAK_ENABLED", defaultValue: true);
+        }
+    }
+
     private static bool ResolveFlag(string environmentVariable, bool defaultValue)
     {
         var raw = Environment.GetEnvironmentVariable(environmentVariable);
@@ -128,4 +141,9 @@ public static class FeatureFlags
     /// Allows tests or diagnostics to override the avatar body flag; passing null clears the override.
     /// </summary>
     public static void OverrideAvatarBody(bool? enabled) => _avatarBodyOverride = enabled;
+
+    /// <summary>
+    /// Allows tests or diagnostics to override the Phoenix streak flag; passing null clears the override.
+    /// </summary>
+    public static void OverridePhoenixStreak(bool? enabled) => _phoenixStreakOverride = enabled;
 }

@@ -273,6 +273,52 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </VerticalStackLayout>
+        <VerticalStackLayout x:Name="PhoenixStreakSection"
+                              Spacing="10"
+                              Margin="0,0,0,12"
+                              IsVisible="False">
+            <Label Text="Phoenix streak"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="White" />
+            <Border StrokeThickness="0"
+                    BackgroundColor="#1B1D3C"
+                    StrokeShape="RoundRectangle 22"
+                    Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <Label x:Name="PhoenixStreakLabel"
+                           FontSize="18"
+                           TextColor="#F2F5FF" />
+                    <Label x:Name="PhoenixStreakStatusLabel"
+                           FontSize="14"
+                           TextColor="#D7DCFF" />
+                    <HorizontalStackLayout Spacing="8"
+                                           VerticalOptions="Center">
+                        <Label Text="Daily threshold"
+                               FontSize="14"
+                               TextColor="#D7DCFF" />
+                        <Stepper x:Name="PhoenixThresholdStepper"
+                                 Minimum="0"
+                                 Maximum="3"
+                                 Increment="1"
+                                 ValueChanged="OnPhoenixThresholdChanged" />
+                        <Label x:Name="PhoenixThresholdValueLabel"
+                               FontSize="14"
+                               TextColor="#F2F5FF" />
+                    </HorizontalStackLayout>
+                    <Label x:Name="PhoenixGraceLabel"
+                           FontSize="13"
+                           TextColor="#BCC4FF" />
+                    <Button x:Name="PhoenixRecoverButton"
+                            Text="Use grace token"
+                            Clicked="OnPhoenixRecoverClicked"
+                            CornerRadius="18"
+                            BackgroundColor="#FF8A65"
+                            TextColor="White"
+                            IsVisible="False" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
         <Button x:Name="BingeButton"
                 Text="I Binged"
                 FontSize="24"
